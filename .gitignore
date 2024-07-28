@@ -5,6 +5,7 @@ node_modules
 .idea
 sassdoc
 .angular/
+.vscode/
 
 #src/assets/theme/*/*.css
 #src/assets/layout/css/*.css
