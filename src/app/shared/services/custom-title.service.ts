@@ -13,7 +13,7 @@ export class CustomTitleService {
     }
 
     set(title) {
-        this.titleService.setTitle(this.prefix + title +" - SIR TECH® Perú Software de Punto de Venta")
+        this.titleService.setTitle(this.prefix + title +" - SGI TECH® Software Gestion de Sacramentos")
     }
 
 }

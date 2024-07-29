@@ -13,6 +13,13 @@ const childrenRoutes: VexRoutes = [
     }
   },
   {
+    path: 'tipoSacramento',
+    loadChildren: () => import('./pages/tipo-sacramento/tipo-sacramento.module').then(m => m.TipoSacramentoModule),
+    data: {
+      containerEnabled: true
+    }
+  },
+  {
     path: '**',
     component: NotFoundComponent
   }

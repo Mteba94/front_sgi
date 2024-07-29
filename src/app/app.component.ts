@@ -11,6 +11,7 @@ import { filter, map } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Style, StyleService } from '../@vex/services/style.service';
 import { ConfigName } from '../@vex/interfaces/config-name.model';
+import icCategory from '@iconify/icons-ic/twotone-category';
 
 @Component({
   selector: 'vex-root',
@@ -36,7 +37,7 @@ export class AppComponent {
 
     this.configService.updateConfig({
       sidenav: {
-        title: "POS",
+        title: "SGI",
         imageUrl: "/assets/img/demo/logo.svg",
         showCollapsePin: true,
       },
@@ -66,6 +67,12 @@ export class AppComponent {
         label: 'Estadísticas',
         route: 'estadisticas',
         icon: icDashboard
+      },
+      {
+        type: 'link',
+        label: 'Tipo de Sacramento',
+        route: 'tipoSacramento',
+        icon: icCategory
       }
     ];
   }
