@@ -8,6 +8,8 @@ import { ListTipoSacramentoRequest } from '../requests/tipoSacramento/list-tipos
 import { map } from 'rxjs/operators';
 import { da } from 'date-fns/locale';
 import { Observable } from 'rxjs';
+import { TipoSacramentoRequest } from '../requests/tipoSacramento/tipoSacramento.request';
+import { ApiResponse } from '../commons/response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +57,15 @@ export class TipoSacramentoService {
         })
         console.log(data.data.items)
         return data
+      })
+    )
+  }
+
+  TipoSacramentoRegister(Tsacramento: TipoSacramentoRequest):Observable<ApiResponse>{
+    const requestUrl =  `${env.api}${endpoint.TIPO_SACRAMENTO_REGISTER}`
+    return this._http.post(requestUrl, Tsacramento).pipe(
+      map((resp: ApiResponse) => {
+        return resp
       })
     )
   }

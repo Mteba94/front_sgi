@@ -6,12 +6,12 @@
                 <span @fadeInRight class="ml-4 block">Gestion de Tipo de Sacramentos</span>
             </h2>
             <div class="flex items-center justify-end w-full">
-                <!-- <vex-search-box
+                <vex-search-box
                     [searchOptions]="component.searchOptions"
                     (search)="search($event)"
-                ></vex-search-box> -->
+                ></vex-search-box>
                 <div>
-                    <!-- <button
+                    <button
                         mat-icon-button
                         matTooltip="Filtro por rango de fechas"
                         type="button"
@@ -19,7 +19,7 @@
                         [ngClass]="{'extra-filters-active': component.filters_dates_active}"
                         (click)="datesFilterOpen()"
                     > <mat-icon [icIcon]="component.icCalendarMonth"></mat-icon>
-                    </button> -->
+                    </button>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                     [currentCategory]="component.getInputs.stateFilter"
                     [buttonShow]="true"
                     buttonLabel="AGREGAR"
-                    
+                    (buttonClick)="openDialogRegister()"
                     (filterChange)="setData($event)"
                     [items]="component.menuItems"
                 ></vex-list-table-menu>

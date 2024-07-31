@@ -1,0 +1,45 @@
+<form (ngSubmit)="TipoSacramentoSave()" [formGroup]="form">
+    <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+        <h2 class="headline m-0 text-xl text-accent" fxFlex="auto">
+            <strong>Gestión de Tipo Sacramentos</strong>
+        </h2>
+        <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content>
+        <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="TsNombre">
+                <mat-error *ngIf="form.get('TsNombre').hasError('required')">
+                    Campo Nombre es requerido.
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Descripción</mat-label>
+                <input matInput formControlName="TsDescripcion">
+                <mat-error *ngIf="form.get('TsDescripcion').hasError('required')">
+                    Campo Descripcion es requerido.
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Requerimiento</mat-label>
+                <input matInput formControlName="TsRequerimiento">
+                <mat-error *ngIf="form.get('TsRequerimiento').hasError('required')">
+                    Campo Requerimiento es requerido.
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close type="button">CANCELAR</button>
+        <button color="purple" class="bg-accent text-accent-contrast" mat-button type="submit" [disabled]="!form.valid">GUARDAR</button>
+    </mat-dialog-actions>
+</form>

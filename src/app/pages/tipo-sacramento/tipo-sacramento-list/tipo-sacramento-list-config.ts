@@ -4,6 +4,27 @@ import icCategory from "@iconify/icons-ic/twotone-category"
 import { ListTableMenu } from "src/app/commons/list-table-menu.interface";
 import icViewHeadline from "@iconify/icons-ic/twotone-view-headline"
 import icLabel from "@iconify/icons-ic/twotone-label"
+import icCalendarMonth from "@iconify/icons-ic/twotone-calendar-today"
+import { GenericValidators } from "@shared/validators/generic-validators";
+
+const searchOptions = [
+    {
+        label: "Nombre",
+        value: 1,
+        placeholder: "Buscar por Nombre",
+        validation: [GenericValidators.defaultName],
+        validation_desc: "Solo se permite letras en esta busqueda",
+        min_length: 2
+    },
+    {
+        label: "Descipcion",
+        value: 2,
+        placeholder: "Buscar por Descripcion",
+        validation: [GenericValidators.defaultDescription],
+        validation_desc: "Solo se permite letras y numeros en esta busqueda",
+        min_length: 2
+    }
+]
 
 const menuItems: ListTableMenu[] = [
     {
@@ -106,6 +127,7 @@ const inputs = {
 export const componentSettings = {
     // ICONS
     icCategory: icCategory,
+    icCalendarMonth: icCalendarMonth,
     //Layout settings
     menuOpen: false,    
     //TABLE SETTINS
@@ -117,6 +139,9 @@ export const componentSettings = {
     buttonlabel2: "ELIMINAR",
     //search filters
     menuItems: menuItems,
+    searchOptions: searchOptions,
+    filters_dates_active: false,
     filters: filters,
+    datesFilterArray: ['Fecha de creación'],
     columnsFilter: tableColumns.map((column) => {return {label: column.label, property: column.property, type: column.type}} )
 }
