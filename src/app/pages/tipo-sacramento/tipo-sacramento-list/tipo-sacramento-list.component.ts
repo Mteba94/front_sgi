@@ -7,8 +7,9 @@ import { componentSettings } from './tipo-sacramento-list-config';
 import { tipoSacramentoApi } from 'src/app/responses/tipoSacramento/tiposacramento.response';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { DatesFilter } from '@shared/functions/actions';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TipoSacramentoManageComponent } from '../tipo-sacramento-manage/tipo-sacramento-manage.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'vex-tipo-sacramento-list',
@@ -34,21 +35,6 @@ export class TipoSacramentoListComponent implements OnInit {
 
   ngOnInit(): void {
     this.component = componentSettings
-  }
-
-  rowClick(e: any){
-    let action = e.action
-    let tipoSacramento = e.row
-
-    switch (action) {
-      case "edit":
-        this.TipoSacramentoEdit(tipoSacramento)
-        break;
-      case "remove":
-        this.TipoSacramentoRemove(tipoSacramento)
-        break;
-    }
-    return false
   }
 
   setData(data: any = null){
@@ -106,12 +92,55 @@ export class TipoSacramentoListComponent implements OnInit {
     )
   }
 
-  TipoSacramentoEdit(row: tipoSacramentoApi){
+  rowClick(e: any){
+    let action = e.action
+    let tipoSacramento = e.row
 
+    switch (action) {
+      case "edit":
+        this.TipoSacramentoEdit(tipoSacramento)
+        break;
+      case "remove":
+        this.TipoSacramentoRemove(tipoSacramento)
+        break;
+    }
+    return false
+  }
+
+  TipoSacramentoEdit(row: tipoSacramentoApi){
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.data = row
+
+    let dialogRef = this._dialog.open(TipoSacramentoManageComponent, {
+      data: dialogConfig,
+      disableClose: true,
+      width: "400px"
+    })
+    dialogRef.afterClosed().subscribe(
+      (res) => {
+        if (res) {
+          this.formatGetInputs()
+        }
+      }
+    )
   }
 
   TipoSacramentoRemove(tipoSacramento: any){
-
+    Swal.fire({
+      title: `¿Realmente deseas eliminar el tipo de Sacramento ${tipoSacramento.tsNombre}`,
+      text: "Se borrara de forma permanente!",
+      icon: "warning",
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonColor: "rgb(210, 155, 253)",
+      cancelButtonColor: "rgb(79,109,253)",
+      confirmButtonText: "Si, eliminar!",
+      cancelButtonText: "Cancelar",
+      width: 430
+    }).then((result) =>{
+      this._tipoSacramentoService.TipoSacramentoDelete(tipoSacramento.tsIdTipoSacramento)
+      .subscribe(() => this.formatGetInputs())
+    })
   }
 
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AlertService } from '@shared/services/alert.service';
-import { tipoSacramentoApi } from '../responses/tipoSacramento/tiposacramento.response';
+import { tipoSacramento, tipoSacramentoApi } from '../responses/tipoSacramento/tiposacramento.response';
 import { environment as env } from 'src/environments/environment';
 import { endpoint } from '@shared/apis/endpoint';
 import { ListTipoSacramentoRequest } from '../requests/tipoSacramento/list-tiposacramento.request';
@@ -55,7 +55,7 @@ export class TipoSacramentoService {
               break;
           }
         })
-        console.log(data.data.items)
+        //console.log(data.data.items)
         return data
       })
     )
@@ -66,6 +66,35 @@ export class TipoSacramentoService {
     return this._http.post(requestUrl, Tsacramento).pipe(
       map((resp: ApiResponse) => {
         return resp
+      })
+    )
+  }
+
+  TipoSacramentoById(TipoSacramentoId: number):Observable<tipoSacramento>{
+    const requestUrl =  `${env.api}${endpoint.TIPO_SACRAMENTO_BY_ID}${TipoSacramentoId}`
+    return this._http.get(requestUrl).pipe(
+      map((resp: ApiResponse) => {
+        return resp.data
+      })
+    )
+  }
+
+  TipoSacramentoEdit(TipoSacramentoId: number, Tsacramento: TipoSacramentoRequest):Observable<ApiResponse>{
+    const requestUrl =  `${env.api}${endpoint.TIPO_SACRAMENTO_UPDATE}${TipoSacramentoId}`
+    return this._http.put(requestUrl, Tsacramento).pipe(
+      map((resp: ApiResponse) => {
+        return resp
+      })
+    )
+  }
+
+  TipoSacramentoDelete(TipoSacramentoId: number):Observable<void>{
+    const requestUrl =  `${env.api}${endpoint.TIPO_SACRAMENTO_DELETE}${TipoSacramentoId}`
+    return this._http.put(requestUrl, '').pipe(
+      map((resp: ApiResponse) => {
+        if(resp.isSuccess){
+          this._alert.success("Excelente", resp.message);
+        }
       })
     )
   }

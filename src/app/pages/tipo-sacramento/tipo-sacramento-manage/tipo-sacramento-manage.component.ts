@@ -38,6 +38,22 @@ export class TipoSacramentoManageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.data != null){
+      this.tipoSacramentoById(this.data.data.tsIdTipoSacramento)
+    }
+  }
+
+  tipoSacramentoById(SacramentoId: number): void{
+    this._tipoSacramentoService.TipoSacramentoById(SacramentoId).subscribe(
+      (resp) => {
+        this.form.reset({
+          TsIdTipoSacramento: resp.tsIdTipoSacramento,
+          TsNombre: resp.tsNombre,
+          TsDescripcion: resp.tsDescripcion,
+          TsRequerimiento: resp.tsRequerimiento
+        })
+      }
+    )
   }
 
   TipoSacramentoSave(): void {
@@ -50,7 +66,7 @@ export class TipoSacramentoManageComponent implements OnInit {
     const tipoSacramentoId = this.form.get("TsIdTipoSacramento").value;
 
     if (tipoSacramentoId > 0) {
-      this.CategoryEdit(tipoSacramentoId);
+      this.tipoSacramentoEdit(tipoSacramentoId);
     } else {
       this.tipoSacramentoRegister();
     }
@@ -70,17 +86,17 @@ export class TipoSacramentoManageComponent implements OnInit {
       });
   }
 
-  CategoryEdit(categoryId: number): void {
-    // this._categoryService
-    //   .CategoryEdit(categoryId, this.form.value)
-    //   .subscribe((resp) => {
-    //     if (resp.isSuccess) {
-    //       this._alert.success("Excelente", resp.message);
-    //       this._dialogRef.close(true);
-    //     } else {
-    //       this._alert.warn("Atención", resp.message);
-    //     }
-    //   });
+  tipoSacramentoEdit(categoryId: number): void {
+    this._tipoSacramentoService
+       .TipoSacramentoEdit(categoryId, this.form.value)
+       .subscribe((resp) => {
+         if (resp.isSuccess) {
+           this._alert.success("Excelente", resp.message);
+           this._dialogRef.close(true);
+         } else {
+           this._alert.warn("Atención", resp.message);
+         }
+       });
   }
 
 }

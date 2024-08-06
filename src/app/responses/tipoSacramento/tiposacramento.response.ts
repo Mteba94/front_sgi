@@ -1,11 +1,11 @@
 export interface tipoSacramento{
-    TsIdTIpoSacramento: number
-    TsNombre: string
-    TsDescripcion: string
-    TsRequerimiento: string
-    TsCreateDate: Date
-    TsEstado: number
-    EstadoDescripcion: string
+    tsIdTipoSacramento: number
+    tsNombre: string
+    tsDescripcion: string
+    tsRequerimiento: string
+    tsCreateDate: Date
+    tsEstado: number
+    estadoDescripcion: string
 }
 
 export interface tipoSacramentoApi{
