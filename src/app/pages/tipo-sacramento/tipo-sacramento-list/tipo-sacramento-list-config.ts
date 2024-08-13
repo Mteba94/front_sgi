@@ -6,6 +6,7 @@ import icViewHeadline from "@iconify/icons-ic/twotone-view-headline"
 import icLabel from "@iconify/icons-ic/twotone-label"
 import icCalendarMonth from "@iconify/icons-ic/twotone-calendar-today"
 import { GenericValidators } from "@shared/validators/generic-validators";
+import { TableColumns } from "src/app/core/interfaces/list-table.interface";
 
 const searchOptions = [
     {
@@ -55,56 +56,89 @@ const menuItems: ListTableMenu[] = [
     }
 ]
 
-const tableColumns: TableColumn<tipoSacramento>[] = [
+const tableColumns: TableColumns<tipoSacramento>[] = [
     {
         label: "Nombre",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
         property: "tsNombre",
+        cssProperty: ["font-semibold", "text-sm"],
         type: "text",
-        cssClasses: ["font-medium", "w-10"]
+        sticky: true,
+        sort: true,
+        sortProperty: "tsNombre",
+        visible: true,
+        download: true
     },
     {
         label: "Descripcion",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
         property: "tsDescripcion",
-        type: "textTruncate",
-        cssClasses: ["font-medium", "w-10"]
+        cssProperty: ["font-semibold", "text-sm"],
+        type: "text",
+        sticky: false,
+        sort: true,
+        sortProperty: "tsDescripcion",
+        visible: true,
+        download: true
     },
     {
         label: "Requerimiento",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
         property: "tsRequerimiento",
-        type: "textTruncate",
-        cssClasses: ["font-medium", "w-10"]
+        cssProperty: ["font-semibold", "text-sm"],
+        type: "text",
+        sticky: false,
+        sort: true,
+        sortProperty: "tsRequerimiento",
+        visible: true,
+        download: true
     },
     {
-        label: "F. Creacion",
+        label: "F. de Creacion",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
         property: "tsCreateDate",
+        cssProperty: ["font-semibold", "text-sm"],
         type: "datetime",
-        cssClasses: ["font-medium", "w-10"]
+        sticky: false,
+        sort: true,
+        sortProperty: "tsCreateDate",
+        visible: true,
+        download: true
     },
     {
         label: "Estado",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
         property: "estadoDescripcion",
+        cssProperty: ["font-semibold", "text-sm"],
         type: "badge",
-        cssClasses: ["font-medium", "w-10"]
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: true
     },
-    {
+   {
+       label: "",
+       cssLabel: [],
+       property: "icEdit",
+       cssProperty: [],
+       type: "icon",
+       action: "edit",
+       sticky: false,
+       sort: false,
+       visible: true,
+       download: false
+   },
+   {
         label: "",
-        property: 'menu',
-        type: 'buttonGroup',
-        buttonItems: [
-            {
-                buttonLabel: "EDITAR",
-                buttonAction: "edit",
-                buttonCondition: null,
-                disable: false
-            },
-            {
-                buttonLabel: "ELIMINAR",
-                buttonAction: "remove",
-                buttonCondition: null,
-                disable: false
-            }
-        ],
-        cssClasses: ["font-medium","w-10"]
+        cssLabel: [],
+        property: "icDelete",
+        cssProperty: [],
+        type: "icon",
+        action: "remove",
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: false
     }
 ]
 

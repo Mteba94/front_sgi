@@ -1,4 +1,6 @@
 import { formatDate } from '@angular/common';
+import { IconsService } from '@shared/services/icons.service';
+import { COLORS_BADGE } from './variables';
 
 export function convertDateToRequest(date, format: 'date' | 'datetime' | 'periodo') {
     switch (format) {
@@ -19,4 +21,34 @@ export function toBase64(file: File) {
         reader.onload = () => resolve(reader.result)
         reader.onerror = (error) => reject(error)
     })
+}
+
+export function getIcon(iconName: string, tooltip: string, permission: boolean, action?: string){
+    let generalCss = "flex justify-center items-center p-1.5 w-fit rounded-full ";
+
+    let iconObject = {
+        tooltip: null,
+        icon: null,
+        css: null,
+        action: null
+    }
+
+    if(permission){
+        iconObject = {
+            tooltip,
+            icon: IconsService.prototype.getIcon(iconName),
+            css: generalCss + COLORS_BADGE.main,
+            action: action ? action : null
+        }
+
+        if(["icEdit"].includes(iconName)){
+            iconObject.css = generalCss + COLORS_BADGE.main;
+        }
+
+        if(["icDelete"].includes(iconName)){
+            iconObject.css = generalCss + COLORS_BADGE.red;
+        }
+    }
+
+    return iconObject;
 }

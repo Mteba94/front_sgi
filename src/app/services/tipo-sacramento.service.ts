@@ -10,6 +10,7 @@ import { da } from 'date-fns/locale';
 import { Observable } from 'rxjs';
 import { TipoSacramentoRequest } from '../requests/tipoSacramento/tipoSacramento.request';
 import { ApiResponse } from '../commons/response.interface';
+import { getIcon } from '@shared/functions/helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,8 @@ export class TipoSacramentoService {
               e.badgeColor = 'text-gray bg-gray-light'
               break;
           }
+          e.icEdit = getIcon("icEdit", "Editar Tipo Sacramento", true, "edit");
+          e.icDelete = getIcon("icDelete", "Eliminar Tipo Sacramento", true, "remove")
         })
         //console.log(data.data.items)
         return data

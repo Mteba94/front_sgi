@@ -5,6 +5,7 @@ import { TipoSacramentoRoutingModule } from './tipo-sacramento-routing.module';
 import { TipoSacramentoListComponent } from './tipo-sacramento-list/tipo-sacramento-list.component';
 import { SharedModule } from '@shared/shared.module';
 import { TipoSacramentoManageComponent } from './tipo-sacramento-manage/tipo-sacramento-manage.component';
+import { ListTableComponent } from 'src/app/core/components/list-table/list-table.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { TipoSacramentoManageComponent } from './tipo-sacramento-manage/tipo-sac
   imports: [
     CommonModule,
     TipoSacramentoRoutingModule,
-    SharedModule
+    SharedModule,
+    ListTableComponent
   ]
 })
 export class TipoSacramentoModule { }

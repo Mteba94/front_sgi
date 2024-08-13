@@ -138,8 +138,10 @@ export class TipoSacramentoListComponent implements OnInit {
       cancelButtonText: "Cancelar",
       width: 430
     }).then((result) =>{
-      this._tipoSacramentoService.TipoSacramentoDelete(tipoSacramento.tsIdTipoSacramento)
-      .subscribe(() => this.formatGetInputs())
+      if (result.isConfirmed) { 
+        this._tipoSacramentoService.TipoSacramentoDelete(tipoSacramento.tsIdTipoSacramento)
+        .subscribe(() => this.formatGetInputs());
+      }
     })
   }
 
