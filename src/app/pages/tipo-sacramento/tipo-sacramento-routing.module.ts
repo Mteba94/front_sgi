@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TipoSacramentoListComponent } from './tipo-sacramento-list/tipo-sacramento-list.component';
+import { TipoSacramentoListComponent } from './components/tipo-sacramento-list/tipo-sacramento-list.component';
 
 const routes: Routes = [
   {

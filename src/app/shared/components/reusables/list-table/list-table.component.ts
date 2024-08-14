@@ -12,7 +12,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { scaleFadeIn400ms } from 'src/@vex/animations/scale-fade-in.animation';
 import { DefaultService } from '@shared/services/default.service';
-import { TableColumns, TableFooter } from '../../interfaces/list-table.interface';
+import { TableColumns, TableFooter } from '../../../models/list-table.interface';
 import { AlertService } from '@shared/services/alert.service';
 import { startWith, switchMap } from 'rxjs/operators';
 

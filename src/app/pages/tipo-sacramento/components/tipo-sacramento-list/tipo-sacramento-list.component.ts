@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CustomTitleService } from '@shared/services/custom-title.service';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
-import { TipoSacramentoService } from 'src/app/services/tipo-sacramento.service';
+import { TipoSacramentoService } from 'src/app/pages/tipo-sacramento/services/tipo-sacramento.service';
 import { componentSettings } from './tipo-sacramento-list-config';
-import { tipoSacramentoApi } from 'src/app/responses/tipoSacramento/tiposacramento.response';
+import { tipoSacramentoApi } from 'src/app/pages/tipo-sacramento/models/tiposacramento.response';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { DatesFilter } from '@shared/functions/actions';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TipoSacramentoManageComponent } from '../tipo-sacramento-manage/tipo-sacramento-manage.component';
 import Swal from 'sweetalert2';
+import { FiltersBox, SearchOptions } from '@shared/models/search-options.interface';
 
 @Component({
   selector: 'vex-tipo-sacramento-list',
@@ -37,15 +38,14 @@ export class TipoSacramentoListComponent implements OnInit {
     this.component = componentSettings
   }
 
-  setData(data: any = null){
-    this.component.filters.stateFilter = data.value
-    this.component.menuOpen = false
+  setData(value: number){
+    this.component.filters.stateFilter = value
     this.formatGetInputs()
   }
 
-  search(data: any){
+  search(data: FiltersBox){
     this.component.filters.numFilter = data.searchValue
-    this.component.filters.textFilter = data.searchString
+    this.component.filters.textFilter = data.searchData
     this.formatGetInputs()
   }
 

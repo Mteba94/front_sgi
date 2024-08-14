@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AlertService } from '@shared/services/alert.service';
-import { tipoSacramento, tipoSacramentoApi } from '../responses/tipoSacramento/tiposacramento.response';
+import { tipoSacramento, tipoSacramentoApi } from '../models/tiposacramento.response';
 import { environment as env } from 'src/environments/environment';
 import { endpoint } from '@shared/apis/endpoint';
-import { ListTipoSacramentoRequest } from '../requests/tipoSacramento/list-tiposacramento.request';
+import { ListTipoSacramentoRequest } from '../models/list-tiposacramento.request';
 import { map } from 'rxjs/operators';
 import { da } from 'date-fns/locale';
 import { Observable } from 'rxjs';
-import { TipoSacramentoRequest } from '../requests/tipoSacramento/tipoSacramento.request';
-import { ApiResponse } from '../commons/response.interface';
+import { TipoSacramentoRequest } from '../models/tipoSacramento.request';
+import { ApiResponse } from '../../../commons/response.interface';
 import { getIcon } from '@shared/functions/helpers';
 
 @Injectable({

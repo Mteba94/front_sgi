@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import icClose from '@iconify/icons-ic/twotone-close'
-import * as configs from '../../../../static-data/configs'
+import * as configs from '../../../../../static-data/configs'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertService } from '@shared/services/alert.service';
-import { TipoSacramentoService } from 'src/app/services/tipo-sacramento.service';
+import { TipoSacramentoService } from '../../services/tipo-sacramento.service';
+
 
 @Component({
   selector: 'vex-tipo-sacramento-manage',

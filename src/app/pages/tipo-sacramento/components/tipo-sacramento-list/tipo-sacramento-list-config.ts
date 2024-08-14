@@ -1,21 +1,23 @@
 import { TableColumn } from "src/@vex/interfaces/table-column.interface";
-import { tipoSacramento } from "src/app/responses/tipoSacramento/tiposacramento.response";
+import { tipoSacramento } from "src/app/pages/tipo-sacramento/models/tiposacramento.response";
 import icCategory from "@iconify/icons-ic/twotone-category"
 import { ListTableMenu } from "src/app/commons/list-table-menu.interface";
 import icViewHeadline from "@iconify/icons-ic/twotone-view-headline"
 import icLabel from "@iconify/icons-ic/twotone-label"
 import icCalendarMonth from "@iconify/icons-ic/twotone-calendar-today"
 import { GenericValidators } from "@shared/validators/generic-validators";
-import { TableColumns } from "src/app/core/interfaces/list-table.interface";
+import { TableColumns } from "@shared/models/list-table.interface";
+import { SearchOptions } from "@shared/models/search-options.interface";
+import { MenuItems } from "@shared/models/menu-items.interface";
 
-const searchOptions = [
+const searchOptions: SearchOptions[] = [
     {
         label: "Nombre",
         value: 1,
         placeholder: "Buscar por Nombre",
         validation: [GenericValidators.defaultName],
         validation_desc: "Solo se permite letras en esta busqueda",
-        min_length: 2
+        icon: "icName"
     },
     {
         label: "Descipcion",
@@ -23,11 +25,11 @@ const searchOptions = [
         placeholder: "Buscar por Descripcion",
         validation: [GenericValidators.defaultDescription],
         validation_desc: "Solo se permite letras y numeros en esta busqueda",
-        min_length: 2
+        icon: "icDescription"
     }
 ]
 
-const menuItems: ListTableMenu[] = [
+const menuItems: MenuItems[] = [
     {
         type: "link",
         id: "all",
@@ -40,7 +42,7 @@ const menuItems: ListTableMenu[] = [
         value: 1,
         icon: icLabel,
         label: "Activo",
-        classes: {
+        class: {
             icon: "text-green"
         }
     },
@@ -50,7 +52,7 @@ const menuItems: ListTableMenu[] = [
         value: 0,
         icon: icLabel,
         label: "Inactivo",
-        classes: {
+        class: {
             icon: "text-gray"
         }
     }
@@ -116,7 +118,7 @@ const tableColumns: TableColumns<tipoSacramento>[] = [
         visible: true,
         download: true
     },
-   {
+    {
        label: "",
        cssLabel: [],
        property: "icEdit",
@@ -127,8 +129,8 @@ const tableColumns: TableColumns<tipoSacramento>[] = [
        sort: false,
        visible: true,
        download: false
-   },
-   {
+    },
+    {
         label: "",
         cssLabel: [],
         property: "icDelete",
