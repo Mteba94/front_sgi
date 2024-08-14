@@ -33,9 +33,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     SearchFilterModule,
     DownloadCsvModule,
     NgxSpinnerModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatAutocompleteModule
+
   ]
 })
 export class SharedModule { }

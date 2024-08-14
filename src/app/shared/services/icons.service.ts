@@ -6,6 +6,8 @@ import icSearch from "@iconify/icons-ic/round-search"
 import icClose from "@iconify/icons-ic/round-close"
 import icName from "@iconify/icons-ic/round-badge"
 import icDescription from "@iconify/icons-ic/round-description"
+import icVisibility from "@iconify/icons-ic/twotone-visibility"
+import icVisibilityOff from "@iconify/icons-ic/twotone-visibility-off"
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +43,14 @@ export class IconsService {
 
     if(icon == "icDescription"){
       return icDescription;
+    }
+
+    if(icon == "icVisibility"){
+      return icVisibility;
+    }
+
+    if(icon == "icVisibilityOff"){
+      return icVisibilityOff;
     }
   }
 }
