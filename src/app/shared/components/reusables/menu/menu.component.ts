@@ -32,7 +32,13 @@ export class MenuComponent implements OnInit {
 
   setCurrentFilter(itenNumber: number){
     let currentItem = this.items.find((item) => item.value == itenNumber);
-    this.activeItem = currentItem.id;
+    if (currentItem) {
+        this.activeItem = currentItem.id;
+    } else {
+        console.error(`Item with value ${itenNumber} not found.`);
+    }
+
+    console.log(currentItem)
   }
 
   setFilter(item: MenuItems){

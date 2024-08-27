@@ -7,8 +7,3 @@ export interface tipoSacramento{
     tsEstado: number
     estadoDescripcion: string
 }
-
-export interface tipoSacramentoApi{
-    data: any
-    totalRecords: number
-}

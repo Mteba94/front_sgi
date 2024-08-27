@@ -4,13 +4,13 @@ import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TipoSacramentoService } from 'src/app/pages/tipo-sacramento/services/tipo-sacramento.service';
 import { componentSettings } from './tipo-sacramento-list-config';
-import { tipoSacramentoApi } from 'src/app/pages/tipo-sacramento/models/tiposacramento.response';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { DatesFilter } from '@shared/functions/actions';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TipoSacramentoManageComponent } from '../tipo-sacramento-manage/tipo-sacramento-manage.component';
 import Swal from 'sweetalert2';
 import { FiltersBox, SearchOptions } from '@shared/models/search-options.interface';
+import { BaseApiResponse } from '@shared/models/base-api-response.interface';
 
 @Component({
   selector: 'vex-tipo-sacramento-list',
@@ -107,7 +107,7 @@ export class TipoSacramentoListComponent implements OnInit {
     return false
   }
 
-  TipoSacramentoEdit(row: tipoSacramentoApi){
+  TipoSacramentoEdit(row: BaseApiResponse){
     const dialogConfig = new MatDialogConfig()
     dialogConfig.data = row
 

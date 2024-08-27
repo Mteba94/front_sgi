@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IconsService } from '@shared/services/icons.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { AlertService } from '@shared/services/alert.service';
 
 
 @Component({
@@ -25,11 +26,14 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  respMessage: string = ""
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private _alert: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -46,6 +50,8 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.form.value).subscribe((resp) => {
       if(resp.isSuccess){
         this.router.navigate(["/"]);
+      }else{
+        this._alert.error("Credenciales Incorrectas", resp.message, false)
       }
     })
   }

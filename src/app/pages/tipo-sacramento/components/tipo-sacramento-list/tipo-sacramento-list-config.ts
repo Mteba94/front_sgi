@@ -2,13 +2,12 @@ import { TableColumn } from "src/@vex/interfaces/table-column.interface";
 import { tipoSacramento } from "src/app/pages/tipo-sacramento/models/tiposacramento.response";
 import icCategory from "@iconify/icons-ic/twotone-category"
 import { ListTableMenu } from "src/app/commons/list-table-menu.interface";
-import icViewHeadline from "@iconify/icons-ic/twotone-view-headline"
-import icLabel from "@iconify/icons-ic/twotone-label"
 import icCalendarMonth from "@iconify/icons-ic/twotone-calendar-today"
 import { GenericValidators } from "@shared/validators/generic-validators";
 import { TableColumns } from "@shared/models/list-table.interface";
 import { SearchOptions } from "@shared/models/search-options.interface";
 import { MenuItems } from "@shared/models/menu-items.interface";
+import { IconsService } from "@shared/services/icons.service";
 
 const searchOptions: SearchOptions[] = [
     {
@@ -33,14 +32,14 @@ const menuItems: MenuItems[] = [
     {
         type: "link",
         id: "all",
-        icon: icViewHeadline,
+        icon: IconsService.prototype.getIcon("icViewHeadline"),
         label: "Todos"
     },
     {
         type: "link",
         id: "Activo",
         value: 1,
-        icon: icLabel,
+        icon: IconsService.prototype.getIcon("icLabel"),
         label: "Activo",
         class: {
             icon: "text-green"
@@ -50,7 +49,7 @@ const menuItems: MenuItems[] = [
         type: "link",
         id: "Inactivo",
         value: 0,
-        icon: icLabel,
+        icon: IconsService.prototype.getIcon("icLabel"),
         label: "Inactivo",
         class: {
             icon: "text-gray"

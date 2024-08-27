@@ -21,6 +21,10 @@ const childrenRoutes: VexRoutes = [
     }
   },
   {
+    path: 'sacramento',
+    loadChildren: () => import("./pages/sacramento/sacramento.module").then((m) => m.SacramentoModule),
+  },
+  {
     path: '**',
     component: NotFoundComponent
   }

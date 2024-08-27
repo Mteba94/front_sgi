@@ -28,13 +28,14 @@ export class AlertService {
     })
   }
 
-  error(title: string, message: string){
+  error(title: string, message: string, backdrop?: boolean){
     Swal.fire({
       title: title,
       text: message,
       icon: 'error',
       confirmButtonColor: 'rgb(210, 155, 253)',
-      width: 430
+      width: 430,
+      backdrop: backdrop
     });
   }
 }

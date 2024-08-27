@@ -1,7 +1,7 @@
 import { convertDateToRequest } from "@shared/functions/helpers";
 import { params } from "src/app/commons/params-api.interface";
 
-export class ListTipoSacramentoRequest extends params {
+export class ListSacramentoRequest extends params {
     constructor(
         numPage: number,
         order: 'desc' | 'asc',

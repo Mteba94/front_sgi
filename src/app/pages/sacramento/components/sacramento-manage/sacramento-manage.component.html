@@ -1,0 +1,178 @@
+<form (ngSubmit)="sacramentoSave" [formGroup]="form">
+    <div mat-dialog-title class="flex justify-between">
+        <h2 class="headline m-0 text-xl text-accent">
+            <strong>Gestión de Sacramento</strong>
+        </h2>
+        <button class="text-secondary" mat-dialog-close mat-icon-button>
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <div>
+            <mat-dialog-content>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Tipo de Sacramento</mat-label>
+                    <mat-select formControlName="scIdTipoSacramento" (selectionChange)="listDocumentTypes()">
+                        <mat-option *ngFor="let item of tipoSacramentoTypes" [value]="item.tsIdTipoSacramento">
+                            {{ item.tsNombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('scIdTipoSacramento').hasError('required')">
+                        Campo Tipo de Sacramento es requerido.
+                    </mat-error>
+                </mat-form-field>
+            </mat-dialog-content>
+            <mat-form-field appearance="outline">
+                <mat-label>Partida</mat-label>
+                <input matInput formControlName="scPartida" (input)="formatInput($event)" />
+                <mat-error *ngIf="form.get('scPartida').hasError('required')">
+                  Campo Partida es requerido.
+                </mat-error>
+            </mat-form-field>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="60%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Nombre</mat-label>
+                            <input matInput formControlName="peNombre">
+                            <mat-error *ngIf="form.get('peNombre').hasError('required')">
+                                Campo Nombre es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="40%">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Fecha de Nacimiento</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="peFechaNacimiento" placeholder="Seleccione una fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="form.get('peFechaNacimiento').hasError('required')">
+                          Campo Fecha de Nacimiento es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="30%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <mat-select formControlName="peIdTipoDocumento" (selectionChange)="listDocumentTypes()">
+                                <mat-option *ngFor="let item of documentTypes" [value]="item.tdIdTipoDocumento">
+                                    {{ item.tdAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('peIdTipoDocumento').hasError('required')">
+                                Campo Tipo de Documento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="70%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Numero de Documento</mat-label>
+                            <input matInput formControlName="peNumeroDocumento">
+                            <mat-error *ngIf="form.get('peNumeroDocumento').hasError('required')">
+                                Campo Numero de Documento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <mat-dialog-content>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Dirección</mat-label>
+                    <input matInput formControlName="peDireccion">
+                    <mat-error *ngIf="form.get('peDireccion').hasError('required')">
+                        Campo Dirección es requerido.
+                    </mat-error>
+                </mat-form-field>
+            </mat-dialog-content>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Padre</mat-label>
+                            <input matInput formControlName="scPadre">
+                            <mat-error *ngIf="form.get('scPadre').hasError('required')">
+                                Campo Padre es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Madre</mat-label>
+                            <input matInput formControlName="scMadre">
+                            <mat-error *ngIf="form.get('scMadre').hasError('required')">
+                                Campo Madre es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Padrino</mat-label>
+                            <input matInput formControlName="scPadrino">
+                            <mat-error *ngIf="form.get('scPadrino').hasError('required')">
+                                Campo Padrino es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Madrina</mat-label>
+                            <input matInput formControlName="scMadrina">
+                            <mat-error *ngIf="form.get('scMadrina').hasError('required')">
+                                Campo Madrina es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Fecha de Sacramento</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="scFechaSacramento" placeholder="Seleccione una fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="form.get('scFechaSacramento').hasError('required')">
+                          Campo Fecha de Sacramento es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Parroco</mat-label>
+                            <input matInput formControlName="scParroco">
+                            <mat-error *ngIf="form.get('scParroco').hasError('required')">
+                                Campo Parroco es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <mat-dialog-content>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Observaciones</mat-label>
+                    <textarea matInput formControlName="scObservaciones"></textarea>
+                    <mat-error *ngIf="form.get('scObservaciones').hasError('required')">
+                        Campo Observaciones es requerido.
+                    </mat-error>
+                </mat-form-field>
+            </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>CANCELAR</button>
+            <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="sacramentoSave()">GUARDAR</button>
+        </mat-dialog-actions>
+    </div>
+</form>

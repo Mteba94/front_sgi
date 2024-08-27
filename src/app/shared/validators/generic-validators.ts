@@ -88,7 +88,7 @@ export class GenericValidators {
     */
      static dni(control: AbstractControl): { [key: string]: boolean } | null {
         if (control.value != null && control.value.toString().trim() != "") {
-            if (/^(?!00000000$)([0-9]{8})$/.test(control.value)) return null;
+            if (/^(?!00000000$)([0-9]{13})$/.test(control.value)) return null;
             else return { 'dni': true };
         } else {
             return null;
