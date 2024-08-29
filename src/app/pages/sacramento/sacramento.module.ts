@@ -10,7 +10,7 @@ import { SacramentolistComponent } from './components/sacramentolist/sacramentol
 import { SacramentoManageComponent } from './components/sacramento-manage/sacramento-manage.component';
 import { SearchBoxSimpleModule } from "../../shared/components/search-box-simple/search-box-simple.module";
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -27,10 +27,10 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     MenuComponent,
     SearchBoxSimpleModule,
     MatDatepickerModule,
-    
+    MatNativeDateModule,
 ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, // Configurar el locale
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
   ]
 })
 export class SacramentoModule { }

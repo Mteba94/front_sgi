@@ -28,6 +28,7 @@
                 ></app-menu>
                 <div class="card h-full overflow-hidden flex-auto">
                     <app-list-table
+                        (rowClick)="rowClick($event)"
                         [service]="_sacramentoService"
                         [columns]="component.tableColumns"
                         [sortBy]="component.initialSort"

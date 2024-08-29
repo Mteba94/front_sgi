@@ -77,10 +77,6 @@ export class SacramentoService {
 
   SacramentoEdit(SacramentId: number, Sacramento: sacramentoRequest):Observable<BaseResponse>{
     const requestUrl =  `${env.api}${endpoint.SACRAMENTO_UPDATE}${SacramentId}`
-    return this._http.put(requestUrl, Sacramento).pipe(
-      map((resp: BaseResponse) => {
-        return resp
-      })
-    )
+    return this._http.put<BaseResponse>(requestUrl, Sacramento);
   }
 }

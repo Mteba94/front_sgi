@@ -6,9 +6,11 @@ import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { SacramentoService } from '../../services/sacramento.service';
 import { componentSettings, menuItems, updateMenuItems } from './sacramento-list-config';
 import { FiltersBox } from '@shared/models/search-options.interface';
-import { BaseResponse } from '@shared/models/base-api-response.interface';
-import { MatDialog } from '@angular/material/dialog';
+import { BaseApiResponse, BaseResponse } from '@shared/models/base-api-response.interface';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SacramentoManageComponent } from '../sacramento-manage/sacramento-manage.component';
+import { SacramentoResponse } from '../../models/sacramento-response.interface';
+import { RowClick } from '@shared/models/row-click.interface';
 
 @Component({
   selector: 'vex-sacramentolist',
@@ -100,5 +102,38 @@ export class SacramentolistComponent implements OnInit {
   setGetInputsSacrament(refresh: boolean){
     this.component.filters.refresh = refresh;
     this.formatGetInputs()
+  }
+
+  rowClick(rowClick: RowClick<SacramentoResponse>){
+    console.log(rowClick)
+    let action = rowClick.action;
+    let sacramento = rowClick.row;
+
+    switch(action){
+      case "edit":
+        this.SacramentoEdit(sacramento);
+        break
+    }
+
+    return false
+  }
+
+  SacramentoEdit(sacramentoData: SacramentoResponse){
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.data = sacramentoData
+
+    this._dialog.open(SacramentoManageComponent, {
+      data: sacramentoData,
+      disableClose: true,
+      width: "700px",
+      maxHeight: '80vh'
+    })
+    .afterClosed().subscribe(
+      (res) => {
+        if (res) {
+          this.formatGetInputs()
+        }
+      }
+    )
   }
 }

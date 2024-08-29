@@ -8,27 +8,35 @@
         </button>
     </div>
     <div>
-            <mat-dialog-content>
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Tipo de Sacramento</mat-label>
-                    <mat-select formControlName="scIdTipoSacramento" (selectionChange)="listDocumentTypes()">
-                        <mat-option *ngFor="let item of tipoSacramentoTypes" [value]="item.tsIdTipoSacramento">
-                            {{ item.tsNombre }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="form.get('scIdTipoSacramento').hasError('required')">
-                        Campo Tipo de Sacramento es requerido.
-                    </mat-error>
-                </mat-form-field>
-            </mat-dialog-content>
-            <mat-form-field appearance="outline">
-                <mat-label>Partida</mat-label>
-                <input matInput formControlName="scPartida" (input)="formatInput($event)" />
-                <mat-error *ngIf="form.get('scPartida').hasError('required')">
-                  Campo Partida es requerido.
-                </mat-error>
-            </mat-form-field>
             <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Tipo de Sacramento</mat-label>
+                            <mat-select formControlName="scIdTipoSacramento" (selectionChange)="handleSacramentoTypeChange($event.value)">
+                                <mat-option *ngFor="let item of tipoSacramentoTypes" [value]="item.tsIdTipoSacramento">
+                                  {{ item.tsNombre }}
+                                </mat-option>
+                              </mat-select>
+                            <mat-error *ngIf="form.get('scIdTipoSacramento').hasError('required')">
+                                Campo Tipo de Sacramento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Partida</mat-label>
+                            <input matInput formControlName="scNumeroPartida" (input)="formatInput($event)">
+                            <mat-error *ngIf="form.get('scNumeroPartida').hasError('required')">
+                                Campo Partida es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peNombre')">
                 <div fxFlex="60%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
@@ -52,7 +60,162 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div fxLayout="row" fxLayoutGap="16px">
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peNombreEsposo')">
+                <div fxFlex="60%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Nombre del Esposo</mat-label>
+                            <input matInput formControlName="peNombreEsposo">
+                            <mat-error *ngIf="form.get('peNombreEsposo').hasError('required')">
+                                Campo Nombre del Esposo es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="40%">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Fecha de Nacimiento Esposo</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="peFechaNacimientoEsposo" placeholder="Seleccione una fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="form.get('peFechaNacimientoEsposo').hasError('required')">
+                          Campo Fecha de Nacimiento es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peIdTipoDocumentoEsposo')">
+                <div fxFlex="30%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <mat-select formControlName="peIdTipoDocumentoEsposo" (selectionChange)="listDocumentTypes()">
+                                <mat-option *ngFor="let item of documentTypes" [value]="item.tdIdTipoDocumento">
+                                    {{ item.tdAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('peIdTipoDocumentoEsposo').hasError('required')">
+                                Campo Tipo de Documento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="70%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Numero de Documento Esposo</mat-label>
+                            <input matInput formControlName="peNumeroDocumentoEsposo" maxlength="13">
+                            <mat-error *ngIf="form.get('peNumeroDocumentoEsposo').hasError('required')">
+                                Campo Numero de Documento es requerido.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('peNumeroDocumentoEsposo').hasError('minLength')">
+                                El campo debe tener 13 caracteres.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div *ngIf="form.get('peDireccionEsposo')">
+                <mat-dialog-content>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Dirección Esposo</mat-label>
+                        <input matInput formControlName="peDireccionEsposo">
+                        <mat-error *ngIf="form.get('peDireccionEsposo').hasError('required')">
+                            Campo Dirección es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </mat-dialog-content>
+            </div>
+            <div *ngIf="form.get('scPadreEsposo')">
+                <div fxLayout="row" fxLayoutGap="16px" >
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Padre - Esposo</mat-label>
+                                <input matInput formControlName="scPadreEsposo">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Madre - Esposo</mat-label>
+                                <input matInput formControlName="scMadreEsposo">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                </div>
+                <mat-error *ngIf="form.hasError('atLeastOneFieldRequired')">
+                    Al menos uno de los campos "Padre" o "Madre" debe ser llenado.
+                </mat-error>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peNombreEsposa')">
+                <div fxFlex="60%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Nombre de la Esposa</mat-label>
+                            <input matInput formControlName="peNombreEsposa">
+                            <mat-error *ngIf="form.get('peNombreEsposa').hasError('required')">
+                                Campo Nombre de la Esposa es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="40%">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Fecha de Nacimiento Esposa</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="peFechaNacimientoEsposa" placeholder="Seleccione una fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="form.get('peFechaNacimientoEsposa').hasError('required')">
+                          Campo Fecha de Nacimiento es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peIdTipoDocumentoEsposa')">
+                <div fxFlex="30%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <mat-select formControlName="peIdTipoDocumentoEsposa" (selectionChange)="listDocumentTypes()">
+                                <mat-option *ngFor="let item of documentTypes" [value]="item.tdIdTipoDocumento">
+                                    {{ item.tdAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('peIdTipoDocumentoEsposa').hasError('required')">
+                                Campo Tipo de Documento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="70%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Numero de Documento Esposa</mat-label>
+                            <input matInput formControlName="peNumeroDocumentoEsposa" maxlength="13">
+                            <mat-error *ngIf="form.get('peNumeroDocumentoEsposa').hasError('required')">
+                                Campo Numero de Documento es requerido.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('peNumeroDocumentoEsposa').hasError('minLength')">
+                                El campo debe tener 13 caracteres.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div *ngIf="form.get('peDireccionEsposa')">
+                <mat-dialog-content>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Dirección Esposa</mat-label>
+                        <input matInput formControlName="peDireccionEsposa">
+                        <mat-error *ngIf="form.get('peDireccionEsposa').hasError('required')">
+                            Campo Dirección es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </mat-dialog-content>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peIdTipoDocumento')">
                 <div fxFlex="30%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
@@ -72,78 +235,124 @@
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Numero de Documento</mat-label>
-                            <input matInput formControlName="peNumeroDocumento">
+                            <input matInput formControlName="peNumeroDocumento" maxlength="13">
                             <mat-error *ngIf="form.get('peNumeroDocumento').hasError('required')">
                                 Campo Numero de Documento es requerido.
                             </mat-error>
-                        </mat-form-field>
-                    </mat-dialog-content>
-                </div>
-            </div>
-            <mat-dialog-content>
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Dirección</mat-label>
-                    <input matInput formControlName="peDireccion">
-                    <mat-error *ngIf="form.get('peDireccion').hasError('required')">
-                        Campo Dirección es requerido.
-                    </mat-error>
-                </mat-form-field>
-            </mat-dialog-content>
-            <div fxLayout="row" fxLayoutGap="16px">
-                <div fxFlex="50%">
-                    <mat-dialog-content>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Padre</mat-label>
-                            <input matInput formControlName="scPadre">
-                            <mat-error *ngIf="form.get('scPadre').hasError('required')">
-                                Campo Padre es requerido.
-                            </mat-error>
-                        </mat-form-field>
-                    </mat-dialog-content>
-                </div>
-                <div fxFlex="50%">
-                    <mat-dialog-content>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Madre</mat-label>
-                            <input matInput formControlName="scMadre">
-                            <mat-error *ngIf="form.get('scMadre').hasError('required')">
-                                Campo Madre es requerido.
+                            <mat-error *ngIf="form.get('peNumeroDocumento').hasError('minLength')">
+                                El campo debe tener 13 caracteres.
                             </mat-error>
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
             </div>
-            <div fxLayout="row" fxLayoutGap="16px">
-                <div fxFlex="50%">
-                    <mat-dialog-content>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Padrino</mat-label>
-                            <input matInput formControlName="scPadrino">
-                            <mat-error *ngIf="form.get('scPadrino').hasError('required')">
-                                Campo Padrino es requerido.
-                            </mat-error>
-                        </mat-form-field>
-                    </mat-dialog-content>
+            <div *ngIf="form.get('peDireccion')">
+                <mat-dialog-content>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Dirección</mat-label>
+                        <input matInput formControlName="peDireccion">
+                        <mat-error *ngIf="form.get('peDireccion').hasError('required')">
+                            Campo Dirección es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </mat-dialog-content>
+            </div>
+            <div *ngIf="form.get('scPadreEsposa')">
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Padre - Esposa</mat-label>
+                                <input matInput formControlName="scPadreEsposa">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Madre - Esposa</mat-label>
+                                <input matInput formControlName="scMadreEsposa">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
                 </div>
-                <div fxFlex="50%">
-                    <mat-dialog-content>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Madrina</mat-label>
-                            <input matInput formControlName="scMadrina">
-                            <mat-error *ngIf="form.get('scMadrina').hasError('required')">
-                                Campo Madrina es requerido.
-                            </mat-error>
-                        </mat-form-field>
-                    </mat-dialog-content>
+                <mat-error *ngIf="form.hasError('atLeastOneFieldRequired')">
+                    Al menos uno de los campos "Padre" o "Madre" debe ser llenado.
+                </mat-error>
+            </div>
+            <div *ngIf="form.get('scPadre')">
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Padre</mat-label>
+                                <input matInput formControlName="scPadre">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Madre</mat-label>
+                                <input matInput formControlName="scMadre">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                </div>
+                <mat-error *ngIf="form.hasError('atLeastOneFieldRequired')">
+                    Al menos uno de los campos "Padre" o "Madre" debe ser llenado.
+                </mat-error>
+            </div>
+            <div *ngIf="form.get('scPadrino')">
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Padrino</mat-label>
+                                <input matInput formControlName="scPadrino">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Madrina</mat-label>
+                                <input matInput formControlName="scMadrina">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                </div>
+                <mat-error *ngIf="form.hasError('atLeastOneFieldRequired')">
+                    Al menos uno de los campos "Padrino" o "Madrina" debe ser llenado.
+                </mat-error>
+            </div>
+            <div *ngIf="form.get('scTestigo1')">
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Testigo 1</mat-label>
+                                <input matInput formControlName="scTestigo1">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
+                    <div fxFlex="50%">
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Testigo 2</mat-label>
+                                <input matInput formControlName="scTestigo2">
+                            </mat-form-field>
+                        </mat-dialog-content>
+                    </div>
                 </div>
             </div>
             <div fxLayout="row" fxLayoutGap="16px">
                 <div fxFlex="50%">
                     <mat-form-field appearance="outline" class="w-full">
                         <mat-label>Fecha de Sacramento</mat-label>
-                        <input matInput [matDatepicker]="picker" formControlName="scFechaSacramento" placeholder="Seleccione una fecha">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
+                        <input matInput [matDatepicker]="picker2" formControlName="scFechaSacramento" placeholder="Seleccione una fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
                         <mat-error *ngIf="form.get('scFechaSacramento').hasError('required')">
                           Campo Fecha de Sacramento es requerido.
                         </mat-error>
