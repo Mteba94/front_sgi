@@ -16,11 +16,21 @@ export const endpoint = {
     //Sacramento Module
     lIST_SACRAMENTO: 'Sacramento',
     SACRAMENTO_BY_ID: 'Sacramento/',
+    MATRIMONIO_BY_ID: 'Sacramento/Matrimonio/',
     SACRAMENTO_REGISTER: 'Sacramento/Register',
+    MATRIMONIO_REGISTER: 'Sacramento/Register/Matrimonio',
     SACRAMENTO_UPDATE: 'Sacramento/Update/',
+    MATRIMONIO_UPDATE: 'Sacramento/Update/Matrimonio/',
 
     //Document Type Module
     SELECT_DOCUMENT_TYPE: 'TipoDocumento/Select',
+
+    //Sex Type Module
+    SELECT_SEX_TYPE: 'TipoSexo/Select',
+
+    //Constancias
+    CONSTANCIA_GENERATE: 'Certification',
+
 }
 
 export const httpOptions = {

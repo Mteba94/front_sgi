@@ -9,6 +9,8 @@ import { map } from 'rxjs/operators';
 import { SacramentoResponse } from '../models/sacramento-response.interface';
 import { getIcon } from '@shared/functions/helpers';
 import { sacramentoRequest } from '../models/sacramento-request.interface';
+import { matrimonioRequest } from '../models/matrimonio-request.interface';
+import { MatrimonioResponse } from '../models/matrimonio-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +44,7 @@ export class SacramentoService {
         map((data: BaseApiResponse) => {
           data.data.items.forEach(function(sac: SacramentoResponse){
             sac.icEdit = getIcon("icEdit", "Editar Sacramento", true, "edit")
+            sac.icCloudDownload = getIcon("icCloudDownload", "Generar Constancia", true, "constancia")
           })
           return data;
         })
@@ -66,6 +69,15 @@ export class SacramentoService {
     )
   }
 
+  MatrimonioById(SacramentoId: number):Observable<MatrimonioResponse>{
+    const requestUrl =  `${env.api}${endpoint.MATRIMONIO_BY_ID}${SacramentoId}`
+    return this._http.get(requestUrl).pipe(
+      map((resp: BaseResponse) => {
+        return resp.data
+      })
+    )
+  }
+
   SacramentoRegister(Sacramento: sacramentoRequest):Observable<BaseResponse>{
     const requestUrl =  `${env.api}${endpoint.SACRAMENTO_REGISTER}`
     return this._http.post(requestUrl, Sacramento).pipe(
@@ -75,8 +87,22 @@ export class SacramentoService {
     )
   }
 
+  MatrimonioRegister(Matrimonio: matrimonioRequest):Observable<BaseResponse>{
+    const requestUrl =  `${env.api}${endpoint.MATRIMONIO_REGISTER}`
+    return this._http.post(requestUrl, Matrimonio).pipe(
+      map((resp: BaseResponse) => {
+        return resp
+      })
+    )
+  }
+
   SacramentoEdit(SacramentId: number, Sacramento: sacramentoRequest):Observable<BaseResponse>{
     const requestUrl =  `${env.api}${endpoint.SACRAMENTO_UPDATE}${SacramentId}`
     return this._http.put<BaseResponse>(requestUrl, Sacramento);
+  }
+
+  MatrimonioEdit(SacramentoId: number, Matrimonio: matrimonioRequest):Observable<BaseResponse>{
+    const requestUrl =  `${env.api}${endpoint.MATRIMONIO_UPDATE}${SacramentoId}`
+    return this._http.put<BaseResponse>(requestUrl, Matrimonio);
   }
 }

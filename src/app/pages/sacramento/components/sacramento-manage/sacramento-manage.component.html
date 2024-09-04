@@ -100,7 +100,7 @@
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
-                <div fxFlex="70%">
+                <div fxFlex="50%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Numero de Documento Esposo</mat-label>
@@ -110,6 +110,21 @@
                             </mat-error>
                             <mat-error *ngIf="form.get('peNumeroDocumentoEsposo').hasError('minLength')">
                                 El campo debe tener 13 caracteres.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Genero</mat-label>
+                            <mat-select formControlName="peSexoIdEsposo" (selectionChange)="listSexType()">
+                                <mat-option *ngFor="let item of sexTypes" [value]="item.sexoId">
+                                    {{ item.sxAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('peSexoIdEsposo').hasError('required')">
+                                Campo Genero es requerido.
                             </mat-error>
                         </mat-form-field>
                     </mat-dialog-content>
@@ -189,7 +204,7 @@
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
-                <div fxFlex="70%">
+                <div fxFlex="50%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Numero de Documento Esposa</mat-label>
@@ -199,6 +214,21 @@
                             </mat-error>
                             <mat-error *ngIf="form.get('peNumeroDocumentoEsposa').hasError('minLength')">
                                 El campo debe tener 13 caracteres.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Genero</mat-label>
+                            <mat-select formControlName="peSexoIdEsposa" (selectionChange)="listSexType()">
+                                <mat-option *ngFor="let item of sexTypes" [value]="item.sexoId">
+                                    {{ item.sxAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('peSexoIdEsposa').hasError('required')">
+                                Campo Genero es requerido.
                             </mat-error>
                         </mat-form-field>
                     </mat-dialog-content>
@@ -231,7 +261,7 @@
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
-                <div fxFlex="70%">
+                <div fxFlex="50%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Numero de Documento</mat-label>
@@ -241,6 +271,21 @@
                             </mat-error>
                             <mat-error *ngIf="form.get('peNumeroDocumento').hasError('minLength')">
                                 El campo debe tener 13 caracteres.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Genero</mat-label>
+                            <mat-select formControlName="peSexoId" (selectionChange)="listSexType()">
+                                <mat-option *ngFor="let item of sexTypes" [value]="item.sexoId">
+                                    {{ item.sxAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('peSexoId').hasError('required')">
+                                Campo Genero es requerido.
                             </mat-error>
                         </mat-form-field>
                     </mat-dialog-content>

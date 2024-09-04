@@ -1,0 +1,22 @@
+<div mat-dialog-title class="flex justify-between">
+    <h2 class="headline m-0 text-xl text-accent">
+        <strong>Constancia de {{ tSacramento }} - {{ tNombre }}</strong>
+    </h2>
+    <button class="text-secondary" mat-dialog-close mat-icon-button>
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<div *ngIf="pdfSrc; else loading">
+    <iframe [src]="pdfSrc" width="100%" height="500px"></iframe>
+  </div>
+  
+  <ng-template #loading>
+    <p>Cargando PDF...</p>
+  </ng-template>
+
+<div mat-dialog-actions>
+  <button mat-flat-button color="primary" (click)="onDownload()">Descargar</button>
+  
+</div>
+

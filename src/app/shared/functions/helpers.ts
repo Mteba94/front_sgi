@@ -48,6 +48,10 @@ export function getIcon(iconName: string, tooltip: string, permission: boolean, 
         if(["icDelete"].includes(iconName)){
             iconObject.css = generalCss + COLORS_BADGE.red;
         }
+
+        if(["icCloudDownload"].includes(iconName)){
+            iconObject.css = generalCss + COLORS_BADGE.coral;
+        }
     }
 
     return iconObject;

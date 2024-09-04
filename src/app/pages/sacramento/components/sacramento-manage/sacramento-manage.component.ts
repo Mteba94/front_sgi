@@ -9,6 +9,8 @@ import { DocumentTypeService } from '@shared/services/document-type.service';
 import { DocumentType } from '@shared/models/document-type.interface';
 import { tipoSacramentoSelect } from '../../models/list-tipoSacramento-select.interface';
 import { atLeastOneFieldRequiredValidator } from './atLeastOneFieldRequiredValidator';
+import { SexType } from '@shared/models/sex-type.interface';
+import { SexTypeService } from '@shared/services/sex-type.service';
 
 @Component({
   selector: 'vex-sacramento-manage',
@@ -20,12 +22,14 @@ export class SacramentoManageComponent implements OnInit {
   configs = configs
 
   documentTypes: DocumentType[];
-  tipoSacramentoTypes: tipoSacramentoSelect[]
+  tipoSacramentoTypes: tipoSacramentoSelect[];
+  sexTypes: SexType[];
   form: FormGroup;
 
   initForm(): void{
     this.form = this._fb.group({
       scIdSacramento: [, ],
+      scMatrimonioId: [, ],
       scNumeroPartida: [, [Validators.required]],
       scIdTipoSacramento: [0, [Validators.required]],
       peNombre: ["", [Validators.required]],
@@ -33,6 +37,7 @@ export class SacramentoManageComponent implements OnInit {
       peIdTipoDocumento: [0, [Validators.required]],
       peNumeroDocumento: [, [Validators.required, 
                               Validators.minLength(13)]],
+      peSexoId: [0, [Validators.required]],
       peDireccion: ["", [Validators.required]],
       scPadre: [""],
       scMadre: [""],
@@ -57,7 +62,8 @@ export class SacramentoManageComponent implements OnInit {
     private _alert: AlertService,
     private _sacramentoService: SacramentoService,
     public _dialogRef: MatDialogRef<SacramentoManageComponent>,
-    private _documentTypeService: DocumentTypeService
+    private _documentTypeService: DocumentTypeService,
+    private _sexTypeService: SexTypeService
   ) {
     this.initForm();
    }
@@ -65,11 +71,15 @@ export class SacramentoManageComponent implements OnInit {
   ngOnInit(): void {
     this.listDocumentTypes();
     this.listTipoSacramento();
+    this.listSexType();
 
     if(this.data != null){
-      //console.log(this.data.data.scIdSacramento)
+      //console.log(this.data.scIdSacramento)
       this.sacramentoById(this.data.scIdSacramento);
-      
+    }else {
+      // Aplicar la configuración del formulario para el tipo de sacramento por defecto (si lo hay)
+      console.log(this.data.scIdSacramento)
+      this.handleSacramentoTypeChange(this.form.get('scMatrimonioId')?.value);
     }
   }
 
@@ -85,6 +95,8 @@ export class SacramentoManageComponent implements OnInit {
         { name: 'peIdTipoDocumentoEsposa', validators: [Validators.required] },
         { name: 'peNumeroDocumentoEsposo', validators: [Validators.required, Validators.minLength(13)] },
         { name: 'peNumeroDocumentoEsposa', validators: [Validators.required, Validators.minLength(13)] },
+        { name: 'peSexoIdEsposo', validators: [Validators.required], defaultValue: 2 },
+        { name: 'peSexoIdEsposa', validators: [Validators.required], defaultValue: 1 },
         { name: 'peDireccionEsposo', validators: [Validators.required] },
         { name: 'peDireccionEsposa', validators: [Validators.required] },
         { name: 'scPadreEsposo' },
@@ -106,17 +118,19 @@ export class SacramentoManageComponent implements OnInit {
       { name: 'scMadre' },
       { name: 'scPadrino' },
       { name: 'scMadrina' },
+      { name: 'peSexoId' }
     ];
 
-    // const fieldsToAdd = matrimonioFields.additionalFields.map(field => field.name);
-  
-    // const fieldsToRemove = ['peNombre', 'peFechaNacimiento', 'peIdTipoDocumento', 'peNumeroDocumento', 'peDireccion', 'scPadre', 'scPadrino'];
-
     if (sacramentoTypeId === matrimonioFields.scIdTipoSacramento) {
-      // Añadir los campos al formulario
+      
       matrimonioFields.additionalFields.forEach(field => {
         if (!this.form.contains(field.name)) {
-          this.form.addControl(field.name, new FormControl('', field.validators));
+          const control = new FormControl(
+            { value: field.defaultValue || '', disabled: !!field.defaultValue },
+            field.validators
+          );
+          this.form.addControl(field.name, control);
+          //this.form.addControl(field.name, new FormControl('', field.validators));
         }
       });
 
@@ -172,6 +186,12 @@ export class SacramentoManageComponent implements OnInit {
     })
   }
 
+  listSexType(): void{
+    this._sexTypeService.listSexType().subscribe((resp) =>{
+      this.sexTypes = resp
+    })
+  }
+
   sacramentoSave(): void{
     if(this.form.invalid){
       return Object.values(this.form.controls).forEach((controls) => {
@@ -184,14 +204,22 @@ export class SacramentoManageComponent implements OnInit {
 
     const scIdTipoSacramento = this.form.get("scIdTipoSacramento").value;
 
-    if(scIdTipoSacramento == 4){
-      console.log(this.form.getRawValue())
-    }
-
     if(scIdSacramento > 0){
-      this.sacramentoEdit(scIdSacramento);
+
+      if(scIdTipoSacramento == 4){
+        this.matrimonioEdit(scIdSacramento);
+      }else{
+        this.sacramentoEdit(scIdSacramento);
+      }
+      
     }else{
-      this.sacramentoRegister();
+
+      if(scIdTipoSacramento == 4){
+        this.matrimonioRegister();
+      }else{
+        this.sacramentoRegister();
+      }
+      
     }
   }
 
@@ -206,8 +234,24 @@ export class SacramentoManageComponent implements OnInit {
     })
   }
 
+  matrimonioRegister(): void{
+    this._sacramentoService.MatrimonioRegister(this.form.getRawValue()).subscribe((resp) => {
+      if(resp.isSuccess){
+        this._alert.success("Excelente", resp.message);
+        this._dialogRef.close(true);
+      }else{
+        this._alert.warn("Atención", resp.message)
+      }
+    })
+  }
+
   sacramentoById(sacramentoId: number): void{
     this._sacramentoService.SacramentoById(sacramentoId).subscribe((resp) => {
+
+      if(resp.scIdTipoSacramento == 4){
+        this.matrimoniobyId(sacramentoId)
+      }
+
       this.form.reset({
         scIdSacramento: resp.scIdSacramento,
         scNumeroPartida: resp.scNumeroPartida,
@@ -216,6 +260,7 @@ export class SacramentoManageComponent implements OnInit {
         peFechaNacimiento: resp.peFechaNacimiento,
         peIdTipoDocumento: resp.peIdTipoDocumento,
         peNumeroDocumento: resp.peNumeroDocumento,
+        peSexoId: resp.peSexoId,
         peDireccion: resp.peDireccion,
         scPadre: resp.scNombrePadre,
         scMadre: resp.scNombreMadre,
@@ -232,6 +277,47 @@ export class SacramentoManageComponent implements OnInit {
     })
   }
 
+  matrimoniobyId(matrimonioId: number): void{
+    this._sacramentoService.MatrimonioById(matrimonioId).subscribe((resp) => {
+      console.log(resp)
+
+      this.handleSacramentoTypeChange(resp.scIdTipoSacramento);
+
+      this.form.patchValue({
+        scIdTipoSacramento: resp.scIdTipoSacramento,
+        scNumeroPartida: resp.scNumeroPartida,
+        peNombreEsposo: resp.peNombreEsposo,
+        peNombreEsposa: resp.peNombreEsposa,
+        peFechaNacimientoEsposo: resp.peFechaNacimientoEsposo,
+        peFechaNacimientoEsposa: resp.peFechaNacimientoEsposa,
+        peIdTipoDocumentoEsposo: resp.peIdTipoDocumentoEsposo,
+        peIdTipoDocumentoEsposa: resp.peIdTipoDocumentoEsposa,
+        peNumeroDocumentoEsposo: resp.peNumeroDocumentoEsposo,
+        peNumeroDocumentoEsposa: resp.peNumeroDocumentoEsposa,
+        peSexoIdEsposo: resp.peSexoIdEsposo,
+        peSexoIdEsposa: resp.peSexoIdEsposa,
+        peDireccionEsposo: resp.peDireccionEsposo,
+        peDireccionEsposa: resp.peDireccionEsposa,
+        scPadreEsposo: resp.scPadreEsposo,
+        scPadreEsposa: resp.scPadreEsposa,
+        scMadreEsposo: resp.scMadreEsposo,
+        scMadreEsposa: resp.scMadreEsposa,
+        scTestigo1: resp.scTestigo1,
+        scTestigo2: resp.scTestigo2,
+        scParroco: resp.scParroco,
+        scFechaSacramento: resp.scFechaSacramento,
+        scObservaciones: resp.scObservaciones
+      });
+  
+      // Ejemplo de cómo manejar deshabilitar un campo o establecer validadores
+      this.form.get('scIdTipoSacramento')?.disable();
+      this.form.get('scObservaciones')?.setValidators([Validators.required]);
+  
+      // Si necesitas realizar alguna acción dependiendo del tipo de sacramento
+      
+    });
+  }
+
   sacramentoEdit(scIdSacramento: number): void{
     this._sacramentoService.SacramentoEdit(scIdSacramento, this.form.getRawValue())
     .subscribe((resp) => {
@@ -242,6 +328,18 @@ export class SacramentoManageComponent implements OnInit {
         this._alert.warn("Atención", resp.message);
       }
     });
+  }
+
+  matrimonioEdit(scIdSacramento: number): void{
+    this._sacramentoService.MatrimonioEdit(scIdSacramento, this.form.getRawValue())
+    .subscribe((resp) =>{
+      if (resp.isSuccess) {
+        this._alert.success("Excelente", resp.message);
+        this._dialogRef.close(true);
+      } else {
+        this._alert.warn("Atención", resp.message);
+      }
+    })
   }
 
   formatInput(event: any) {

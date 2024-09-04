@@ -142,7 +142,19 @@ const tableColumns: TableColumns<SacramentoResponse>[] = [
         sort: false,
         visible: true,
         download: false
-     }
+    },
+    {
+        label: "",
+        cssLabel: [],
+        property: "icCloudDownload",
+        cssProperty: [],
+        type: "icon",
+        action: "constancia",
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: false
+    },
 ]
 
 const filters = {

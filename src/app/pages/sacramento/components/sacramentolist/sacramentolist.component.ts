@@ -6,11 +6,14 @@ import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { SacramentoService } from '../../services/sacramento.service';
 import { componentSettings, menuItems, updateMenuItems } from './sacramento-list-config';
 import { FiltersBox } from '@shared/models/search-options.interface';
-import { BaseApiResponse, BaseResponse } from '@shared/models/base-api-response.interface';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SacramentoManageComponent } from '../sacramento-manage/sacramento-manage.component';
 import { SacramentoResponse } from '../../models/sacramento-response.interface';
 import { RowClick } from '@shared/models/row-click.interface';
+import { ConstanciesService } from 'src/app/pages/constancies/services/constancies.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ConstanciesManageComponent } from 'src/app/pages/constancies/components/constancies-manage/constancies-manage.component';
+import { BaseResponse } from '@shared/models/base-api-response.interface';
 
 @Component({
   selector: 'vex-sacramentolist',
@@ -25,7 +28,7 @@ export class SacramentolistComponent implements OnInit {
   constructor(
     customTitle: CustomTitleService,
     public _sacramentoService: SacramentoService,
-    public _dialog: MatDialog
+    public _dialog: MatDialog,
   ) {
     customTitle.set("Sacramentos");
    }
@@ -105,13 +108,15 @@ export class SacramentolistComponent implements OnInit {
   }
 
   rowClick(rowClick: RowClick<SacramentoResponse>){
-    console.log(rowClick)
     let action = rowClick.action;
     let sacramento = rowClick.row;
 
     switch(action){
       case "edit":
         this.SacramentoEdit(sacramento);
+        break
+      case "constancia":
+        this.constancesGenerate(sacramento)
         break
     }
 
@@ -136,4 +141,131 @@ export class SacramentolistComponent implements OnInit {
       }
     )
   }
+
+  constancesGenerate(sacramentoData: SacramentoResponse){
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.data = sacramentoData
+    this._dialog.open(ConstanciesManageComponent, {
+      data: sacramentoData,
+      disableClose: true,
+      width: "900px",
+      maxHeight: '80vh'
+    })
+    .afterClosed().subscribe(
+      (res) => {
+        if (res) {
+          this.formatGetInputs()
+        }
+      }
+    )
+  }
+
+  /*
+  constancesGenerate(sacramentoData: SacramentoResponse){
+    this._sacramentoService.SacramentoById(sacramentoData.scIdSacramento).subscribe((resp) => {
+
+      const numeroPartida = resp.scNumeroPartida.trim();
+      const [libro, folio, partida] = numeroPartida.split('-').map(part => part.trim());
+
+      const libroNumero = libro.replace(/[^\d]/g, '');  // Elimina todo lo que no sea dígito
+      const folioNumero = folio.replace(/[^\d]/g, '');
+      const partidaNumero = partida.replace(/[^\d]/g, '');
+
+      const fechaSacramento = resp.scFechaSacramento;
+      const fecha = new Date(fechaSacramento);
+
+      const dia = fecha.getDate();
+      const mesNumero = fecha.getMonth();
+      const anio = fecha.getFullYear();
+
+      const fechaActual = new Date();
+
+      const diaAct = fechaActual.getDate();
+      const mesAct = fechaActual.getMonth();
+      const aniAct = fechaActual.getFullYear();
+
+      const meses = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+      ];
+
+      const mesLetraAct = meses[mesAct];
+      
+      const mesLetra = meses[mesNumero];
+
+      const fechaNacimiento = new Date(resp.peFechaNacimiento)
+
+      const diaNac = fechaNacimiento.getDate().toString().padStart(2, '0')
+      const mesNac = (fechaNacimiento.getMonth() + 1).toString().padStart(2, '0');
+      const añoNac = fechaNacimiento.getFullYear();
+
+      const fechaFormateadaNac = `${diaNac}/${mesNac}/${añoNac}`;
+
+      const nombrePadrinos = [resp.scNombrePadrino, resp.scNombreMadrina];
+
+      let edad = fecha.getFullYear() - fechaNacimiento.getFullYear();
+      const mes = fecha.getMonth() - fechaNacimiento.getMonth();
+      
+      if (mes < 0 || (mes === 0 && fecha.getDate() < fechaNacimiento.getDate())) {
+          edad--;
+      }
+      
+      const constaciaData: ConstanciaRequest = {
+        idTipoSacramento: resp.scIdTipoSacramento,
+        tipoSacramento: resp.scTipoSacramento,
+        numero: libroNumero,
+        folio: folioNumero,
+        partida: partidaNumero,
+        dia: dia.toString(),
+        mes: mesLetra,
+        anio: anio.toString(),
+        nombreBautizado: resp.peNombre,
+        fechaNacimiento: fechaFormateadaNac,
+        edad: edad,
+        nombrePadre: resp.scNombrePadre,
+        nombreMadre: resp.scNombreMadre,
+        nombrePadrinos: nombrePadrinos,
+        nombreSacerdote: resp.scParroco,
+        anotacionMarginal: "resp.scAnotacionMarginal",
+        diaExpedicion: diaAct.toString(),
+        mesExpedicion: mesLetraAct,
+        anioExpedicion: aniAct.toString()
+      }
+
+      this._spinner.show();
+      this._constanciaService.constancieGenerate(constaciaData).subscribe((respConst) => {
+
+        const base64Data = respConst.data.b64;
+        const fileName = respConst.data.fileName;
+
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+      
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+      
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+      
+        document.body.appendChild(link);
+      
+        link.click();
+      
+        document.body.removeChild(link);
+        this._spinner.hide();
+      },
+      (error) => {
+        console.error("Error al generar la constancia: ", error);
+
+        this._spinner.hide();
+      })
+    })
+  }
+    */
+
+
 }

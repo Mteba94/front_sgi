@@ -3,9 +3,11 @@ export interface SacramentoResponse {
     scNumeroPartida: string,
     scIdTipoSacramento: number,
     scTipoSacramento: string,
+    scMatrimonioId: number,
     peNombre: string,
     peFechaNacimiento: Date,
     peNumeroDocumento: string,
+    peSexoId: number,
     peIdTipoDocumento: number,
     peTipoDocumento: string,
     peDireccion: string,
@@ -17,5 +19,6 @@ export interface SacramentoResponse {
     scParroco: string,
     scObservaciones: string,
     scCreateDate: Date,
-    icEdit: any;
+    icEdit: any,
+    icCloudDownload: any;
 }
