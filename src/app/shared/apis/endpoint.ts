@@ -29,7 +29,13 @@ export const endpoint = {
     SELECT_SEX_TYPE: 'TipoSexo/Select',
 
     //Constancias
+    CONSTANCIA_LIST: 'HistConstancia',
     CONSTANCIA_GENERATE: 'Certification',
+    CONSTANCIA_HISTORY_REGISTER: 'HistConstancia/Register',
+    CONSTANCIA_GENERATE_CORRELATIVO: 'HistConstancia/Correlativo/',
+
+    //Dashboard
+    CANTIDAD_SACRAMENTOS: 'Dashboard/CantidadSacramentos'
 
 }
 

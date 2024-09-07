@@ -8,8 +8,9 @@
 </div>
 
 <div *ngIf="pdfSrc; else loading">
-    <iframe [src]="pdfSrc" width="100%" height="500px"></iframe>
-  </div>
+    <!-- <iframe [src]="pdfSrc" width="100%" height="500px"></iframe> -->
+
+</div>
   
   <ng-template #loading>
     <p>Cargando PDF...</p>

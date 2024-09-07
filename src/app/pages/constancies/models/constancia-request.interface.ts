@@ -4,6 +4,7 @@ export interface ConstanciaRequest{
     numero: string;
     folio: string;
     partida: string;
+    correlativo: string;
     dia: string;
     mes: string;
     anio: string;

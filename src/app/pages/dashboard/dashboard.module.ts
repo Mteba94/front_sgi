@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
+import { ChartModule } from 'src/@vex/components/chart/chart.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { DashboardListComponent } from './dashboard-list/dashboard-list.componen
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    ChartModule
   ]
 })
 export class DashboardModule { }

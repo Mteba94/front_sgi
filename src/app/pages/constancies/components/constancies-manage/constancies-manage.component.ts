@@ -7,6 +7,9 @@ import { ConstanciaRequest } from '../../models/constancia-request.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ConstanciesService } from '../../services/constancies.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AlertService } from '@shared/services/alert.service';
+import { HistConstanciaRequest } from '../../models/histConstancia-request.interface';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'vex-constancies-manage',
@@ -16,15 +19,18 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class ConstanciesManageComponent implements OnInit {
   icClose = IconsService.prototype.getIcon('icClose')
   pdfSrc: SafeResourceUrl | null = null;
+  fileName: string = null;
   tSacramento: string = null;
   tNombre: string = null;
+  correlativo: string = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public _sacramentoService: SacramentoService,
     public _spinner: NgxSpinnerService,
     public _constanciaService: ConstanciesService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private _alert: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -40,12 +46,23 @@ export class ConstanciesManageComponent implements OnInit {
     }
   }
 
+  generateCorrelativo(sacramentoId: number) {
+    this._constanciaService.genarateCorrelativo(sacramentoId).subscribe((resp) => {
+      this.correlativo = resp.data
+    });
+  }
+
   constancesGenerate(sacramentoId: number) {
-    this._sacramentoService.SacramentoById(sacramentoId).subscribe((resp) => {
+    forkJoin({
+      resp: this._sacramentoService.SacramentoById(sacramentoId),
+      correlativo: this._constanciaService.genarateCorrelativo(sacramentoId)
+    }).subscribe(({resp, correlativo}) => {
 
       if(resp.scIdTipoSacramento == 4){
         this.constancesMatrimonioGenerate(sacramentoId);
       }
+
+      this.correlativo = correlativo.data;
 
       this.tSacramento = resp.scTipoSacramento
       this.tNombre = resp.peNombre
@@ -101,6 +118,7 @@ export class ConstanciesManageComponent implements OnInit {
         numero: libroNumero,
         folio: folioNumero,
         partida: partidaNumero,
+        correlativo: this.correlativo,
         dia: dia.toString(),
         mes: mesLetra,
         anio: anio.toString(),
@@ -126,6 +144,7 @@ export class ConstanciesManageComponent implements OnInit {
         this._spinner.hide();
 
         const base64Data = respConst.data.b64;
+        const fileNameData = respConst.data.fileName
   
         const binary = atob(base64Data.replace(/\s/g, ''));
         const len = binary.length;
@@ -138,6 +157,7 @@ export class ConstanciesManageComponent implements OnInit {
 
         const url = URL.createObjectURL(blob);
         this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        this.fileName = fileNameData
   
       }, (error) => {
         console.error("Error al generar la constancia: ", error);
@@ -147,7 +167,12 @@ export class ConstanciesManageComponent implements OnInit {
   }
 
   constancesMatrimonioGenerate(sacramentoId: number){
-    this._sacramentoService.MatrimonioById(sacramentoId).subscribe((resp) => {
+    forkJoin({
+      resp: this._sacramentoService.MatrimonioById(sacramentoId),
+      correlativo: this._constanciaService.genarateCorrelativo(sacramentoId)
+    }).subscribe(({resp, correlativo}) => {
+
+      this.correlativo = correlativo.data;
 
       this.tSacramento = "Matrimonio"
       this.tNombre = resp.peNombreEsposo + " con " + resp.peNombreEsposa
@@ -203,6 +228,7 @@ export class ConstanciesManageComponent implements OnInit {
         numero: libroNumero,
         folio: folioNumero,
         partida: partidaNumero,
+        correlativo: this.correlativo,
         dia: dia.toString(),
         mes: mesLetra,
         anio: anio.toString(),
@@ -228,6 +254,7 @@ export class ConstanciesManageComponent implements OnInit {
         this._spinner.hide();
 
         const base64Data = respConst.data.b64;
+        const fileNameData = respConst.data.fileName
   
         const binary = atob(base64Data.replace(/\s/g, ''));
         const len = binary.length;
@@ -240,6 +267,7 @@ export class ConstanciesManageComponent implements OnInit {
 
         const url = URL.createObjectURL(blob);
         this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        this.fileName = fileNameData
   
       }, (error) => {
         console.error("Error al generar la constancia: ", error);
@@ -264,6 +292,7 @@ export class ConstanciesManageComponent implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
   }
 
   onDownload() {
@@ -275,12 +304,30 @@ export class ConstanciesManageComponent implements OnInit {
   
       if (url) {
         link.href = url;
-        link.download = 'Constancia.pdf'; // Puedes cambiar el nombre aquí
+        link.download = this.fileName;
         link.click();
       } else {
         console.error('Error: la URL del PDF no es segura o no se pudo convertir a string.');
       }
     }
+
+    const histConstancia: HistConstanciaRequest = {
+      ct_SacramentoId: this.data.scIdSacramento,
+      ct_correlativo: this.correlativo,
+      ct_UsuarioId: 1
+    };
+
+    this.histRegiter(histConstancia);
+  }
+
+  histRegiter(histConstancia: HistConstanciaRequest){
+    this._constanciaService.histConstanciaRegister(histConstancia).subscribe((resp) => {
+      if(resp.isSuccess){
+        this._alert.success("Exito", "Constancia generada correctamente");
+      }else{
+        this._alert.error("Error", "Error al generar la constancia");
+      }
+    })
   }
   
 
