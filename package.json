@@ -40,7 +40,7 @@
     "highlight.js": "~10.6.0",
     "luxon": "~1.26.0",
     "ngx-quicklink": "~0.2.7",
-    "ngx-quill": "~14.0.0",
+    "ngx-quill": "^LATEST_VERSION",
     "ngx-showdown": "~6.0.0",
     "ngx-spinner": "^12.0.0",
     "quill": "~1.3.7",
