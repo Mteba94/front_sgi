@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "NODE_ENV=production node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --configuration production",
+    "build": "set NODE_ENV=production && node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -67,6 +67,7 @@
     "@types/simplebar": "^5.1.2",
     "autoprefixer": "^10.2.6",
     "codelyzer": "^6.0.2",
+    "cross-env": "^7.0.3",
     "faker": "~5.4.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
