@@ -1,6 +1,6 @@
 [build]
-  command = "npm install --force && npm run build"
+  command = "npm install --force"
   publish = "dist/"
   
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20.12.2"
