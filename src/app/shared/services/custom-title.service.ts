@@ -13,7 +13,7 @@ export class CustomTitleService {
     }
 
     set(title) {
-        this.titleService.setTitle(this.prefix + title +" - SGI TECH® Software Gestion de Sacramentos")
+        this.titleService.setTitle(this.prefix + title +" - SGI® Software Gestion de Sacramentos")
     }
 
 }

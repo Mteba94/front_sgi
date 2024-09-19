@@ -5,23 +5,22 @@
                 <ic-icon @scaleIn [icon]="component.icCategory" class="hidden sm:block"> </ic-icon>
                 <span @fadeInRight class="ml-4 block">Gestion de Tipo de Sacramentos</span>
             </h2>
-            <div class="flex items-center justify-end w-full">
-                <app-search-box-multiple
+            <div class="flex items-center justify-end w-full mt-5">
+                <div class="flex justify-between">
+                    <app-filter-date-range-ymd
+                      (rangeDate)="searchDateRange($event)"
+                      [start]="component.filters.startDate"
+                      [end]="component.filters.endDate"
+                    ></app-filter-date-range-ymd>
+                </div>
+                <div class="flex justify-between ml-6">
+                    <app-search-box-multiple
                     [searchOptions]="component.searchOptions"
                     (search)="search($event)"
-                >
-                </app-search-box-multiple>
-                <div>
-                    <button
-                        mat-icon-button
-                        matTooltip="Filtro por rango de fechas"
-                        type="button"
-                        class="ml-8 text-primary-contrast"
-                        [ngClass]="{'extra-filters-active': component.filters_dates_active}"
-                        (click)="datesFilterOpen()"
-                    > <mat-icon [icIcon]="component.icCalendarMonth"></mat-icon>
-                    </button>
+                    >
+                    </app-search-box-multiple>
                 </div>
+                
             </div>
         </div>
     </div>

@@ -37,7 +37,7 @@ export class AppComponent {
     this.configService.updateConfig({
       sidenav: {
         title: "SGI",
-        imageUrl: "/assets/img/demo/logo.svg",
+        imageUrl: "/assets/img/demo/LogoParroquial.png",
         showCollapsePin: true,
       },
     });

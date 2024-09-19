@@ -9,7 +9,7 @@ import { DatesFilter } from '@shared/functions/actions';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TipoSacramentoManageComponent } from '../tipo-sacramento-manage/tipo-sacramento-manage.component';
 import Swal from 'sweetalert2';
-import { FiltersBox, SearchOptions } from '@shared/models/search-options.interface';
+import { DateRange, FiltersBox, SearchOptions } from '@shared/models/search-options.interface';
 import { BaseApiResponse } from '@shared/models/base-api-response.interface';
 
 @Component({
@@ -49,8 +49,10 @@ export class TipoSacramentoListComponent implements OnInit {
     this.formatGetInputs()
   }
 
-  datesFilterOpen(){
-    DatesFilter(this)
+  searchDateRange(date: DateRange){
+    this.component.filters.startDate = date.startDate
+    this.component.filters.endDate = date.endDate
+    this.formatGetInputs();
   }
 
   formatGetInputs(){

@@ -4,6 +4,7 @@ import { IconsService } from '@shared/services/icons.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { AlertService } from '@shared/services/alert.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private _alert: AlertService
+    private _alert: AlertService,
+    public _spinner: NgxSpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +49,9 @@ export class LoginComponent implements OnInit {
       })
     }
 
+    this._spinner.show()
     this.authService.login(this.form.value).subscribe((resp) => {
+      this._spinner.hide()
       if(resp.isSuccess){
         this.router.navigate(["/"]);
       }else{

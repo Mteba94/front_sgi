@@ -161,8 +161,8 @@ const filters = {
     numFilter: 0,
     textFilter: "",
     stateFilter: null,
-    startdate: null,
-    enddate: null,
+    startDate: null,
+    endDate: null,
     refresh: false
 }
 
@@ -170,8 +170,8 @@ const inputs = {
     numFilter: 0,
     textFilter: "",
     stateFilter: null,
-    startdate: null,
-    enddate: null,
+    startDate: null,
+    endDate: null,
     refresh: false
 }
 

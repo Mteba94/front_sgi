@@ -1,0 +1,11 @@
+<div class="flex items-center bg-white border border-am-main-blue-light rounded-lg overflow-hidden w-68 mx-auto h-11">
+    <div class="flex items-center justify-center pl-4">
+      <mat-form-field>
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>

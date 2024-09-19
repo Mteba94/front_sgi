@@ -147,16 +147,16 @@ const filters = {
     numFilter: 0,
     textFilter: "",
     stateFilter: null,
-    startdate: null,
-    enddate: null
+    startDate: null,
+    endDate: null
 }
 
 const inputs = {
     numFilter: 0,
     textFilter: "",
     stateFilter: null,
-    startdate: null,
-    enddate: null
+    startDate: null,
+    endDate: null
 }
 
 export const componentSettings = {
@@ -172,7 +172,7 @@ export const componentSettings = {
     getInputs: inputs,
     buttonlabel: "EDITAR",
     buttonlabel2: "ELIMINAR",
-    //search filters
+    //search: filters,
     menuItems: menuItems,
     searchOptions: searchOptions,
     filters_dates_active: false,

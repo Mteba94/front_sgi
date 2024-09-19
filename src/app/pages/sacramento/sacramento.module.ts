@@ -11,6 +11,8 @@ import { SacramentoManageComponent } from './components/sacramento-manage/sacram
 import { SearchBoxSimpleModule } from "../../shared/components/search-box-simple/search-box-simple.module";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { FilterDateRangeYmdComponent } from '@shared/components/reusables/filter-date-range-ymd/filter-date-range-ymd.component';
+import { FilterDateSingleYmdComponent } from '@shared/components/reusables/filter-date-single-ymd/filter-date-single-ymd.component';
 
 
 @NgModule({
@@ -26,11 +28,8 @@ import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular
     SearchBoxMultipleComponent,
     MenuComponent,
     SearchBoxSimpleModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-],
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
-  ]
+    //FilterDateRangeYmdComponent,
+    //FilterDateSingleYmdComponent
+  ],
 })
 export class SacramentoModule { }

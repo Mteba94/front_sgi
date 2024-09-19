@@ -7,6 +7,7 @@ import { TipoSacramentoManageComponent } from './components/tipo-sacramento-mana
 import { ListTableComponent } from '@shared/components/reusables/list-table/list-table.component';
 import { SearchBoxMultipleComponent } from '@shared/components/reusables/search-box-multiple/search-box-multiple.component';
 import { MenuComponent } from "../../shared/components/reusables/menu/menu.component";
+import { FilterDateRangeYmdComponent } from '@shared/components/reusables/filter-date-range-ymd/filter-date-range-ymd.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { MenuComponent } from "../../shared/components/reusables/menu/menu.compo
     SharedModule,
     ListTableComponent,
     SearchBoxMultipleComponent,
-    MenuComponent
+    MenuComponent,
+    FilterDateRangeYmdComponent
 ]
 })
 export class TipoSacramentoModule { }

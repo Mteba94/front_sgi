@@ -25,7 +25,7 @@ export class ListSacramentoRequest extends params {
             stateFilter
         )
 
-        this.startDate = convertDateToRequest(this.startDate, 'date');
-        this.endDate = convertDateToRequest(this.endDate, 'date');
+        //this.startDate = convertDateToRequest(this.startDate, 'date');
+        //this.endDate = convertDateToRequest(this.endDate, 'date');
     }
 }

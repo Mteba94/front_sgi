@@ -1,10 +1,26 @@
 
-
 <div class="container mx-auto p-4">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <vex-chart [options]="chartOptions" [series]="chartSeries"></vex-chart>
-    </div>
-    <div class="col-6">
-        
+        <div class="col-6">
+            <ngx-charts-line-chart
+            [view]="view"
+            [scheme]="colorScheme"
+            [legend]="legend"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxis]="xAxis"
+            [yAxis]="yAxis"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [yAxisTickFormatting]="yAxisTickFormatting"
+            [xAxisTickFormatting]="xAxisTickFormatting"
+            [timeline]="timeline"
+            [results]="multi"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+            >
+            </ngx-charts-line-chart>
+        </div>
     </div>
 </div>

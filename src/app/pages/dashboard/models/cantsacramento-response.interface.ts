@@ -1,4 +1,5 @@
 export interface CantidadSacramentosResponse {
     sacramentos: string,
-    total: number
+    total: number,
+    anio: number
 }

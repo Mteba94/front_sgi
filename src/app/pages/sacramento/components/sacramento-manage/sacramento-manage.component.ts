@@ -11,6 +11,7 @@ import { tipoSacramentoSelect } from '../../models/list-tipoSacramento-select.in
 import { atLeastOneFieldRequiredValidator } from './atLeastOneFieldRequiredValidator';
 import { SexType } from '@shared/models/sex-type.interface';
 import { SexTypeService } from '@shared/services/sex-type.service';
+import moment from 'moment';
 
 @Component({
   selector: 'vex-sacramento-manage',
@@ -26,6 +27,9 @@ export class SacramentoManageComponent implements OnInit {
   sexTypes: SexType[];
   form: FormGroup;
 
+  initialDate = '2023-01-01';
+  maxDate = moment();
+
   initForm(): void{
     this.form = this._fb.group({
       scIdSacramento: [, ],
@@ -33,7 +37,7 @@ export class SacramentoManageComponent implements OnInit {
       scNumeroPartida: [, [Validators.required]],
       scIdTipoSacramento: [0, [Validators.required]],
       peNombre: ["", [Validators.required]],
-      peFechaNacimiento: ["", [Validators.required]],
+      peFechaNacimiento: [null, [Validators.required]],
       peIdTipoDocumento: [0, [Validators.required]],
       peNumeroDocumento: [, [Validators.required, 
                               Validators.minLength(13)]],

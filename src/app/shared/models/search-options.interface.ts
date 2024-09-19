@@ -12,3 +12,8 @@ export interface FiltersBox{
     searchValue: number
     searchData: string
 }
+
+export interface DateRange {
+    startDate: string
+    endDate: string
+}

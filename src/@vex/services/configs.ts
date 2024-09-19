@@ -10,7 +10,7 @@ const defaultConfig: Config = {
   boxed: false,
   sidenav: {
     title: 'VEX',
-    imageUrl: 'assets/img/demo/logo.svg',
+    imageUrl: 'assets/img/demo/LogoParroquial.png',
     showCollapsePin: true,
     state: 'expanded'
   },

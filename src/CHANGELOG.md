@@ -1,4 +1,4 @@
-<img style="float: left; height: 80px; width: unset;" src="/assets/img/demo/logo.svg" alt="Vex Logo"/>
+<img style="float: left; height: 80px; width: unset;" src="/assets/img/demo/LogoParroquial.png" alt="Vex Logo"/>
 <h1 style="height: 80px; line-height: 80px; margin: 0 0 0 70px; font-weight: 700; border: none;">VEX</h1>
 
 # Changelog

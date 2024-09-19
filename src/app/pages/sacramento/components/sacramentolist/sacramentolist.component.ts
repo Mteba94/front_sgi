@@ -5,7 +5,7 @@ import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { SacramentoService } from '../../services/sacramento.service';
 import { componentSettings, menuItems, updateMenuItems } from './sacramento-list-config';
-import { FiltersBox } from '@shared/models/search-options.interface';
+import { DateRange, FiltersBox } from '@shared/models/search-options.interface';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SacramentoManageComponent } from '../sacramento-manage/sacramento-manage.component';
 import { SacramentoResponse } from '../../models/sacramento-response.interface';
@@ -55,6 +55,12 @@ export class SacramentolistComponent implements OnInit {
     this.component.filters.numFilter = data.searchValue
     this.component.filters.textFilter = data.searchData
     this.formatGetInputs()
+  }
+
+  searchDateRange(date: DateRange){
+    this.component.filters.startDate = date.startDate
+    this.component.filters.endDate = date.endDate
+    this.formatGetInputs();
   }
 
   formatGetInputs(){
