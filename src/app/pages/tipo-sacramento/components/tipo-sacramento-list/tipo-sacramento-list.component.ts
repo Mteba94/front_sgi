@@ -55,6 +55,11 @@ export class TipoSacramentoListComponent implements OnInit {
     this.formatGetInputs();
   }
 
+  resetFilters() {
+    this.component.filters = { ...this.component.resetFilters };
+    this.formatGetInputs();
+  }
+
   formatGetInputs(){
     let inputs = {
       numFilter: 0,

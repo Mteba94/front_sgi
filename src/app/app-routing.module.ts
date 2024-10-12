@@ -29,6 +29,13 @@ const childrenRoutes: VexRoutes = [
     loadChildren: () => import("./pages/constancies/constancies.module").then((m) => m.ConstanciesModule),
   },
   {
+    path: 'user',
+    loadChildren: () => import("./pages/user/user.module").then((m) => m.UserModule),
+    data: {
+      containerEnabled: true
+    }
+  },
+  {
     path: '**',
     component: NotFoundComponent
   }

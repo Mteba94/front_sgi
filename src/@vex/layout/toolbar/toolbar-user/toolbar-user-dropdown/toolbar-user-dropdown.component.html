@@ -17,7 +17,7 @@
   </div>
 
   <div class="dropdown-content">
-    <a (click)="close()"
+    <a 
        *ngFor="let item of items; trackBy: trackById"
        [routerLink]="item.route"
        class="notification"

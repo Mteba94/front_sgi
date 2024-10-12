@@ -35,7 +35,10 @@ export const endpoint = {
     CONSTANCIA_GENERATE_CORRELATIVO: 'HistConstancia/Correlativo/',
 
     //Dashboard
-    CANTIDAD_SACRAMENTOS: 'Dashboard/CantidadSacramentos'
+    CANTIDAD_SACRAMENTOS: 'Dashboard/CantidadSacramentos',
+
+    //User
+    USER_LIST: 'Usuario/',
 
 }
 

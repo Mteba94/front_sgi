@@ -1,26 +1,47 @@
-
-<div class="container mx-auto p-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="col-6">
+<div class="w-full h-full flex flex-col">
+    <div class="px-gutter pt-6 pb-20 bg-primary flex-none">
+        <div class="flex items-center justify-between">
+            <h2 class="headline text-primary-contrast m-0 flex items-center w-full max-w-xxxl mr-6">
+                <ic-icon @scaleIn [icon]="icDashboard" class="hidden sm:block"> </ic-icon>
+                <span @fadeInRight class="ml-4 block">Estadisticas</span>
+            </h2>
+        </div>
+    </div>
+    <div class="flex items-center justify-between">
+        <div>
+            <div class="flex items-center justify-between">
+                <h2 class="headline text-primary-contrast m-0 flex items-center w-full max-w-xxxl mr-6" style="color: black;">
+                    <!-- <ic-icon @scaleIn [icon]="component.icProvider" class="hidden sm:block"> </ic-icon> -->
+                    <span @fadeInRight class="ml-4 block">Sacramentos por Año</span>
+                </h2>
+            </div>
             <ngx-charts-line-chart
-            [view]="view"
-            [scheme]="colorScheme"
-            [legend]="legend"
-            [showXAxisLabel]="showXAxisLabel"
-            [showYAxisLabel]="showYAxisLabel"
-            [xAxis]="xAxis"
-            [yAxis]="yAxis"
-            [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel"
-            [yAxisTickFormatting]="yAxisTickFormatting"
-            [xAxisTickFormatting]="xAxisTickFormatting"
-            [timeline]="timeline"
-            [results]="multi"
-            (select)="onSelect($event)"
-            (activate)="onActivate($event)"
-            (deactivate)="onDeactivate($event)"
-            >
+                [view]="view"
+                [scheme]="colorScheme"
+                [legend]="legend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxis]="xAxis"
+                [yAxis]="yAxis"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel"
+                [yAxisTickFormatting]="yAxisTickFormatting"
+                [xAxisTickFormatting]="xAxisTickFormatting"
+                [timeline]="timeline"
+                [results]="multi"
+                (select)="onSelect($event)"
+                (activate)="onActivate($event)"
+                (deactivate)="onDeactivate($event)">
             </ngx-charts-line-chart>
+        </div>
+        <div>
+            <div class="flex items-center justify-between">
+                <h2 class="headline text-primary-contrast m-0 flex items-center w-full max-w-xxxl mr-6" style="color: black;">
+                    <!-- <ic-icon @scaleIn [icon]="component.icProvider" class="hidden sm:block"> </ic-icon> -->
+                    <span @fadeInRight class="ml-4 block">Sacramentos Año Actual</span>
+                </h2>
+            </div>
+            <app-sac-anio-act></app-sac-anio-act>
         </div>
     </div>
 </div>

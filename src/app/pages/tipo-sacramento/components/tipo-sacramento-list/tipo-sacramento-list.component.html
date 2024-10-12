@@ -12,6 +12,9 @@
                       [start]="component.filters.startDate"
                       [end]="component.filters.endDate"
                     ></app-filter-date-range-ymd>
+                    <app-button-reset-filters
+                        (buttonClick)="resetFilters()"
+                    ></app-button-reset-filters>
                 </div>
                 <div class="flex justify-between ml-6">
                     <app-search-box-multiple

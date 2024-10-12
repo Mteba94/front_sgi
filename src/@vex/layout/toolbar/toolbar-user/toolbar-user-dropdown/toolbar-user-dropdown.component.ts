@@ -39,14 +39,14 @@ export interface OnlineStatus {
 export class ToolbarUserDropdownComponent implements OnInit {
 
   items: MenuItem[] = [
-    // {
-    //   id: '1',
-    //   icon: icAccountCircle,
-    //   label: 'My Profile',
-    //   description: 'Personal Information',
-    //   colorClass: 'text-teal',
-    //   route: '/apps/social'
-    // },
+    {
+      id: '1',
+      icon: icAccountCircle,
+      label: 'Mi Perfil',
+      description: 'Informacion Personal',
+      colorClass: 'text-teal',
+      route: 'user'
+    },
     // {
     //   id: '2',
     //   icon: icMoveToInbox,

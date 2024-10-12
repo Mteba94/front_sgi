@@ -2,13 +2,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { DashboardRequest } from '../models/dashboar-request.interface';
 import { CantidadSacramentosResponse } from '../models/cantsacramento-response.interface';
+import { IconsService } from '@shared/services/icons.service';
+import { stagger40ms } from 'src/@vex/animations/stagger.animation';
+import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
+import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 
 @Component({
   selector: 'vex-dashboard-list',
   templateUrl: './dashboard-list.component.html',
-  styleUrls: ['./dashboard-list.component.scss']
+  styleUrls: ['./dashboard-list.component.scss'],
+  animations: [stagger40ms, scaleIn400ms, fadeInRight400ms]
 })
 export class DashboardListComponent implements OnInit {
+
+  icDashboard = IconsService.prototype.getIcon('icDashboard')
 
   multi: any[] = [ ];
   
@@ -55,15 +62,15 @@ export class DashboardListComponent implements OnInit {
   }
 
   onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+    //console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   }
 
   onActivate(data): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
+    //console.log('Activate', JSON.parse(JSON.stringify(data)));
   }
 
   onDeactivate(data): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+    //console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 
   yAxisTickFormatting(value: number): string {

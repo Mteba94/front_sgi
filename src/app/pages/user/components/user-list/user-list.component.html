@@ -1,0 +1,102 @@
+<div class="w-full h-full flex flex-col">
+    <div class="px-gutter pt-6 pb-20 bg-primary flex-none">
+        <div class="flex items-center justify-between">
+            <h2 class="headline text-primary-contrast m-0 flex items-center w-full max-w-xxxl mr-6">
+                <span @fadeInRight class="ml-4 block">Gestión de Usuario</span>
+            </h2>
+        </div>
+    </div>
+
+    <!-- Contenedor del formulario, con 2 columnas -->
+    <div class="pt-4 overflow-hidden flex justify-center">
+        <form (ngSubmit)="userUpdate()" [formGroup]="form" class="w-full max-w-xxxl px-gutter">
+            <div class="flex flex-wrap -mx-4">
+                <!-- Primera columna -->
+                <div class="w-full md:w-1/2 px-4">
+                    <mat-dialog-content>
+
+                        <app-img-selector
+                            (urlCurrentImg)="this.form.get('usImage').value"
+                            (selectedImage)="selectedImage($event)"
+                        >
+                        </app-img-selector>
+                        
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Nombre</mat-label>
+                            <input matInput formControlName="usNombre">
+                            <mat-error *ngIf="form.get('usNombre').hasError('required')">
+                                Campo Nombre es requerido.
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Username</mat-label>
+                            <input matInput formControlName="usUserName">
+                            <mat-error *ngIf="form.get('usUserName').hasError('required')">
+                                Campo Username es requerido.
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Dirección</mat-label>
+                            <input matInput formControlName="usDireccion">
+                            <mat-error *ngIf="form.get('usDireccion').hasError('required')">
+                                Campo Dirección es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+
+                <!-- Segunda columna -->
+                <div class="w-full md:w-1/2 px-4">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Estado</mat-label>
+                            <input matInput formControlName="estadoDescripcion">
+                            <mat-error *ngIf="form.get('estadoDescripcion').hasError('required')">
+                                Campo Estado es requerido.
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Fecha de Nacimiento</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="usFechaNacimiento">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="form.get('usFechaNacimiento').hasError('required')">
+                                Campo Fecha de Nacimiento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput type="password" formControlName="usPass">
+                            <mat-error *ngIf="form.get('usPass').hasError('required')">
+                                Campo Contraseña es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+
+            <!-- Botón de guardar -->
+            <div class="flex justify-end mt-4">
+                <button mat-raised-button color="primary" type="submit">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- <form (ngSubmit)="userUpdate" [formGroup]="form">
+    <div mat-dialog-title class="flex justify-between">
+        <h2 class="headline m-0 text-xl text-accent">
+            <strong>Gestión de Sacramento</strong>
+        </h2>
+    </div>
+    <div>
+            
+    </div>
+</form> -->
+

@@ -16,7 +16,8 @@ import icCategory from '@iconify/icons-ic/twotone-category';
 import icSacramento from '@iconify/icons-ic/twotone-arrow-right-alt'
 import icCloudDownload from '@iconify/icons-ic/twotone-cloud-download'
 import icToday from "@iconify/icons-ic/twotone-today"
-
+import icRefresh from "@iconify/icons-ic/twotone-restart-alt"
+import icUpload from "@iconify/icons-ic/twotone-upload-file"
 
 @Injectable({
   providedIn: 'root'
@@ -92,6 +93,14 @@ export class IconsService {
 
     if(icon == "icToday"){
       return icToday
+    }
+
+    if(icon == "icRefresh"){
+      return icRefresh
+    }
+
+    if(icon == "icUpload"){
+      return icUpload
     }
   }
 }
