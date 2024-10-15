@@ -9,6 +9,8 @@ import { SexType } from '@shared/models/sex-type.interface';
 import { AlertService } from '@shared/services/alert.service';
 import { DocumentTypeService } from '@shared/services/document-type.service';
 import { DocumentType } from '@shared/models/document-type.interface';
+import { AuthService } from 'src/app/pages/auth/services/auth.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'vex-user-list',
@@ -24,22 +26,29 @@ export class UserListComponent implements OnInit {
   userId: number;
   documentTypes: DocumentType[];
 
-  initForm(): void{
+  initForm(): void {
     this.form = this._fb.group({
-      usIdUsuario: [, ],  // ID de usuario
-      UsNombre: ['', Validators.required],  // Nombre
-      UsUserName: ['', Validators.required],  // Nombre de usuario
-      usIdGenero: [0, [Validators.required]],
-      UsPass: [''],  // Contraseña, normalmente no se muestra o se gestiona diferente
-      UsDireccion: ['', Validators.required],  // Dirección
-      usFechaNacimiento: ['', Validators.required],  // Fecha de nacimiento
+      usIdUsuario: [, ],
+      UsNombre: ['', Validators.required],
+      UsUserName: ['', Validators.required],
+      usIdGenero: [0, Validators.required],
+      UsPass: ['', []],  // Nueva contraseña
+      confirmPass: ['', []],  // Confirmar contraseña
+      UsDireccion: ['', Validators.required],
+      usFechaNacimiento: ['', Validators.required],
       usIdTipoDocumento: ['', Validators.required],
       UsNumerodocumento: ['', Validators.required],
-      usImage: [''],  // Ruta de imagen
-      usCreateDate: [''],  // Fecha de creación
-      usEstado: [],  // Estado (1 = Activo)
-      estadoDescripcion: ['']  // Descripción del estado
-    })
+      usImage: [''],
+      usCreateDate: [''],
+      usEstado: [],
+      estadoDescripcion: ['']
+    }, { validators: this.passwordMatchValidator });
+  }
+  
+  passwordMatchValidator(group: FormGroup) {
+    const password = group.get('UsPass').value;
+    const confirmPass = group.get('confirmPass').value;
+    return password && confirmPass && password !== confirmPass ? { passwordMismatch: true } : null;
   }
 
   constructor(
@@ -48,6 +57,8 @@ export class UserListComponent implements OnInit {
     private _sexTypeService: SexTypeService,
     private _alert: AlertService,
     private _documentTypeService: DocumentTypeService,
+    private authService: AuthService,
+    public _spinner: NgxSpinnerService,
   ) {
     this.initForm();
   }
@@ -67,7 +78,17 @@ export class UserListComponent implements OnInit {
 
     this.dataUser(this.username)
 
+    this.form.get('UsPass').valueChanges.subscribe(() => {
+      this.form.updateValueAndValidity(); // Actualiza las validaciones
+    });
+
+    this.form.get('confirmPass').valueChanges.subscribe(() => {
+      this.form.updateValueAndValidity(); // Actualiza las validaciones
+    });
+
   }
+
+  
 
   dataUser(userName: string){
     this._userService.getDataUser(userName).subscribe((resp) => {
@@ -90,37 +111,59 @@ export class UserListComponent implements OnInit {
     })
   }
 
-  userUpdate(){
+  userUpdate(): void {
     if (this.form.invalid) {
-      return Object.values(this.form.controls).forEach((controls) => {
-        controls.markAllAsTouched();
-        console.log(this.form.invalid)
-      })
-    }
-
-    let currentPassword: string
-
-    this._userService.getDataUser(this.username).subscribe((resp) => {
-      currentPassword = resp.usPass;
-  
-      // Verificar si usPass está vacío
-      const newPass = this.form.get('UsPass').value;
-      if (!newPass) {
-        this.form.patchValue({ UsPass: currentPassword });
-      }
-  
-      this._userService.updateDataUser(this.userId, this.form.getRawValue())
-      .subscribe((resp) => {
-        if (resp.isSuccess) {
-          this._alert.success("Excelente", resp.message);
-          this.dataUser(this.username)
-          //this._dialogRef.close(true);
-        } else {
-          this._alert.warn("Atención", resp.message);
-        }
+      return Object.values(this.form.controls).forEach((control) => {
+        control.markAsTouched();
       });
-    });
+    }
+  
+    const newPass = this.form.get('UsPass').value;
+    const confirmPass = this.form.get('confirmPass').value;
+    const username = this.form.get('UsUserName').value; // Asegúrate de que el campo 'username' esté en el formulario
+  
+    if (newPass) {
+      // Validar si las contraseñas coinciden
+      if (newPass !== confirmPass) {
+        this._alert.warn("Atención", "Las contraseñas no coinciden.");
+        return;
+      }
+    } else {
+      // Si no hay nueva contraseña, solicitar la contraseña actual
+      this._alert.prompt("Atención", "Ingrese su contraseña actual").then(currentPass => {
+        
+        if (!currentPass) {
+          this._alert.warn("Atención", "Debe proporcionar la contraseña actual.");
+          return;
+        }
+  
+        // Mostrar el spinner mientras se valida la contraseña actual
+        this._spinner.show();
+  
+        // Crear el objeto con username y currentPass
+        const loginData = {
+          username: username,
+          password: currentPass.value
+        };
+
+        console.log(loginData)
+  
+        // Enviar solo username y contraseña al servicio de autenticación
+        this.authService.login(loginData).subscribe((resp) => {
+          this._spinner.hide();
+          if (resp.isSuccess) {
+            this.form.get('UsPass').setValue(currentPass.value);
+            this.saveUserData();
+          } else {
+            this._alert.error("Credenciales Incorrectas", resp.message, false);
+          }
+        });
+      });
+      return;
+    }
+    this.saveUserData();
   }
+  
 
   selectedImage(file: File){
     this.form.get("usImage").setValue(file);
@@ -138,6 +181,22 @@ export class UserListComponent implements OnInit {
     this._documentTypeService.listDocumentType().subscribe((resp) =>{
       this.documentTypes = resp
     })
+  }
+
+  saveUserData(): void {
+    this._alert.confirm("Confirmación", "¿Desea guardar los cambios?").then(result => {
+      if (result.isConfirmed) {
+        this._userService.updateDataUser(this.userId, this.form.getRawValue())
+          .subscribe((resp) => {
+            if (resp.isSuccess) {
+              this._alert.success("Excelente", resp.message);
+              this.dataUser(this.username);
+            } else {
+              this._alert.warn("Atención", resp.message);
+            }
+          });
+      }
+    });
   }
 
 }

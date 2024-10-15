@@ -45,25 +45,33 @@
                             </mat-error>
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Tipo de Documento</mat-label>
-                            <mat-select formControlName="usIdTipoDocumento" (selectionChange)="listDocumentTypes()">
-                                <mat-option *ngFor="let item of documentTypes" [value]="item.tdIdTipoDocumento">
-                                    {{ item.tdAbreviacion }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="form.get('usIdTipoDocumento').hasError('required')">
-                                Campo Tipo de Documento es requerido.
-                            </mat-error>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Numero Documento</mat-label>
-                            <input matInput formControlName="UsNumerodocumento">
-                            <mat-error *ngIf="form.get('UsNumerodocumento').hasError('required')">
-                                Campo Numero Documento es requerido.
-                            </mat-error>
-                        </mat-form-field>
+                        <div class="flex -mx-4">
+                            <!-- Tipo de Documento -->
+                            <div class="w-full md:w-1/2 px-4">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Tipo de Documento</mat-label>
+                                    <mat-select formControlName="usIdTipoDocumento" (selectionChange)="listDocumentTypes()">
+                                        <mat-option *ngFor="let item of documentTypes" [value]="item.tdIdTipoDocumento">
+                                            {{ item.tdAbreviacion }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="form.get('usIdTipoDocumento').hasError('required')">
+                                        Campo Tipo de Documento es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        
+                            <!-- Número de Documento -->
+                            <div class="w-full md:w-1/2 px-4">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Número Documento</mat-label>
+                                    <input matInput formControlName="UsNumerodocumento">
+                                    <mat-error *ngIf="form.get('UsNumerodocumento').hasError('required')">
+                                        Campo Número Documento es requerido.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
                     </mat-dialog-content>
                 </div>
 
@@ -102,35 +110,38 @@
                             </mat-form-field>
                         </mat-dialog-content>
 
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Contraseña</mat-label>
-                            <input matInput type="password" formControlName="UsPass">
-                            <mat-error *ngIf="form.get('UsPass').hasError('required')">
-                                Campo Contraseña es requerido.
-                            </mat-error>
-                        </mat-form-field>
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                              <mat-label>Nueva Contraseña</mat-label>
+                              <input matInput type="password" formControlName="UsPass">
+                              <mat-error *ngIf="form.get('UsPass').hasError('required')">
+                                Campo nueva contraseña es requerido.
+                              </mat-error>
+                            </mat-form-field>
+                        </mat-dialog-content>
+
+                        <mat-dialog-content *ngIf="form.get('UsPass').value">
+                            <mat-form-field appearance="outline" class="w-full">
+                              <mat-label>Confirmar Contraseña</mat-label>
+                              <input matInput type="password" formControlName="confirmPass">
+                              <mat-error *ngIf="form.get('confirmPass').hasError('required')">
+                                Campo confirmar contraseña es requerido.
+                              </mat-error>
+                              <div *ngIf="form.hasError('passwordMismatch') && form.get('confirmPass').touched">
+                                <span>Las contraseñas no coinciden.</span>
+                              </div>
+                            </mat-form-field>
+                          </mat-dialog-content>
+                          
+                          
                     </mat-dialog-content>
                 </div>
             </div>
 
             <!-- Botón de guardar -->
             <div class="flex justify-end mt-4">
-                <button mat-raised-button color="primary" type="submit">Guardar Cambios</button>
+                <button color="purple" class="bg-accent text-accent-contrast" mat-button type="submit" [disabled]="!form.valid">GUARDAR</button>
             </div>
         </form>
     </div>
 </div>
-
-
-
-<!-- <form (ngSubmit)="userUpdate" [formGroup]="form">
-    <div mat-dialog-title class="flex justify-between">
-        <h2 class="headline m-0 text-xl text-accent">
-            <strong>Gestión de Sacramento</strong>
-        </h2>
-    </div>
-    <div>
-            
-    </div>
-</form> -->
-
