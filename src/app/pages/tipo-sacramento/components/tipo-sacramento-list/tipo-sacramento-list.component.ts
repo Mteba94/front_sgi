@@ -11,6 +11,7 @@ import { TipoSacramentoManageComponent } from '../tipo-sacramento-manage/tipo-sa
 import Swal from 'sweetalert2';
 import { DateRange, FiltersBox, SearchOptions } from '@shared/models/search-options.interface';
 import { BaseApiResponse } from '@shared/models/base-api-response.interface';
+import { AuthService } from 'src/app/pages/auth/services/auth.service';
 
 @Component({
   selector: 'vex-tipo-sacramento-list',
@@ -25,17 +26,20 @@ import { BaseApiResponse } from '@shared/models/base-api-response.interface';
 export class TipoSacramentoListComponent implements OnInit {
 
   component
+  buttonShow: boolean = false;
 
   constructor(
     customTitle: CustomTitleService,
     public _tipoSacramentoService: TipoSacramentoService,
-    public _dialog: MatDialog
+    public _dialog: MatDialog,
+    private authService: AuthService
   ) { 
     customTitle.set('Listado de Tipos de Sacramento');
   }
 
   ngOnInit(): void {
     this.component = componentSettings
+    this.buttonShow = this.authService.hasRole(['Administrador'])
   }
 
   setData(value: number){

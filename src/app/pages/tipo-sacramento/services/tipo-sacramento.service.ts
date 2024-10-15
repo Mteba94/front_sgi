@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { TipoSacramentoRequest } from '../models/tipoSacramento.request';
 import { getIcon } from '@shared/functions/helpers';
 import { BaseApiResponse, BaseResponse } from '@shared/models/base-api-response.interface';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class TipoSacramentoService {
 
   constructor(
     private _http: HttpClient,
-    private _alert: AlertService
+    private _alert: AlertService,
+    private _authService: AuthService
   ) { }
 
   GetAll(
@@ -42,6 +44,7 @@ export class TipoSacramentoService {
     );
     return this._http.post<BaseApiResponse>(requestUrl, params).pipe(
       map((data: BaseApiResponse) => {
+        const canEdit = this._authService.hasRole(['Administrador'])
         data.data.items.forEach(function(e: any){
           switch (e.tsEstado) {
             case 0:
@@ -54,8 +57,8 @@ export class TipoSacramentoService {
               e.badgeColor = 'text-gray bg-gray-light'
               break;
           }
-          e.icEdit = getIcon("icEdit", "Editar Tipo Sacramento", true, "edit");
-          e.icDelete = getIcon("icDelete", "Eliminar Tipo Sacramento", true, "remove")
+          e.icEdit = getIcon("icEdit", "Editar Tipo Sacramento", canEdit, "edit");
+          e.icDelete = getIcon("icDelete", "Eliminar Tipo Sacramento", canEdit, "remove")
         })
         //console.log(data.data.items)
         return data

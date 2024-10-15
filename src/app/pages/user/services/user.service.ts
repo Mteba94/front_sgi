@@ -8,6 +8,7 @@ import { UserRequest, UserResponse } from '../models/user-response.interface';
 import { environment as env } from 'src/environments/environment';
 import { ListUserRequest } from '../models/list-user-request.interface';
 import { getIcon } from '@shared/functions/helpers';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ import { getIcon } from '@shared/functions/helpers';
 export class UserService {
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
+    private _authService: AuthService
   ) { }
 
   GetAll(
@@ -39,8 +41,9 @@ export class UserService {
     )
     return this._http.post<BaseApiResponse>(requestUrl, params).pipe(
       map((data: BaseApiResponse) => {
+        const canEdit = this._authService.hasRole(['Administrador'])
         data.data.items.forEach(function(user: UserResponse){
-          user.icEdit = getIcon("icEdit", "Editar Usuario", true, "edit")
+          user.icEdit = getIcon("icEdit", "Editar Usuario", canEdit, "edit")
           //sac.icCloudDownload = getIcon("icCloudDownload", "Generar Constancia", true, "constancia")
         })
         return data;

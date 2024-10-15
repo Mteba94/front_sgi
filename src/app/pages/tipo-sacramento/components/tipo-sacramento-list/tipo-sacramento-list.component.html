@@ -33,7 +33,7 @@
                 <app-menu
                     class="hidden sm:block mr-6"
                     [currentMenu]="component.getInputs.stateFilter"
-                    [buttonShow]="true"
+                    [buttonShow]="buttonShow"
                     buttonLabel="AGREGAR"
                     (buttonClick)="openDialogRegister()"
                     (filterChange)="setData($event)"
