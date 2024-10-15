@@ -1,0 +1,123 @@
+<form (ngSubmit)="usuarioSave" [formGroup]="form">
+    <div mat-dialog-title class="flex justify-between">
+        <h2 class="headline m-0 text-xl text-accent">
+            <strong>Gestión de Sacramento</strong>
+        </h2>
+        <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                          <mat-label>Nombre</mat-label>
+                          <input matInput formControlName="usNombre">
+                          <mat-error *ngIf="form.get('usNombre').hasError('required')">
+                            Campo nombre es requerido.
+                          </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                          <mat-label>Username</mat-label>
+                          <input matInput formControlName="usUserName">
+                          <mat-error *ngIf="form.get('usUserName').hasError('required')">
+                            Campo username es requerido.
+                          </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="30%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <mat-select formControlName="usIdTipoDocumento" (selectionChange)="listDocumentTypes()">
+                                <mat-option *ngFor="let item of documentTypes" [value]="item.tdIdTipoDocumento">
+                                    {{ item.tdAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('usIdTipoDocumento').hasError('required')">
+                                Campo Tipo de Documento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="50%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Numero de Documento</mat-label>
+                            <input matInput formControlName="usNumerodocumento" maxlength="13">
+                            <mat-error *ngIf="form.get('usNumerodocumento').hasError('required')">
+                                Campo Numero de Documento es requerido.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('usNumerodocumento').hasError('minLength')">
+                                El campo debe tener 13 caracteres.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Genero</mat-label>
+                            <mat-select formControlName="usIdGenero" (selectionChange)="listSexType()">
+                                <mat-option *ngFor="let item of sexTypes" [value]="item.sexoId">
+                                    {{ item.sxAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('usIdGenero').hasError('required')">
+                                Campo Genero es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="40%">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Fecha de Nacimiento</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="usFechaNacimiento" placeholder="Seleccione una fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="form.get('usFechaNacimiento').hasError('required')">
+                          Campo Fecha de Nacimiento es requerido.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex = "60%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Dirección</mat-label>
+                            <input matInput formControlName="usDireccion">
+                            <mat-error *ngIf="form.get('usDireccion').hasError('required')">
+                                Campo Dirección es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex = "60%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput formControlName="usPass">
+                            <mat-error *ngIf="form.get('usPass').hasError('required')">
+                                Campo Contraseña es requerido.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+            </div>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>CANCELAR</button>
+            <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="usuarioSave()">GUARDAR</button>
+        </mat-dialog-actions>
+    </div>
+</form>

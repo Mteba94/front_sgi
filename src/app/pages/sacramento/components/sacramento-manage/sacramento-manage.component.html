@@ -9,7 +9,7 @@
     </div>
     <div>
             <div fxLayout="row" fxLayoutGap="16px">
-                <div fxFlex="50%">
+                <div fxFlex="40%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Tipo de Sacramento</mat-label>
@@ -24,16 +24,43 @@
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
-                <div fxFlex="50%">
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                          <mat-label>Libro</mat-label>
+                          <input matInput formControlName="scLibro">
+                          <mat-error *ngIf="form.get('scLibro').hasError('required')">
+                            Campo Libro es requerido.
+                          </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Folio</mat-label>
+                            <input matInput formControlName="scFolio">
+                            <mat-error *ngIf="form.get('scFolio').hasError('required')">
+                              Campo Folio es requerido.
+                            </mat-error>
+                          </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="20%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Partida</mat-label>
-                            <input matInput formControlName="scNumeroPartida" (input)="formatInput($event)">
-                            <mat-error *ngIf="form.get('scNumeroPartida').hasError('required')">
-                                Campo Partida es requerido.
+                            <input matInput formControlName="scPartida">
+                            <mat-error *ngIf="form.get('scPartida').hasError('required')">
+                              Campo Partida es requerido.
                             </mat-error>
-                        </mat-form-field>
+                          </mat-form-field>
+                          
+                          <!-- Campo oculto para scNumeroPartida -->
                     </mat-dialog-content>
+                </div>
+                <div>
+                    <input matInput formControlName="scNumeroPartida" type="hidden">
                 </div>
             </div>
             <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peNombre')">

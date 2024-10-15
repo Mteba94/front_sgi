@@ -38,40 +38,45 @@ export interface OnlineStatus {
 })
 export class ToolbarUserDropdownComponent implements OnInit {
 
-  items: MenuItem[] = [
-    {
-      id: '1',
-      icon: icAccountCircle,
-      label: 'Mi Perfil',
-      description: 'Informacion Personal',
-      colorClass: 'text-teal',
-      route: 'user'
-    },
-    // {
-    //   id: '2',
-    //   icon: icMoveToInbox,
-    //   label: 'My Inbox',
-    //   description: 'Messages & Latest News',
-    //   colorClass: 'text-primary',
-    //   route: '/apps/chat'
-    // },
-    // {
-    //   id: '3',
-    //   icon: icListAlt,
-    //   label: 'My Projects',
-    //   description: 'Tasks & Active Projects',
-    //   colorClass: 'text-amber',
-    //   route: '/apps/scrumboard'
-    // },
-    // {
-    //   id: '4',
-    //   icon: icTableChart,
-    //   label: 'Billing Information',
-    //   description: 'Pricing & Current Plan',
-    //   colorClass: 'text-purple',
-    //   route: '/pages/pricing'
-    // }
-  ];
+  items: MenuItem[] = [];
+  filteredItems: MenuItem[] = [];
+
+  // items: MenuItem[] = [
+  //   {
+  //     id: '1',
+  //     icon: icAccountCircle,
+  //     label: 'Mi Perfil',
+  //     description: 'Informacion Personal',
+  //     colorClass: 'text-teal',
+  //     route: 'user'
+  //   },
+  //   {
+  //     id: '2',
+  //     icon: icListAlt,
+  //     label: 'Administracion del Sistema',
+  //     description: 'Gestion de Usuarios y Roles',
+  //     colorClass: 'text-amber',
+  //     route: '/apps/chat'
+  //   },
+  //   // {
+  //   //   id: '3',
+  //   //   icon: icListAlt,
+  //   //   label: 'My Projects',
+  //   //   description: 'Tasks & Active Projects',
+  //   //   colorClass: 'text-amber',
+  //   //   route: '/apps/scrumboard'
+  //   // },
+  //   // {
+  //   //   id: '4',
+  //   //   icon: icTableChart,
+  //   //   label: 'Billing Information',
+  //   //   description: 'Pricing & Current Plan',
+  //   //   colorClass: 'text-purple',
+  //   //   route: '/pages/pricing'
+  //   // }
+  // ];
+
+
 
   statuses: OnlineStatus[] = [
     {
@@ -102,7 +107,7 @@ export class ToolbarUserDropdownComponent implements OnInit {
 
   activeStatus: OnlineStatus = this.statuses[0];
 
-  trackById = trackById;
+  //trackById = trackById;
   icPerson = icPerson;
   icSettings = icSettings;
   icChevronRight = icChevronRight;
@@ -115,12 +120,13 @@ export class ToolbarUserDropdownComponent implements OnInit {
   username: string;
   
   constructor(private cd: ChangeDetectorRef,
-        private authService: AuthService,
+        public authService: AuthService,
         private popoverRef: PopoverRef<ToolbarUserDropdownComponent>) { }
         
 
   ngOnInit() {
     const token = localStorage.getItem("token")
+    this.initializeMenu();
 
     if(!token){
       return ""
@@ -138,6 +144,39 @@ export class ToolbarUserDropdownComponent implements OnInit {
   close() {
       this.authService.logout();
       this.popoverRef.close();
+  }
+
+  initializeMenu(): void {
+    const allItems: MenuItem[] = [
+      {
+        id: '1',
+        icon: icAccountCircle,
+        label: 'Mi Perfil',
+        description: 'Informacion Personal',
+        colorClass: 'text-teal',
+        route: 'user'
+      },
+      {
+        id: '2',
+        icon: icListAlt,
+        label: 'Administracion del Sistema',
+        description: 'Gestion de Usuarios y Roles',
+        colorClass: 'text-amber',
+        route: '/user/list'
+      }
+    ];
+
+    // Filtrar los items basados en el rol del usuario
+    this.filteredItems = allItems.filter(item => {
+      if (item.id === '2') {
+        return this.authService.hasRole(['Administrador']);
+      }
+      return true; // Para todos los demás items
+    });
+  }
+
+  trackById(index: number, item: MenuItem): string {
+    return item.id;
   }
   
 }

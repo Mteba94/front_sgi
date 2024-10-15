@@ -37,8 +37,6 @@ export class MenuComponent implements OnInit {
     } else {
         console.error(`Item with value ${itenNumber} not found.`);
     }
-
-    console.log(currentItem)
   }
 
   setFilter(item: MenuItems){

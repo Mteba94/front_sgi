@@ -34,7 +34,10 @@ export class SacramentoManageComponent implements OnInit {
     this.form = this._fb.group({
       scIdSacramento: [, ],
       scMatrimonioId: [, ],
-      scNumeroPartida: [, [Validators.required]],
+      scLibro: ['', [Validators.required]],
+      scFolio: ['', [Validators.required]],
+      scPartida: ['', [Validators.required]],
+      scNumeroPartida: [''],
       scIdTipoSacramento: [0, [Validators.required]],
       peNombre: ["", [Validators.required]],
       peFechaNacimiento: [null, [Validators.required]],
@@ -204,6 +207,16 @@ export class SacramentoManageComponent implements OnInit {
       })
     }
 
+    const libro = this.form.get('libro').value;
+    const folio = this.form.get('folio').value;
+    const partida = this.form.get('partida').value;
+
+    // Combinar los valores en el campo scNumeroPartida
+    const scNumeroPartida = `L.${libro}-F.${folio}-P.${partida}`.toUpperCase();
+    this.form.patchValue({ scNumeroPartida })
+
+    console.log(this.form.get('scNumeroPartida').value)
+
     const scIdSacramento = this.form.get("scIdSacramento").value;
 
     const scIdTipoSacramento = this.form.get("scIdTipoSacramento").value;
@@ -256,8 +269,18 @@ export class SacramentoManageComponent implements OnInit {
         this.matrimoniobyId(sacramentoId)
       }
 
+      const parts = resp.scNumeroPartida.match(/L\.(\d+)-F\.(\d+)-P\.(\d+)/i);
+      const scLibro = parts ? parts[1] : '';
+      const scFolio = parts ? parts[2] : '';
+      const scPartida = parts ? parts[3] : ''
+
+      console.log(resp.scNumeroPartida,parts, scLibro, - scFolio, - scPartida )
+
       this.form.reset({
         scIdSacramento: resp.scIdSacramento,
+        scLibro: scLibro,
+        scFolio: scFolio,
+        scPartida: scPartida,
         scNumeroPartida: resp.scNumeroPartida,
         scIdTipoSacramento: resp.scIdTipoSacramento,
         peNombre: resp.peNombre,
@@ -289,6 +312,9 @@ export class SacramentoManageComponent implements OnInit {
 
       this.form.patchValue({
         scIdTipoSacramento: resp.scIdTipoSacramento,
+        scLibro: resp.scNumeroPartida,
+        scFolio: resp.scNumeroPartida,
+        scPartida: resp.scNumeroPartida,
         scNumeroPartida: resp.scNumeroPartida,
         peNombreEsposo: resp.peNombreEsposo,
         peNombreEsposa: resp.peNombreEsposa,

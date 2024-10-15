@@ -1,8 +1,8 @@
-import { TableColumns } from "@shared/models/list-table.interface";
 import { SearchOptions } from "@shared/models/search-options.interface";
-import { GenericValidators } from "@shared/validators/generic-validators";
-import { SacramentoResponse } from "../../models/sacramento-response.interface";
 import { IconsService } from "@shared/services/icons.service";
+import { GenericValidators } from "@shared/validators/generic-validators";
+import { UserResponse } from "../../models/user-response.interface";
+import { TableColumns } from "@shared/models/list-table.interface";
 import { MenuItems } from "@shared/models/menu-items.interface";
 
 const searchOptions: SearchOptions[] = [
@@ -32,54 +32,57 @@ const searchOptions: SearchOptions[] = [
     }
 ]
 
-export let menuItems: MenuItems[] = [];
-
-export function updateMenuItems(sacramentos: any) {
-const baseMenuItems: MenuItems[] = [
+const menuItems: MenuItems[] = [
     {
         type: "link",
         id: "all",
         icon: IconsService.prototype.getIcon("icViewHeadline"),
         label: "Todos"
+    },
+    {
+        type: "link",
+        id: "Activo",
+        value: 1,
+        icon: IconsService.prototype.getIcon("icLabel"),
+        label: "Activo",
+        class: {
+            icon: "text-green"
+        }
+    },
+    {
+        type: "link",
+        id: "Inactivo",
+        value: 0,
+        icon: IconsService.prototype.getIcon("icLabel"),
+        label: "Inactivo",
+        class: {
+            icon: "text-gray"
+        }
     }
 ]
 
-const sacramentoMenuItems: MenuItems[] = sacramentos.map((sacramento, index) => ({
-    type: "link",
-    id: sacramento.tsNombre,  // Ajusta según la estructura de sacramento
-    value: sacramento.tsIdTipoSacramento,
-    icon: IconsService.prototype.getIcon("icSacramento"),
-    label: sacramento.tsNombre,  // Ajusta según la estructura de sacramento
-    class: {
-      icon: "text-gray"
-    }
-  }));
-
-  menuItems = [...baseMenuItems, ...sacramentoMenuItems];
-}
-
-const tableColumns: TableColumns<SacramentoResponse>[] = [
+const tableColumns: TableColumns<UserResponse>[] = [
     {
         label: "Nombre",
         cssLabel: ["font-bold", "text-sm", "text-left"],
-        property: "peNombre",
+        property: "usNombre",
         cssProperty: ["font-semibold", "text-sm"],
         type: "text",
         sticky: true,
         sort: true,
-        sortProperty: "peNombre",
+        sortProperty: "usNombre",
         visible: true,
         download: true
     },
     {
-        label: "Numero Partida",
+        label: "UserName",
         cssLabel: ["font-bold", "text-sm", "text-left"],
-        property: "scNumeroPartida",
+        property: "usUserName",
         cssProperty: ["font-semibold", "text-sm", "text-uppercase"],
         type: "text",
         sticky: false,
         sort: true,
-        sortProperty: "scNumeroPartida",
+        sortProperty: "usUserName",
         visible: true,
         download: true
     },
@@ -98,36 +101,24 @@ const tableColumns: TableColumns<SacramentoResponse>[] = [
     {
         label: "Numero Documento",
         cssLabel: ["font-bold", "text-sm", "text-left"],
-        property: "peNumeroDocumento",
+        property: "usNumerodocumento",
         cssProperty: ["font-semibold", "text-sm"],
         type: "text",
         sticky: false,
         sort: true,
-        sortProperty: "peNumeroDocumento",
+        sortProperty: "usNumerodocumento",
         visible: true,
         download: true
     },
     {
-        label: "Fecha Sacramento",
+        label: "Fecha Nacimiento",
         cssLabel: ["font-bold", "text-sm", "text-left"],
-        property: "scFechaSacramento",
+        property: "usFechaNacimiento",
         cssProperty: ["font-semibold", "text-sm"],
         type: "datetime",
         sticky: false,
         sort: true,
-        sortProperty: "scFechaSacramento",
-        visible: true,
-        download: true
-    },
-    {
-        label: "Observaciones",
-        cssLabel: ["font-bold", "text-sm", "text-left"],
-        property: "scObservaciones",
-        cssProperty: ["font-semibold", "text-sm"],
-        type: "text",
-        sticky: false,
-        sort: false,
-        sortProperty: "scObservaciones",
+        sortProperty: "usFechaNacimiento",
         visible: true,
         download: true
     },
@@ -142,19 +133,7 @@ const tableColumns: TableColumns<SacramentoResponse>[] = [
         sort: false,
         visible: true,
         download: false
-    },
-    {
-        label: "",
-        cssLabel: [],
-        property: "icCloudDownload",
-        cssProperty: [],
-        type: "icon",
-        action: "constancia",
-        sticky: false,
-        sort: false,
-        visible: true,
-        download: false
-    },
+    }
 ]
 
 const filters = {
@@ -180,7 +159,7 @@ export const componentSettings = {
     searchOptions,
     menuItems,
     tableColumns,
-    initialSort: "scIdSacramento",
+    initialSort: 'usIdUsuario',
     initialSortDir: "desc",
     filters,
     getInputs: inputs,

@@ -39,6 +39,8 @@ export const endpoint = {
 
     //User
     USER_LIST: 'Usuario/',
+    USER_UPDATE: 'Usuario/Update/',
+    USERS_ALL: 'Usuario/List'
 
 }
 

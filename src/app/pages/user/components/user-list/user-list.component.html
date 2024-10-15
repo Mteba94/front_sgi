@@ -23,25 +23,45 @@
                         
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Nombre</mat-label>
-                            <input matInput formControlName="usNombre">
-                            <mat-error *ngIf="form.get('usNombre').hasError('required')">
+                            <input matInput formControlName="UsNombre">
+                            <mat-error *ngIf="form.get('UsNombre').hasError('required')">
                                 Campo Nombre es requerido.
                             </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Username</mat-label>
-                            <input matInput formControlName="usUserName">
-                            <mat-error *ngIf="form.get('usUserName').hasError('required')">
+                            <input matInput formControlName="UsUserName">
+                            <mat-error *ngIf="form.get('UsUserName').hasError('required')">
                                 Campo Username es requerido.
                             </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Dirección</mat-label>
-                            <input matInput formControlName="usDireccion">
-                            <mat-error *ngIf="form.get('usDireccion').hasError('required')">
+                            <input matInput formControlName="UsDireccion">
+                            <mat-error *ngIf="form.get('UsDireccion').hasError('required')">
                                 Campo Dirección es requerido.
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <mat-select formControlName="usIdTipoDocumento" (selectionChange)="listDocumentTypes()">
+                                <mat-option *ngFor="let item of documentTypes" [value]="item.tdIdTipoDocumento">
+                                    {{ item.tdAbreviacion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('usIdTipoDocumento').hasError('required')">
+                                Campo Tipo de Documento es requerido.
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Numero Documento</mat-label>
+                            <input matInput formControlName="UsNumerodocumento">
+                            <mat-error *ngIf="form.get('UsNumerodocumento').hasError('required')">
+                                Campo Numero Documento es requerido.
                             </mat-error>
                         </mat-form-field>
                     </mat-dialog-content>
@@ -68,10 +88,24 @@
                             </mat-error>
                         </mat-form-field>
 
+                        <mat-dialog-content>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Genero</mat-label>
+                                <mat-select formControlName="usIdGenero" (selectionChange)="listSexType()">
+                                    <mat-option *ngFor="let item of sexTypes" [value]="item.sexoId">
+                                        {{ item.sxAbreviacion }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="form.get('usIdGenero').hasError('required')">
+                                    Campo Genero es requerido.
+                                </mat-error>
+                            </mat-form-field>
+                        </mat-dialog-content>
+
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Contraseña</mat-label>
-                            <input matInput type="password" formControlName="usPass">
-                            <mat-error *ngIf="form.get('usPass').hasError('required')">
+                            <input matInput type="password" formControlName="UsPass">
+                            <mat-error *ngIf="form.get('UsPass').hasError('required')">
                                 Campo Contraseña es requerido.
                             </mat-error>
                         </mat-form-field>

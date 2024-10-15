@@ -5,7 +5,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment as env } from 'src/environments/environment';
 import { endpoint, httpOptions } from '@shared/apis/endpoint';
 import { map } from 'rxjs/operators';
-import { AlertService } from '@shared/services/alert.service';
 import { BaseResponse } from '@shared/models/base-api-response.interface';
 
 @Injectable({
@@ -42,4 +41,45 @@ export class AuthService {
     this.user.next(null);
     window.location.reload();
   }
+
+  private decodeToken(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      return JSON.parse(decodedPayload);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  public hasRole(allowedRoles: string[]): boolean {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = this.decodeToken(token);
+      if (decodedToken && decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']) {
+        const roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+        const rolesArray = Array.isArray(roles) ? roles : [roles];
+        return allowedRoles.some(role => rolesArray.includes(role));
+      } else {
+        console.log("El token decodificado no contiene roles.");
+      }
+    } else {
+      console.log("No se encontró un token válido.");
+    }
+    
+    return false;
+  }
+
+
+  public isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    const decodedToken = this.decodeToken(token);
+    if (decodedToken && decodedToken.exp) {
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decodedToken.exp > currentTime;
+    }
+    return false;
+  }
+  
 }

@@ -17,17 +17,19 @@
   </div>
 
   <div class="dropdown-content">
-    <a 
-       *ngFor="let item of items; trackBy: trackById"
-       [routerLink]="item.route"
-       class="notification"
-       fxLayout="row"
-       fxLayoutAlign="start center"
-       matRipple>
-      <mat-icon [icIcon]="item.icon"
-                [ngClass]="item.colorClass"
-                class="notification-icon"
-                fxFlex="none"></mat-icon>
+    <a
+      *ngFor="let item of filteredItems; trackBy: trackById"
+      [routerLink]="item.route"
+      class="notification"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      matRipple>
+      <mat-icon
+        [icIcon]="item.icon"
+        [ngClass]="item.colorClass"
+        class="notification-icon"
+        fxFlex="none">
+      </mat-icon>
       <div fxFlex="auto">
         <div class="notification-label">{{ item.label }}</div>
         <div class="notification-description">{{ item.description }}</div>
@@ -35,6 +37,8 @@
       <mat-icon [icIcon]="icChevronRight" class="notification-chevron" fxFlex="none"></mat-icon>
     </a>
   </div>
+  
+  
 
   <div class="dropdown-footer" fxLayout="row" fxLayoutAlign="space-between center">
     <!-- <button [matMenuTriggerFor]="statusMenu" class="dropdown-footer-select" mat-button type="button">
@@ -53,11 +57,13 @@
 <mat-menu #statusMenu="matMenu" xPosition="before" yPosition="below">
   <button (click)="setStatus(status)"
           *ngFor="let status of statuses; trackBy: trackById"
-          mat-menu-item>
+          mat-menu-item
+          [hidden]="status.id === '2' && !authService.hasRole(['Administrador'])">
     <ic-icon [icon]="status.icon" [ngClass]="status.colorClass" inline="true" size="24px"></ic-icon>
     <span>{{ status.label }}</span>
   </button>
 </mat-menu>
+
 
 
 <mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
