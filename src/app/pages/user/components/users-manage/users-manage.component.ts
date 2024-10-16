@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { IconsService } from '@shared/services/icons.service';
 import * as configs from '../../../../../static-data/configs';
 import { DocumentType } from '@shared/models/document-type.interface';
@@ -9,6 +9,7 @@ import { AlertService } from '@shared/services/alert.service';
 import { DocumentTypeService } from '@shared/services/document-type.service';
 import { SexTypeService } from '@shared/services/sex-type.service';
 import { UserService } from '../../services/user.service';
+import { GenericValidators } from '@shared/validators/generic-validators';
 
 @Component({
   selector: 'vex-users-manage',
@@ -24,11 +25,18 @@ export class UsersManageComponent implements OnInit {
   sexTypes: SexType[];
   form: FormGroup;
 
+  isEditMode: boolean = false;
+
+  visible = false;
+  inputType = "password";
+  icVisibility = IconsService.prototype.getIcon("icVisibility")
+  icVisibilityOff = IconsService.prototype.getIcon("icVisibilityOff")
+
   initForm(): void {
     this.form = this._fb.group({
       usIdUsuario: [''],
       usUserName: ['', [Validators.required]],
-      usPass: ['', [Validators.required, Validators.minLength(8)]],
+      usPass: ['', [Validators.required, Validators.minLength(8), GenericValidators.passwordValidator]],
       usImage: [''],
       usNombre: ['', [Validators.required]],
       usFechaNacimiento: ['', [Validators.required]],
@@ -47,6 +55,7 @@ export class UsersManageComponent implements OnInit {
     private _sexTypeService: SexTypeService,
     public _dialogRef: MatDialogRef<UsersManageComponent>,
     private _userService: UserService,
+    private cd: ChangeDetectorRef,
   ) { 
     this.initForm();
   }
@@ -55,9 +64,24 @@ export class UsersManageComponent implements OnInit {
     this.listDocumentTypes();
     this.listSexType();
 
-    if(this.data != null){
-      //console.log(this.data)
+    if (this.data != null) {
+      // Modo de edición
+      this.isEditMode = true;
       this.dataUser(this.data.usUserName);
+
+      this.form.get('usPass').clearValidators();
+      this.form.get('usPass').updateValueAndValidity();
+    } else {
+      // Modo de agregar
+      this.isEditMode = false;
+
+      this.form.get('usPass').setValidators([
+        Validators.required,
+        Validators.minLength(8),
+        GenericValidators.passwordValidator
+        //this.passwordValidator // Supongo que tienes un validador personalizado para la contraseña
+      ]);
+      this.form.get('usPass').updateValueAndValidity();
     }
   }
 
@@ -90,10 +114,16 @@ export class UsersManageComponent implements OnInit {
     }
   }
 
+  selectedImage(file: File){
+    this.form.get("usImage").setValue(file);
+    console.log(this.form.get("usImage").setValue(file))
+  }
+
   dataUser(userName: string){
     this._userService.getDataUser(userName).subscribe((resp) => {
 
       this.form.reset({
+        usImage: resp.usImage,
         usNombre: resp.usNombre,
         usUserName: resp.usUserName,
         usDireccion: resp.usDireccion,
@@ -111,7 +141,28 @@ export class UsersManageComponent implements OnInit {
   }
 
   userEdit(userId: number){
-    this._userService.updateDataUser(userId, this.form.getRawValue())
+
+    const formData = new FormData();
+    
+    // Agregar los datos del formulario al FormData
+    formData.append('usIdUsuario', this.form.get('usIdUsuario').value);
+    formData.append('usUserName', this.form.get('usUserName').value);
+    formData.append('usPass', this.form.get('usPass').value);
+    formData.append('usNombre', this.form.get('usNombre').value);
+    const fechaNacimiento = new Date(this.form.get('usFechaNacimiento').value).toISOString(); // Convertir a formato ISO
+    formData.append('usFechaNacimiento', fechaNacimiento);
+    formData.append('usIdTipoDocumento', this.form.get('usIdTipoDocumento').value);
+    formData.append('usNumerodocumento', this.form.get('usNumerodocumento').value);
+    formData.append('usIdGenero', this.form.get('usIdGenero').value);
+    formData.append('usDireccion', this.form.get('usDireccion').value);
+  
+    // Agregar la imagen si existe
+    const fileInput = this.form.get('usImage').value; // Asegúrate de que 'usImage' sea el campo correcto en tu formulario.
+    if (fileInput) {
+      formData.append('usImage', fileInput); // Agregar archivo
+    }
+
+    this._userService.updateDataUser(userId, formData)
     .subscribe((resp) => {
       if (resp.isSuccess) {
         this._alert.success("Excelente", resp.message);
@@ -122,8 +173,49 @@ export class UsersManageComponent implements OnInit {
     });
   }
 
-  userRegister(){
+  userRegister() {
+    const formData = new FormData();
+    
+    // Agregar los datos del formulario al FormData
+    formData.append('usIdUsuario', this.form.get('usIdUsuario').value);
+    formData.append('usUserName', this.form.get('usUserName').value);
+    formData.append('usPass', this.form.get('usPass').value);
+    formData.append('usNombre', this.form.get('usNombre').value);
+    const fechaNacimiento = new Date(this.form.get('usFechaNacimiento').value).toISOString(); // Convertir a formato ISO
+    formData.append('usFechaNacimiento', fechaNacimiento);
+    formData.append('usIdTipoDocumento', this.form.get('usIdTipoDocumento').value);
+    formData.append('usNumerodocumento', this.form.get('usNumerodocumento').value);
+    formData.append('usIdGenero', this.form.get('usIdGenero').value);
+    formData.append('usDireccion', this.form.get('usDireccion').value);
+  
+    // Agregar la imagen si existe
+    const fileInput = this.form.get('usImage').value; // Asegúrate de que 'usImage' sea el campo correcto en tu formulario.
+    if (fileInput) {
+      formData.append('usImage', fileInput); // Agregar archivo
+    }
+  
+    this._userService.createUser(formData)
+      .subscribe((resp) => {
+        if (resp.isSuccess) {
+          this._alert.success("Excelente", resp.message);
+          this._dialogRef.close(true);
+        } else {
+          this._alert.warn("Atención", resp.message);
+        }
+      });
+  }
+  
 
+  toggleVisibility(){
+    if(this.visible){
+      this.inputType = "password";
+      this.visible = false;
+      this.cd.markForCheck()
+    }else {
+      this.inputType = "text";
+      this.visible = true;
+      this.cd.markForCheck()
+    }
   }
 
 }

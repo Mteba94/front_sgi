@@ -18,6 +18,8 @@ import icCloudDownload from '@iconify/icons-ic/twotone-cloud-download'
 import icToday from "@iconify/icons-ic/twotone-today"
 import icRefresh from "@iconify/icons-ic/twotone-restart-alt"
 import icUpload from "@iconify/icons-ic/twotone-upload-file"
+import icGuardian from "@iconify/icons-ic/twotone-supervisor-account"
+import icLockReset from "@iconify/icons-ic/twotone-lock-open"
 
 @Injectable({
   providedIn: 'root'
@@ -101,6 +103,14 @@ export class IconsService {
 
     if(icon == "icUpload"){
       return icUpload
+    }
+
+    if(icon == "icGuardian"){
+      return icGuardian
+    }
+
+    if(icon == "icLockReset"){
+      return icLockReset
     }
   }
 }

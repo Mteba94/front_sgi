@@ -396,5 +396,27 @@ export class GenericValidators {
             }
             
         }
+    /**
+     * 
+     */
+        static passwordValidator(control: AbstractControl): { [key: string]: boolean } | null {
+            if (control.value != null && control.value.toString().trim() !== "") {
+                // Expresión regular que valida:
+                // - Al menos una mayúscula
+                // - Al menos un número
+                // - Al menos un carácter especial
+                // - Al menos 8 caracteres de longitud
+                const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&+])[A-Za-z\d@$!%*?&+]{8,}$/;
+        
+                if (passwordRegex.test(control.value)) {
+                    return null;  // Contraseña válida
+                } else {
+                    return { 'invalidPassword': true };  // Contraseña no válida
+                }
+            } else {
+                return null;  // Campo vacío
+            }
+        }
+        
 
 }

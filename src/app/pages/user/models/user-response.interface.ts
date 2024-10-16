@@ -14,7 +14,11 @@ export interface UserResponse {
     usCreateDate: DateTime,
     usEstado: number,
     estadoDescripcion: string,
+    userRole: string,
+    userIdRole: number,
     icEdit: any,
+    icGuardian: any,
+    icLockReset: any
 }
 
 export interface UserRequest {

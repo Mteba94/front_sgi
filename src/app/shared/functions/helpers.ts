@@ -52,6 +52,14 @@ export function getIcon(iconName: string, tooltip: string, permission: boolean, 
         if(["icCloudDownload"].includes(iconName)){
             iconObject.css = generalCss + COLORS_BADGE.coral;
         }
+
+        if(["icGuardian"].includes(iconName)){
+            iconObject.css = generalCss + COLORS_BADGE.red;
+        }
+
+        if(["icLockReset"].includes(iconName)){
+            iconObject.css = generalCss + COLORS_BADGE.teal;
+        }
     }
 
     return iconObject;

@@ -10,13 +10,17 @@ import { ListTableComponent } from '@shared/components/reusables/list-table/list
 import { MenuComponent } from '@shared/components/reusables/menu/menu.component';
 import { UsersManageComponent } from './components/users-manage/users-manage.component';
 import { SearchBoxSimpleModule } from '@shared/components/search-box-simple/search-box-simple.module';
+import { UsersRolComponent } from './components/users-rol/users-rol.component';
+import { UsersResetComponent } from './components/users-reset/users-reset.component';
 
 
 @NgModule({
   declarations: [
     UserListComponent,
     UsersAllComponent,
-    UsersManageComponent
+    UsersManageComponent,
+    UsersRolComponent,
+    UsersResetComponent
   ],
   imports: [
     CommonModule,

@@ -87,14 +87,14 @@ const tableColumns: TableColumns<UserResponse>[] = [
         download: true
     },
     {
-        label: "Tipo Sacramento",
+        label: "Rol",
         cssLabel: ["font-bold", "text-sm", "text-left"],
-        property: "scTipoSacramento",
+        property: "userRole",
         cssProperty: ["font-semibold", "text-sm"],
         type: "text",
         sticky: false,
         sort: true,
-        sortProperty: "scTipoSacramento",
+        sortProperty: "userRole",
         visible: true,
         download: true
     },
@@ -133,8 +133,33 @@ const tableColumns: TableColumns<UserResponse>[] = [
         sort: false,
         visible: true,
         download: false
+    },
+    {
+        label: "",
+        cssLabel: [],
+        property: "icGuardian",
+        cssProperty: [],
+        type: "icon",
+        action: "rol",
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: false
+    },
+    {
+        label: "",
+        cssLabel: [],
+        property: "icLockReset",
+        cssProperty: [],
+        type: "icon",
+        action: "reset",
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: false
     }
 ]
+
 
 const filters = {
     numFilter: 0,

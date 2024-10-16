@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
@@ -11,6 +11,7 @@ import { DocumentTypeService } from '@shared/services/document-type.service';
 import { DocumentType } from '@shared/models/document-type.interface';
 import { AuthService } from 'src/app/pages/auth/services/auth.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { IconsService } from '@shared/services/icons.service';
 
 @Component({
   selector: 'vex-user-list',
@@ -25,6 +26,11 @@ export class UserListComponent implements OnInit {
   sexTypes: SexType[];
   userId: number;
   documentTypes: DocumentType[];
+
+  visible = false;
+  inputType = "password";
+  icVisibility = IconsService.prototype.getIcon("icVisibility")
+  icVisibilityOff = IconsService.prototype.getIcon("icVisibilityOff")
 
   initForm(): void {
     this.form = this._fb.group({
@@ -59,6 +65,7 @@ export class UserListComponent implements OnInit {
     private _documentTypeService: DocumentTypeService,
     private authService: AuthService,
     public _spinner: NgxSpinnerService,
+    private cd: ChangeDetectorRef,
   ) {
     this.initForm();
   }
@@ -145,8 +152,6 @@ export class UserListComponent implements OnInit {
           username: username,
           password: currentPass.value
         };
-
-        console.log(loginData)
   
         // Enviar solo username y contraseña al servicio de autenticación
         this.authService.login(loginData).subscribe((resp) => {
@@ -186,8 +191,31 @@ export class UserListComponent implements OnInit {
   saveUserData(): void {
     this._alert.confirm("Confirmación", "¿Desea guardar los cambios?").then(result => {
       if (result.isConfirmed) {
-        this._userService.updateDataUser(this.userId, this.form.getRawValue())
+
+        const formData = new FormData();
+    
+        // Agregar los datos del formulario al FormData
+        formData.append('usIdUsuario', this.form.get('usIdUsuario').value);
+        formData.append('usUserName', this.form.get('UsUserName').value);
+        formData.append('usPass', this.form.get('UsPass').value);
+        formData.append('usNombre', this.form.get('UsNombre').value);
+        const fechaNacimiento = new Date(this.form.get('usFechaNacimiento').value).toISOString();
+        formData.append('usFechaNacimiento', fechaNacimiento);
+        formData.append('usIdTipoDocumento', this.form.get('usIdTipoDocumento').value);
+        formData.append('usNumerodocumento', this.form.get('UsNumerodocumento').value);
+        formData.append('usIdGenero', this.form.get('usIdGenero').value);
+        formData.append('usDireccion', this.form.get('UsDireccion').value);
+      
+        // Agregar la imagen si existe
+        const fileInput = this.form.get('usImage').value; // Asegúrate de que 'usImage' sea el campo correcto en tu formulario.
+        if (fileInput) {
+          formData.append('usImage', fileInput); // Agregar archivo
+        }
+
+        this._spinner.show();
+        this._userService.updateDataUser(this.userId, formData)
           .subscribe((resp) => {
+            this._spinner.hide();
             if (resp.isSuccess) {
               this._alert.success("Excelente", resp.message);
               this.dataUser(this.username);
@@ -197,6 +225,18 @@ export class UserListComponent implements OnInit {
           });
       }
     });
+  }
+
+  toggleVisibility(){
+    if(this.visible){
+      this.inputType = "password";
+      this.visible = false;
+      this.cd.markForCheck()
+    }else {
+      this.inputType = "text";
+      this.visible = true;
+      this.cd.markForCheck()
+    }
   }
 
 }

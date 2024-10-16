@@ -40,7 +40,15 @@ export const endpoint = {
     //User
     USER_LIST: 'Usuario/',
     USER_UPDATE: 'Usuario/Update/',
-    USERS_ALL: 'Usuario/List'
+    USERS_ALL: 'Usuario/List',
+    USER_CREATE: 'Usuario/Register',
+    USER_RETSET: 'Usuario/Reset/',
+
+    //Rol
+    ROL_SELECT: 'Rol/Select',
+
+    //User-Rol
+    ROL_ASSIGN: 'UserRol/Assign/'
 
 }
 

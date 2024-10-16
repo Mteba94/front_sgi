@@ -112,25 +112,58 @@
 
                         <mat-dialog-content>
                             <mat-form-field appearance="outline" class="w-full">
-                              <mat-label>Nueva Contraseña</mat-label>
-                              <input matInput type="password" formControlName="UsPass">
-                              <mat-error *ngIf="form.get('UsPass').hasError('required')">
-                                Campo nueva contraseña es requerido.
-                              </mat-error>
-                            </mat-form-field>
+                                <mat-label>Contraseña</mat-label>
+                                <input [type]="inputType" matInput formControlName="UsPass" />
+                                <mat-error *ngIf="form.get('UsPass').hasError('required')">
+                                    Campo Contraseña es requerido.
+                                  </mat-error>
+                                  
+                                  <mat-error *ngIf="form.get('UsPass').hasError('minlength')">
+                                    La contraseña debe tener al menos 8 caracteres.
+                                  </mat-error>
+                                  
+                                  <mat-error *ngIf="form.get('UsPass').hasError('invalidPassword')">
+                                    La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial.
+                                  </mat-error>
+                                <button
+                                  (click)="toggleVisibility()"
+                                  mat-icon-button
+                                  matSuffix
+                                  matTooltip="{{ !visible ? 'Ver contraseña' : 'Ocultar contraseña' }}"
+                                  type="button"
+                                >
+                                  <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+                                  <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+                                </button>
+                              </mat-form-field>
                         </mat-dialog-content>
 
                         <mat-dialog-content *ngIf="form.get('UsPass').value">
-                            <mat-form-field appearance="outline" class="w-full">
-                              <mat-label>Confirmar Contraseña</mat-label>
-                              <input matInput type="password" formControlName="confirmPass">
-                              <mat-error *ngIf="form.get('confirmPass').hasError('required')">
-                                Campo confirmar contraseña es requerido.
-                              </mat-error>
-                              <div *ngIf="form.hasError('passwordMismatch') && form.get('confirmPass').touched">
-                                <span>Las contraseñas no coinciden.</span>
-                              </div>
-                            </mat-form-field>
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Confirmar Contraseña</mat-label>
+                                    <input [type]="inputType" matInput formControlName="confirmPass" />
+                                    <mat-error *ngIf="form.get('confirmPass').hasError('required')">
+                                        Campo Contraseña es requerido.
+                                      </mat-error>
+                                      
+                                      <mat-error *ngIf="form.get('confirmPass').hasError('minlength')">
+                                        La contraseña debe tener al menos 8 caracteres.
+                                      </mat-error>
+                                      
+                                      <mat-error *ngIf="form.get('confirmPass').hasError('invalidPassword')">
+                                        La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial.
+                                      </mat-error>
+                                    <button
+                                      (click)="toggleVisibility()"
+                                      mat-icon-button
+                                      matSuffix
+                                      matTooltip="{{ !visible ? 'Ver contraseña' : 'Ocultar contraseña' }}"
+                                      type="button"
+                                    >
+                                      <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+                                      <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+                                    </button>
+                                  </mat-form-field>
                           </mat-dialog-content>
                           
                           

@@ -44,6 +44,8 @@ export class UserService {
         const canEdit = this._authService.hasRole(['Administrador'])
         data.data.items.forEach(function(user: UserResponse){
           user.icEdit = getIcon("icEdit", "Editar Usuario", canEdit, "edit")
+          user.icGuardian = getIcon("icGuardian", "Editar Rol", canEdit, "rol")
+          user.icLockReset = getIcon("icLockReset", "Reestablecer Contraseña", canEdit, "reset")
           //sac.icCloudDownload = getIcon("icCloudDownload", "Generar Constancia", true, "constancia")
         })
         return data;
@@ -60,10 +62,32 @@ export class UserService {
     )
   }
 
-  updateDataUser(UserId: number, user: UserRequest):Observable<BaseResponse>{
+  updateDataUser(UserId: number, userFormData: FormData):Observable<BaseResponse>{
     const requestUrl =  `${env.api}${endpoint.USER_UPDATE}${UserId}`
-    return this._http.put<BaseResponse>(requestUrl, user);
+    return this._http.put(requestUrl, userFormData).pipe(
+      map((resp: BaseResponse) => {
+        return resp
+      })
+    )
   }
 
+  createUser(userFormData: FormData): Observable<BaseResponse> {
+    const requestUrl = `${env.api}${endpoint.USER_CREATE}`;
+    
+    return this._http.post<BaseResponse>(requestUrl, userFormData).pipe(
+      map((resp: BaseResponse) => {
+        return resp;
+      })
+    );
+  }
+  
+  userReset(UserId: number):Observable<BaseResponse>{
+    const requestUrl =  `${env.api}${endpoint.USER_RETSET}${UserId}`
+    return this._http.get(requestUrl).pipe(
+      map((resp: BaseResponse) => {
+        return resp;
+      })
+    )
+  }
 
 }

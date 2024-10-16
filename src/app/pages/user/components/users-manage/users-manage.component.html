@@ -1,13 +1,18 @@
 <form (ngSubmit)="usuarioSave" [formGroup]="form">
     <div mat-dialog-title class="flex justify-between">
         <h2 class="headline m-0 text-xl text-accent">
-            <strong>Gestión de Sacramento</strong>
+            <strong>Gestión de Usuario</strong>
         </h2>
         <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
             <mat-icon [icIcon]="icClose"></mat-icon>
         </button>
     </div>
     <div>
+        <app-img-selector
+            (urlCurrentImg)="this.form.get('usImage').value"
+            (selectedImage)="selectedImage($event)"
+        >
+        </app-img-selector>
             <div fxLayout="row" fxLayoutGap="16px">
                 <div fxFlex="50%">
                     <mat-dialog-content>
@@ -102,15 +107,31 @@
                     </mat-dialog-content>
                 </div>
             </div>
-            <div fxLayout="row" fxLayoutGap="16px">
-                <div fxFlex = "60%">
+            <div *ngIf="!isEditMode" fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="60%">
                     <mat-dialog-content>
-                        <mat-form-field appearance="outline" class="w-full">
+                        <mat-form-field appearance="outline" class="textbox">
                             <mat-label>Contraseña</mat-label>
-                            <input matInput formControlName="usPass">
+                            <input [type]="inputType" matInput formControlName="usPass" />
                             <mat-error *ngIf="form.get('usPass').hasError('required')">
                                 Campo Contraseña es requerido.
                             </mat-error>
+                            <mat-error *ngIf="form.get('usPass').hasError('minlength')">
+                                La contraseña debe tener al menos 8 caracteres.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('usPass').hasError('invalidPassword')">
+                                La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial.
+                            </mat-error>
+                            <button
+                                (click)="toggleVisibility()"
+                                mat-icon-button
+                                matSuffix
+                                matTooltip="{{ !visible ? 'Ver contraseña' : 'Ocultar contraseña' }}"
+                                type="button"
+                            >
+                                <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+                                <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+                            </button>
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>

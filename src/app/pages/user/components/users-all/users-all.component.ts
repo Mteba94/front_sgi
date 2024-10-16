@@ -9,6 +9,9 @@ import { UserResponse } from '../../models/user-response.interface';
 import { RowClick } from '@shared/models/row-click.interface';
 import { UsersManageComponent } from '../users-manage/users-manage.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { UsersRolComponent } from '../users-rol/users-rol.component';
+import { UsersResetComponent } from '../users-reset/users-reset.component';
+import { AlertService } from '@shared/services/alert.service';
 
 @Component({
   selector: 'vex-users-all',
@@ -24,6 +27,7 @@ export class UsersAllComponent implements OnInit {
     customTitle: CustomTitleService,
     public _userService: UserService,
     public _dialog: MatDialog,
+    public _alert: AlertService
   ) {
     customTitle.set("Usuarios");
   }
@@ -89,6 +93,7 @@ export class UsersAllComponent implements OnInit {
   }
 
   rowClick(rowClick: RowClick<UserResponse>){
+
     let action = rowClick.action;
     let user = rowClick.row;
 
@@ -96,8 +101,11 @@ export class UsersAllComponent implements OnInit {
       case "edit":
         this.UserEdit(user);
         break
-      case "constancia":
-        //this.constancesGenerate(sacramento)
+      case "rol":
+        this.UserRol(user)
+        break
+      case "reset":
+        this.userReset(user)
         break
     }
 
@@ -121,6 +129,47 @@ export class UsersAllComponent implements OnInit {
         }
       }
     )
+  }
+
+  UserRol(userData: UserResponse){
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.data = userData
+
+    this._dialog.open(UsersRolComponent, {
+      data: userData,
+      disableClose: true,
+      width: "700px",
+      maxHeight: '80vh'
+    })
+    .afterClosed().subscribe(
+      (res) => {
+        if (res) {
+          this.formatGetInputs()
+        }
+      }
+    )
+  }
+
+  userReset(userData: UserResponse){
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.data = userData
+    this._alert.confirm("Confirmación", "¿Desea reestabler la contraseña?").then(result => {
+      if (result.value) {
+        this._dialog.open(UsersResetComponent, {
+          data: userData,
+          disableClose: true,
+          width: "400px",
+          maxHeight: '80vh'
+        })
+        .afterClosed().subscribe(
+          (res) => {
+            if (res) {
+              this.formatGetInputs()
+            }
+          }
+        )
+      }
+    })
   }
 
 }
