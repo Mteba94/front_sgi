@@ -207,9 +207,9 @@ export class SacramentoManageComponent implements OnInit {
       })
     }
 
-    const libro = this.form.get('libro').value;
-    const folio = this.form.get('folio').value;
-    const partida = this.form.get('partida').value;
+    const libro = this.form.get('scLibro').value;
+    const folio = this.form.get('scFolio').value;
+    const partida = this.form.get('scPartida').value;
 
     // Combinar los valores en el campo scNumeroPartida
     const scNumeroPartida = `L.${libro}-F.${folio}-P.${partida}`.toUpperCase();
