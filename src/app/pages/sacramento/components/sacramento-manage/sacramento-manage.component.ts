@@ -80,6 +80,15 @@ export class SacramentoManageComponent implements OnInit {
     this.listTipoSacramento();
     this.listSexType();
 
+    this.form.get("peIdTipoDocumento")?.valueChanges.subscribe((value) => {
+      if (value === 2) {
+        this.form.get("peNumeroDocumento")?.disable();
+        this.generateSecuencial();
+      } else {
+        this.form.get("peNumeroDocumento")?.enable();
+      }
+    });
+
     if(this.data != null){
       //console.log(this.data.scIdSacramento)
       this.sacramentoById(this.data.scIdSacramento);
@@ -88,6 +97,17 @@ export class SacramentoManageComponent implements OnInit {
       console.log(this.data.scIdSacramento)
       this.handleSacramentoTypeChange(this.form.get('scMatrimonioId')?.value);
     }
+  }
+
+  generateSecuencial(): void {
+    const date = new Date();
+    const year = date.getFullYear().toString().slice(-2); // Últimos dos dígitos del año 
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Mes con dos dígitos 
+    const day = ('0' + date.getDate()).slice(-2); // Día con dos dígitos 
+    const hour = ('0' + date.getHours()).slice(-2); // Hora con dos dígitos 
+    const minute = ('0' + date.getMinutes()).slice(-2); // Minutos con dos dígitos 
+    const second = ('0' + date.getSeconds()).slice(-2); // Segundos con dos dígitos 
+    const secuencial = `${year}${month}${day}${hour}${minute}${second.slice(-2)}`; this.form.patchValue({ peNumeroDocumento: secuencial });
   }
 
   handleSacramentoTypeChange(sacramentoTypeId: number): void {
@@ -207,12 +227,16 @@ export class SacramentoManageComponent implements OnInit {
       })
     }
 
+    if (this.form.get("peIdTipoDocumento").value === 2) {
+      this.form.get("peNumeroDocumento").enable();
+    }
+
     const libro = this.form.get('scLibro').value;
     const folio = this.form.get('scFolio').value;
     const partida = this.form.get('scPartida').value;
 
     // Combinar los valores en el campo scNumeroPartida
-    const scNumeroPartida = `L.${libro}-F.${folio}-P.${partida}`.toUpperCase();
+    const scNumeroPartida = `L.${libro} - F.${folio} - P.${partida}`.toUpperCase();
     this.form.patchValue({ scNumeroPartida })
 
     console.log(this.form.get('scNumeroPartida').value)
@@ -269,7 +293,7 @@ export class SacramentoManageComponent implements OnInit {
         this.matrimoniobyId(sacramentoId)
       }
 
-      const parts = resp.scNumeroPartida.match(/L\.(\d+)-F\.(\d+)-P\.(\d+)/i);
+      const parts = resp.scNumeroPartida.match(/L\.(\d+) - F\.(\d+) - P\.(\d+)/i);
       const scLibro = parts ? parts[1] : '';
       const scFolio = parts ? parts[2] : '';
       const scPartida = parts ? parts[3] : ''

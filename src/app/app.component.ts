@@ -84,6 +84,12 @@ export class AppComponent {
         label: 'Constancias',
         route: 'constancias',
         icon: IconsService.prototype.getIcon("icCloudDownload")
+      },
+      {
+        type: 'link',
+        label: 'Sacerdotes',
+        route: 'sacerdotes',
+        icon: IconsService.prototype.getIcon("icPriest")
       }
     ];
   }

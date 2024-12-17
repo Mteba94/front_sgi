@@ -10,6 +10,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AlertService } from '@shared/services/alert.service';
 import { HistConstanciaRequest } from '../../models/histConstancia-request.interface';
 import { forkJoin } from 'rxjs';
+import { SacerdoteResponse } from 'src/app/pages/sacerdotes/models/sacerdote-response.interface';
 
 @Component({
   selector: 'vex-constancies-manage',
@@ -23,6 +24,7 @@ export class ConstanciesManageComponent implements OnInit {
   tSacramento: string = null;
   tNombre: string = null;
   correlativo: string = null;
+  sacerdote: SacerdoteResponse[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -37,6 +39,7 @@ export class ConstanciesManageComponent implements OnInit {
     if(this.data != null){
       //console.log(this.data.scIdSacramento)
       this.constancesGenerate(this.data.scIdSacramento);
+      this.firmaSelect();
     }
   }
 
@@ -136,7 +139,9 @@ export class ConstanciesManageComponent implements OnInit {
         anotacionMarginal: "resp.scAnotacionMarginal",
         diaExpedicion: diaAct.toString(),
         mesExpedicion: mesLetraAct,
-        anioExpedicion: aniAct.toString()
+        anioExpedicion: aniAct.toString(),
+        sacerdoteFirma: this.sacerdote[0].sacerdoteNombre,
+        sacerdoteCat: this.sacerdote[0].sacerdoteCategoria
       }
   
       this._spinner.show();
@@ -246,7 +251,9 @@ export class ConstanciesManageComponent implements OnInit {
         anotacionMarginal: "resp.scAnotacionMarginal",
         diaExpedicion: diaAct.toString(),
         mesExpedicion: mesLetraAct,
-        anioExpedicion: aniAct.toString()
+        anioExpedicion: aniAct.toString(),
+        sacerdoteFirma: "",
+        sacerdoteCat: ""
       }
   
       this._spinner.show();
@@ -330,5 +337,10 @@ export class ConstanciesManageComponent implements OnInit {
     })
   }
   
+  firmaSelect(){
+    this._constanciaService.firmaSelect().subscribe((resp) => {
+      this.sacerdote = resp;
+    })
+  }
 
 }

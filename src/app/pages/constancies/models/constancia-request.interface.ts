@@ -23,4 +23,6 @@ export interface ConstanciaRequest{
     diaExpedicion: string;
     mesExpedicion: string;
     anioExpedicion: string;
+    sacerdoteFirma: string;
+    sacerdoteCat: string;
 }

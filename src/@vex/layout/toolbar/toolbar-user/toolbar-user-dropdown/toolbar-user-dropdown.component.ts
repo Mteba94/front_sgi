@@ -163,6 +163,14 @@ export class ToolbarUserDropdownComponent implements OnInit {
         description: 'Gestion de Usuarios y Roles',
         colorClass: 'text-amber',
         route: '/user/list'
+      },
+      {
+        id: '3',
+        icon: icSettings,
+        label: 'Configuracion del Sistema',
+        description: 'Gestion de Catalogos',
+        colorClass: 'text-teal',
+        route: '/catalogos'
       }
     ];
 

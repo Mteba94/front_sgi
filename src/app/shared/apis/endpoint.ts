@@ -48,7 +48,27 @@ export const endpoint = {
     ROL_SELECT: 'Rol/Select',
 
     //User-Rol
-    ROL_ASSIGN: 'UserRol/Assign/'
+    ROL_ASSIGN: 'UserRol/Assign/',
+
+    //Sacerdotes
+    SACERDOTE_LIST: 'Sacerdote/List',
+    SACERDOTE_SELECT: 'Sacerdote/Select',
+    SACERDOTE_BY_ID: 'Sacerdote/',
+    SACERDOTE_REGISTER: 'Sacerdote/Register',
+    SACERDOTE_UPDATE: 'Sacerdote/Update/',
+    SACERDOTE_DELETE: 'Sacerdote/Delete/',
+
+    //Categoria Sacerdote
+    CATEGORIA_SACERDOTE_LIST: 'CategoriaSacerdote/List',
+    CATEGORIA_SACERDOTE_SELECT: 'CategoriaSacerdote/Select',
+    CATEGORIA_SACERDOTE_BY_ID: 'CategoriaSacerdote/',
+    CATEGORIA_SACERDOTE_REGISTER: 'CategoriaSacerdote/Register',
+    CATEGORIA_SACERDOTE_UPDATE: 'CategoriaSacerdote/Update/',
+    CATEGORIA_SACERDOTE_DELETE: 'CategoriaSacerdote/Delete/',
+
+    //Firma
+    FIRMA_REGISTER: 'Firma/RegisterFirma/',
+    FIRMA_SELECT: 'Firma/ListSelectFirma'
 
 }
 

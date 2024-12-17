@@ -48,6 +48,20 @@ const childrenRoutes: VexRoutes = [
     }
   },
   {
+    path: 'sacerdotes',
+    loadChildren: () => import("./pages/sacerdotes/sacerdotes.module").then((m) => m.SacerdotesModule),
+    data: {
+      containerEnabled: true, roles: ['Administrador']
+    }
+  },
+  {
+    path: 'catalogos',
+    loadChildren: () => import("./pages/catalogos/catalogos.module").then((m) => m.CatalogosModule),
+    data: {
+      containerEnabled: true, roles: ['Administrador']
+    }
+  },
+  {
     path:'access-denied',
     component: AccesDeniedComponent
   },
