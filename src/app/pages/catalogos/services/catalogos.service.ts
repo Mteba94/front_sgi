@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { endpoint } from '@shared/apis/endpoint';
-import { BaseApiResponse } from '@shared/models/base-api-response.interface';
+import { BaseApiResponse, BaseResponse } from '@shared/models/base-api-response.interface';
 import { Observable } from 'rxjs';
 import { environment as env } from "src/environments/environment";
 import { ListGradoSacerdotalRequest } from '../models/list-gradoSacerdotal-request.interface';
@@ -39,6 +39,42 @@ export class CatalogosService {
             sac.icFirma = getIcon("icSignature", "Firma", sac.csEStado != 0, "firma");
           });
           return data;
+        })
+      );
+    }
+
+    GradoSacerdotalById(sacerdoteId: number): Observable<GradoSacerdotalResponse> {
+      const requestUrl = `${env.api}${endpoint.CATEGORIA_SACERDOTE_BY_ID}${sacerdoteId}`;
+      return this._http.get(requestUrl).pipe(
+        map((resp: BaseResponse) => {
+          return resp.data;
+        })
+      );
+    }
+
+    GradoSacerdotalRegister(sacerdote: GradoSacerdotalResponse): Observable<BaseResponse> {
+      const requestUrl = `${env.api}${endpoint.CATEGORIA_SACERDOTE_REGISTER}`;
+      return this._http.post(requestUrl, sacerdote).pipe(
+        map((resp: BaseResponse) => {
+          return resp;
+        })
+      );
+    }
+
+    GradoSacerdotalUpdate(sacerdoteId: number, sacerdote: GradoSacerdotalResponse): Observable<BaseResponse> {
+      const requestUrl = `${env.api}${endpoint.CATEGORIA_SACERDOTE_UPDATE}${sacerdoteId}`;
+      return this._http.put(requestUrl, sacerdote).pipe(
+        map((resp: BaseResponse) => {
+          return resp;
+        })
+      );
+    }
+
+    GradoSacerdotalDelete(sacerdoteId: number): Observable<BaseResponse> {
+      const requestUrl = `${env.api}${endpoint.CATEGORIA_SACERDOTE_DELETE}${sacerdoteId}`;
+      return this._http.put(requestUrl, '').pipe(
+        map((resp: BaseResponse) => {
+          return resp;
         })
       );
     }

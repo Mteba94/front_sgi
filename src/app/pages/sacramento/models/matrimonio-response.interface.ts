@@ -23,7 +23,7 @@ export interface MatrimonioResponse {
     scMadreEsposa: string,
     scTestigo1: string,
     scTestigo2: string,
-    scParroco: string,
+    scParrocoId: number,
     scFechaSacramento: Date,
     scObservaciones: string
 }

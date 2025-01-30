@@ -1,1 +1,35 @@
-<p>grado-sacerdotal-manage works!</p>
+<form (ngSubmit)="catSacerdoteSave()" [formGroup]="form">
+    <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+        <h2 class="headline m-0 text-xl text-accent" fxFlex="auto">
+            <strong>Gestión de Grado Sacerdotal</strong>
+        </h2>
+        <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content>
+        <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Grado</mat-label>
+                <input matInput formControlName="csNombre">
+                <mat-error *ngIf="form.get('csNombre').hasError('required')">
+                    Campo Grado es requerido.
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Abreviatura</mat-label>
+                <input matInput formControlName="csAbreviacion">
+                <mat-error *ngIf="form.get('csAbreviacion').hasError('required')">
+                    Campo Abreviatura es requerido.
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close type="button">CANCELAR</button>
+        <button color="purple" class="bg-accent text-accent-contrast" mat-button type="submit" [disabled]="!form.valid">GUARDAR</button>
+    </mat-dialog-actions>
+</form>

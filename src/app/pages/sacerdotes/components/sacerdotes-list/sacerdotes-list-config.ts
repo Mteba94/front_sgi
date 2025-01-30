@@ -33,32 +33,32 @@ const searchOptions: SearchOptions[] = [
 ]
 
 const menuItems: MenuItems[] = [
-    {
-        type: "link",
-        id: "all",
-        icon: IconsService.prototype.getIcon("icViewHeadline"),
-        label: "Todos"
-    },
-    {
-        type: "link",
-        id: "Activo",
-        value: 1,
-        icon: IconsService.prototype.getIcon("icLabel"),
-        label: "Activo",
-        class: {
-            icon: "text-green"
-        }
-    },
-    {
-        type: "link",
-        id: "Inactivo",
-        value: 0,
-        icon: IconsService.prototype.getIcon("icLabel"),
-        label: "Inactivo",
-        class: {
-            icon: "text-gray"
-        }
-    }
+    // {
+    //     type: "link",
+    //     id: "all",
+    //     icon: IconsService.prototype.getIcon("icViewHeadline"),
+    //     label: "Todos"
+    // },
+    // {
+    //     type: "link",
+    //     id: "Activo",
+    //     value: 1,
+    //     icon: IconsService.prototype.getIcon("icLabel"),
+    //     label: "Activo",
+    //     class: {
+    //         icon: "text-green"
+    //     }
+    // },
+    // {
+    //     type: "link",
+    //     id: "Inactivo",
+    //     value: 0,
+    //     icon: IconsService.prototype.getIcon("icLabel"),
+    //     label: "Inactivo",
+    //     class: {
+    //         icon: "text-gray"
+    //     }
+    // }
 ]
 
 const tableColumns: TableColumns<SacerdoteResponse>[] = [

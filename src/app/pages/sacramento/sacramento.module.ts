@@ -13,12 +13,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { FilterDateRangeYmdComponent } from '@shared/components/reusables/filter-date-range-ymd/filter-date-range-ymd.component';
 import { FilterDateSingleYmdComponent } from '@shared/components/reusables/filter-date-single-ymd/filter-date-single-ymd.component';
+import { SacramentoSignatureComponent } from './components/sacramento-signature/sacramento-signature.component';
 
 
 @NgModule({
   declarations: [
     SacramentolistComponent,
     SacramentoManageComponent,
+    SacramentoSignatureComponent,
   ],
   imports: [
     CommonModule,

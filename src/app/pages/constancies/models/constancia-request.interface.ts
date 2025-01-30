@@ -19,10 +19,12 @@ export interface ConstanciaRequest{
     nombreMadreEsposa: string;
     nombrePadrinos: string[];
     nombreSacerdote: string;
+    sacerdoteRealizaCat: string;
     anotacionMarginal: string;
     diaExpedicion: string;
     mesExpedicion: string;
     anioExpedicion: string;
     sacerdoteFirma: string;
     sacerdoteCat: string;
+    tituloSacerdotal: string;
 }

@@ -14,6 +14,7 @@ import { ConstanciesService } from 'src/app/pages/constancies/services/constanci
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ConstanciesManageComponent } from 'src/app/pages/constancies/components/constancies-manage/constancies-manage.component';
 import { BaseResponse } from '@shared/models/base-api-response.interface';
+import { SacramentoSignatureComponent } from '../sacramento-signature/sacramento-signature.component';
 
 @Component({
   selector: 'vex-sacramentolist',
@@ -125,7 +126,6 @@ export class SacramentolistComponent implements OnInit {
         this.constancesGenerate(sacramento)
         break
     }
-
     return false
   }
 
@@ -148,130 +148,57 @@ export class SacramentolistComponent implements OnInit {
     )
   }
 
-  constancesGenerate(sacramentoData: SacramentoResponse){
+  confirmConstance(){
     const dialogConfig = new MatDialogConfig()
-    dialogConfig.data = sacramentoData
-    this._dialog.open(ConstanciesManageComponent, {
-      data: sacramentoData,
-      disableClose: true,
-      width: "900px",
-      maxHeight: '80vh'
-    })
-    .afterClosed().subscribe(
-      (res) => {
-        if (res) {
-          this.formatGetInputs()
-        }
-      }
-    )
+    
   }
 
-  /*
   constancesGenerate(sacramentoData: SacramentoResponse){
-    this._sacramentoService.SacramentoById(sacramentoData.scIdSacramento).subscribe((resp) => {
-
-      const numeroPartida = resp.scNumeroPartida.trim();
-      const [libro, folio, partida] = numeroPartida.split('-').map(part => part.trim());
-
-      const libroNumero = libro.replace(/[^\d]/g, '');  // Elimina todo lo que no sea dígito
-      const folioNumero = folio.replace(/[^\d]/g, '');
-      const partidaNumero = partida.replace(/[^\d]/g, '');
-
-      const fechaSacramento = resp.scFechaSacramento;
-      const fecha = new Date(fechaSacramento);
-
-      const dia = fecha.getDate();
-      const mesNumero = fecha.getMonth();
-      const anio = fecha.getFullYear();
-
-      const fechaActual = new Date();
-
-      const diaAct = fechaActual.getDate();
-      const mesAct = fechaActual.getMonth();
-      const aniAct = fechaActual.getFullYear();
-
-      const meses = [
-        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
-        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-      ];
-
-      const mesLetraAct = meses[mesAct];
-      
-      const mesLetra = meses[mesNumero];
-
-      const fechaNacimiento = new Date(resp.peFechaNacimiento)
-
-      const diaNac = fechaNacimiento.getDate().toString().padStart(2, '0')
-      const mesNac = (fechaNacimiento.getMonth() + 1).toString().padStart(2, '0');
-      const añoNac = fechaNacimiento.getFullYear();
-
-      const fechaFormateadaNac = `${diaNac}/${mesNac}/${añoNac}`;
-
-      const nombrePadrinos = [resp.scNombrePadrino, resp.scNombreMadrina];
-
-      let edad = fecha.getFullYear() - fechaNacimiento.getFullYear();
-      const mes = fecha.getMonth() - fechaNacimiento.getMonth();
-      
-      if (mes < 0 || (mes === 0 && fecha.getDate() < fechaNacimiento.getDate())) {
-          edad--;
-      }
-      
-      const constaciaData: ConstanciaRequest = {
-        idTipoSacramento: resp.scIdTipoSacramento,
-        tipoSacramento: resp.scTipoSacramento,
-        numero: libroNumero,
-        folio: folioNumero,
-        partida: partidaNumero,
-        dia: dia.toString(),
-        mes: mesLetra,
-        anio: anio.toString(),
-        nombreBautizado: resp.peNombre,
-        fechaNacimiento: fechaFormateadaNac,
-        edad: edad,
-        nombrePadre: resp.scNombrePadre,
-        nombreMadre: resp.scNombreMadre,
-        nombrePadrinos: nombrePadrinos,
-        nombreSacerdote: resp.scParroco,
-        anotacionMarginal: "resp.scAnotacionMarginal",
-        diaExpedicion: diaAct.toString(),
-        mesExpedicion: mesLetraAct,
-        anioExpedicion: aniAct.toString()
-      }
-
-      this._spinner.show();
-      this._constanciaService.constancieGenerate(constaciaData).subscribe((respConst) => {
-
-        const base64Data = respConst.data.b64;
-        const fileName = respConst.data.fileName;
-
-        const byteCharacters = atob(base64Data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+    this._dialog.open(SacramentoSignatureComponent, {
+      disableClose: true,
+      width: "600px",
+    }).afterClosed().subscribe(
+      (res) => {
+      if (res) {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+          ...sacramentoData,
+          tituloSacerdotal: res.tituloSacerdotal
         }
-        const byteArray = new Uint8Array(byteNumbers);
-      
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-      
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileName;
-      
-        document.body.appendChild(link);
-      
-        link.click();
-      
-        document.body.removeChild(link);
-        this._spinner.hide();
-      },
-      (error) => {
-        console.error("Error al generar la constancia: ", error);
-
-        this._spinner.hide();
-      })
+       this._dialog.open(ConstanciesManageComponent, {
+         data: dialogConfig.data,
+         disableClose: true,
+         width: "900px",
+         maxHeight: '80vh'
+       })
+       .afterClosed().subscribe(
+         (res) => {
+           if (res) {
+             this.formatGetInputs()
+           }
+         }
+       )
+      }else{
+        this.formatGetInputs()
+      }
     })
   }
-    */
 
-
+  // constancesGenerate(sacramentoData: SacramentoResponse){
+  //   const dialogConfig = new MatDialogConfig()
+  //   dialogConfig.data = sacramentoData
+  //   this._dialog.open(ConstanciesManageComponent, {
+  //     data: sacramentoData,
+  //     disableClose: true,
+  //     width: "900px",
+  //     maxHeight: '80vh'
+  //   })
+  //   .afterClosed().subscribe(
+  //     (res) => {
+  //       if (res) {
+  //         this.formatGetInputs()
+  //       }
+  //     }
+  //   )
+  // }
 }

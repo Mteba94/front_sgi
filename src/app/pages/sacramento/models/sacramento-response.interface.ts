@@ -16,7 +16,7 @@ export interface SacramentoResponse {
     scNombrePadrino: string,
     scNombreMadrina: string,
     scFechaSacramento: Date,
-    scParroco: string,
+    scParrocoId: number,
     scObservaciones: string,
     scCreateDate: Date,
     icEdit: any,

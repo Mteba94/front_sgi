@@ -433,11 +433,16 @@
                 <div fxFlex="50%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Parroco</mat-label>
-                            <input matInput formControlName="scParroco">
-                            <mat-error *ngIf="form.get('scParroco').hasError('required')">
-                                Campo Parroco es requerido.
-                            </mat-error>
+                            <mat-label>Celebrante</mat-label>
+                            <input type="text" matInput [formControl]="celebranteFilterCtrl" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCelebrante" (optionSelected)="onCelebranteSelected($event.option.value)">
+                                <mat-option [value]="null" (click)="agregarNuevoCelebrante()" >
+                                    Agregar nuevo celebrante
+                                </mat-option>
+                                <mat-option *ngFor="let item of (filteredSacerdotes | async)" [value]="item">
+                                    {{ item.scNombre }}
+                                </mat-option>
+                            </mat-autocomplete>
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
@@ -454,6 +459,7 @@
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>CANCELAR</button>
             <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="sacramentoSave()">GUARDAR</button>
+            <!-- <button mat-flat-button color="primary" (click)="sacramentoSave()">GUARDAR</button> -->
         </mat-dialog-actions>
     </div>
 </form>
