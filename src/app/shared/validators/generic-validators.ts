@@ -130,7 +130,7 @@ export class GenericValidators {
     */
      static numeric(control: AbstractControl): { [key: string]: boolean } | null {
         if (control.value != null && control.value.toString().trim() != "") {
-            if (/^[0-9.]+$/.test(control.value)) return null;
+            if (/^[0-9]+$/.test(control.value)) return null;
             else return { 'numeric': true };
         } else {
             return null;

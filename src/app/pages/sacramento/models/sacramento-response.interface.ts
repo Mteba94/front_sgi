@@ -5,6 +5,7 @@ export interface SacramentoResponse {
     scTipoSacramento: string,
     scMatrimonioId: number,
     peNombre: string,
+    peEdad: number,
     peFechaNacimiento: Date,
     peNumeroDocumento: string,
     peSexoId: number,
@@ -19,6 +20,8 @@ export interface SacramentoResponse {
     scParrocoId: number,
     scObservaciones: string,
     scCreateDate: Date,
+    scLugarBautizo: string,
     icEdit: any,
     icCloudDownload: any;
+    icDelete: any;
 }

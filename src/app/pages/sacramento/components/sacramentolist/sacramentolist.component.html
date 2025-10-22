@@ -7,11 +7,14 @@
             </h2>
             <div class="flex items-center justify-end w-full">
                 <div class="flex justify-between">
-                    <!-- <app-filter-date-range-ymd
+                    <app-filter-date-range-ymd
                       (rangeDate)="searchDateRange($event)"
                       [start]="component.filters.startDate"
                       [end]="component.filters.endDate"
-                    ></app-filter-date-range-ymd> -->
+                    ></app-filter-date-range-ymd>
+                    <app-button-reset-filters
+                        (buttonClick)="resetFilters()"
+                    ></app-button-reset-filters>
                 </div>
                 <div class="flex justify-between ml-6">
                     <app-search-box-multiple
@@ -29,7 +32,7 @@
                 <app-menu
                     class="hidden sm:block mr-6"
                     [currentMenu]="component.getInputs.stateFilter"
-                    [buttonShow]="true"
+                    [buttonShow]="buttonShow"
                     buttonLabel="AGREGAR"
                     (filterChange)="setMenu($event)"
                     [items]="component.menuItems"

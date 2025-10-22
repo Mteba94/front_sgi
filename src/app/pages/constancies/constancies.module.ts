@@ -10,12 +10,15 @@ import { ListTableComponent } from '@shared/components/reusables/list-table/list
 import { SearchBoxMultipleComponent } from '@shared/components/reusables/search-box-multiple/search-box-multiple.component';
 import { MenuComponent } from '@shared/components/reusables/menu/menu.component';
 import { SearchBoxSimpleModule } from '@shared/components/search-box-simple/search-box-simple.module';
+import { ContanciesAnularComponent } from './components/contancies-anular/contancies-anular.component';
+import { ButtonResetFiltersComponent } from '@shared/components/reusables/button-reset-filters/button-reset-filters.component';
 
 
 @NgModule({
   declarations: [
     ConstancieslistComponent,
-    ConstanciesManageComponent
+    ConstanciesManageComponent,
+    ContanciesAnularComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +29,7 @@ import { SearchBoxSimpleModule } from '@shared/components/search-box-simple/sear
     SearchBoxMultipleComponent,
     MenuComponent,
     SearchBoxSimpleModule,
+    ButtonResetFiltersComponent
   ]
 })
 export class ConstanciesModule { }

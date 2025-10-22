@@ -11,6 +11,7 @@ import { getIcon } from '@shared/functions/helpers';
 import { sacramentoRequest } from '../models/sacramento-request.interface';
 import { matrimonioRequest } from '../models/matrimonio-request.interface';
 import { MatrimonioResponse } from '../models/matrimonio-response.interface';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ import { MatrimonioResponse } from '../models/matrimonio-response.interface';
 export class SacramentoService {
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
+    private _authService: AuthService
   ) { }
 
   GetAll(
@@ -42,9 +44,11 @@ export class SacramentoService {
       )
       return this._http.post<BaseApiResponse>(requestUrl, params).pipe(
         map((data: BaseApiResponse) => {
+          const canEdit = this._authService.hasRole(['Administrador'])
           data.data.items.forEach(function(sac: SacramentoResponse){
-            sac.icEdit = getIcon("icEdit", "Editar Sacramento", true, "edit")
+            sac.icEdit = getIcon("icEdit", "Editar Sacramento", canEdit, "edit")
             sac.icCloudDownload = getIcon("icCloudDownload", "Generar Constancia", true, "constancia")
+            sac.icDelete = getIcon("icDelete", "Eliminar Sacramento", canEdit, "remove")
           })
           return data;
         })
@@ -103,6 +107,16 @@ export class SacramentoService {
 
   MatrimonioEdit(SacramentoId: number, Matrimonio: matrimonioRequest):Observable<BaseResponse>{
     const requestUrl =  `${env.api}${endpoint.MATRIMONIO_UPDATE}${SacramentoId}`
+    return this._http.put<BaseResponse>(requestUrl, Matrimonio);
+  }
+
+  SacramentoDelete(SacramentId: number, Sacramento: sacramentoRequest):Observable<BaseResponse>{
+    const requestUrl =  `${env.api}${endpoint.SACRAMENTO_DELETE}${SacramentId}`
+    return this._http.put<BaseResponse>(requestUrl, Sacramento);
+  }
+
+  MatrimonioDelete(SacramentId: number, Matrimonio: matrimonioRequest):Observable<BaseResponse>{
+    const requestUrl = `${env.api}${endpoint.MATRIMONIO_DELETE}${SacramentId}`
     return this._http.put<BaseResponse>(requestUrl, Matrimonio);
   }
 }

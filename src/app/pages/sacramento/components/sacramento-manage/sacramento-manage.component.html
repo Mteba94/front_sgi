@@ -32,6 +32,9 @@
                           <mat-error *ngIf="form.get('scLibro').hasError('required')">
                             Campo Libro es requerido.
                           </mat-error>
+                          <mat-error *ngIf="form.get('scLibro').hasError('numeric')">
+                            Solo números.
+                          </mat-error>
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
@@ -42,6 +45,9 @@
                             <input matInput formControlName="scFolio">
                             <mat-error *ngIf="form.get('scFolio').hasError('required')">
                               Campo Folio es requerido.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('scFolio').hasError('numeric')">
+                                Solo números.
                             </mat-error>
                           </mat-form-field>
                     </mat-dialog-content>
@@ -54,6 +60,9 @@
                             <mat-error *ngIf="form.get('scPartida').hasError('required')">
                               Campo Partida es requerido.
                             </mat-error>
+                            <mat-error *ngIf="form.get('scPartida').hasError('numeric')">
+                                Solo números.
+                            </mat-error>
                           </mat-form-field>
                           
                           <!-- Campo oculto para scNumeroPartida -->
@@ -64,7 +73,7 @@
                 </div>
             </div>
             <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peNombre')">
-                <div fxFlex="60%">
+                <div fxFlex="form.get('peEdad') ? '50%' : '60%'">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Nombre</mat-label>
@@ -75,7 +84,21 @@
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
-                <div fxFlex="40%">
+                <div fxFlex="20%" *ngIf="form.get('peEdad')">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Edad</mat-label>
+                            <input matInput formControlName="peEdad" maxlength="2">
+                            <mat-error *ngIf="form.get('peEdad').hasError('required')">
+                                Campo Edad es requerido.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('peEdad').hasError('numeric')">
+                                Solo números.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="form.get('peEdad') ? '30%' : '40%'">
                     <mat-form-field appearance="outline" class="w-full">
                         <mat-label>Fecha de Nacimiento</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="peFechaNacimiento" placeholder="Seleccione una fecha">
@@ -84,11 +107,12 @@
                         <mat-error *ngIf="form.get('peFechaNacimiento').hasError('required')">
                           Campo Fecha de Nacimiento es requerido.
                         </mat-error>
-                    </mat-form-field>
+                      </mat-form-field>
+                      
                 </div>
             </div>
             <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peNombreEsposo')">
-                <div fxFlex="60%">
+                <div fxFlex="50%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Nombre del Esposo</mat-label>
@@ -99,7 +123,21 @@
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
-                <div fxFlex="40%">
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Edad</mat-label>
+                            <input matInput formControlName="peEdadEsposo" maxlength="2">
+                            <mat-error *ngIf="form.get('peEdadEsposo').hasError('required')">
+                                Campo Edad es requerido.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('peEdadEsposo').hasError('numeric')">
+                                Solo numeros.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="30%">
                     <mat-form-field appearance="outline" class="w-full">
                         <mat-label>Fecha de Nacimiento Esposo</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="peFechaNacimientoEsposo" placeholder="Seleccione una fecha">
@@ -192,7 +230,7 @@
                 </mat-error>
             </div>
             <div fxLayout="row" fxLayoutGap="16px" *ngIf="form.get('peNombreEsposa')">
-                <div fxFlex="60%">
+                <div fxFlex="50%">
                     <mat-dialog-content>
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Nombre de la Esposa</mat-label>
@@ -203,7 +241,21 @@
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>
-                <div fxFlex="40%">
+                <div fxFlex="20%">
+                    <mat-dialog-content>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Edad</mat-label>
+                            <input matInput formControlName="peEdadEsposa" maxlength="2">
+                            <mat-error *ngIf="form.get('peEdadEsposa').hasError('required')">
+                                Campo Edad es requerido.
+                            </mat-error>
+                            <mat-error *ngIf="form.get('peEdadEsposa').hasError('numeric')">
+                                Solo numeros.
+                            </mat-error>
+                        </mat-form-field>
+                    </mat-dialog-content>
+                </div>
+                <div fxFlex="30%">
                     <mat-form-field appearance="outline" class="w-full">
                         <mat-label>Fecha de Nacimiento Esposa</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="peFechaNacimientoEsposa" placeholder="Seleccione una fecha">
@@ -318,6 +370,14 @@
                     </mat-dialog-content>
                 </div>
             </div>
+            <div *ngIf="form.get('scLugarBautizo')">
+                <mat-dialog-content>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Lugar de Bautizo</mat-label>
+                        <input matInput formControlName="scLugarBautizo">
+                    </mat-form-field>
+                </mat-dialog-content>
+            </div>
             <div *ngIf="form.get('peDireccion')">
                 <mat-dialog-content>
                     <mat-form-field appearance="outline" class="w-full">
@@ -375,7 +435,7 @@
                     Al menos uno de los campos "Padre" o "Madre" debe ser llenado.
                 </mat-error>
             </div>
-            <div *ngIf="form.get('scPadrino')">
+            <div *ngIf="form.get('scPadrino') && tipoSacramento !== 2">
                 <div fxLayout="row" fxLayoutGap="16px">
                     <div fxFlex="50%">
                         <mat-dialog-content>

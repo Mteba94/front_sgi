@@ -118,6 +118,65 @@ const tableColumns: TableColumns<ConstanciaResponse>[]= [
         visible: true,
         download: true
     },
+    {
+        label: "Estado",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
+        property: "ct_EstadoDescripcion",
+        cssProperty: ["font-semibold", "text-sm"],
+        type: "badge",
+        sticky: false,
+        sort: true,
+        sortProperty: "ct_EstadoDescripcion",
+        visible: true,
+        download: true
+    },
+    {
+        label: "Observaciones",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
+        property: "ct_Observacion",
+        cssProperty: ["font-semibold", "text-sm"],
+        type: "text",
+        sticky: false,
+        sort: true,
+        sortProperty: "ct_Observacion",
+        visible: true,
+        download: true
+    },
+    {
+        label: "Rechazada Por",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
+        property: "ct_UsuarioRechazoNombre",
+        cssProperty: ["font-semibold", "text-sm"],
+        type: "text",
+        sticky: false,
+        sort: true,
+        sortProperty: "ct_UsuarioRechazoNombre",
+        visible: true,
+        download: true
+    },{
+        label: "Fecha de Rechazo",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
+        property: "ct_FechaRechazo",
+        cssProperty: ["font-semibold", "text-sm"],
+        type: "datetime",
+        sticky: false,
+        sort: true,
+        sortProperty: "ct_FechaRechazo",
+        visible: true,
+        download: true
+    },
+    {
+        label: "",
+        cssLabel: [],
+        property: "icContractDelete",
+        cssProperty: [],
+        type: "icon",
+        action: "anular",
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: false
+    },
 ]
 
 const filters = {

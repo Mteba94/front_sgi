@@ -1,18 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SharedModule } from '@shared/shared.module';
-import { IconsService } from '@shared/services/icons.service';
-import { toBase64 } from '@shared/functions/helpers';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { SharedModule } from "@shared/shared.module";
+import { IconsService } from "@shared/services/icons.service";
+import { toBase64 } from "@shared/functions/helpers";
 
 @Component({
-  selector: 'app-img-selector',
+  selector: "app-img-selector",
   standalone: true,
   imports: [CommonModule, SharedModule],
-  templateUrl: './img-selector.component.html',
-  styleUrls: ['./img-selector.component.scss']
+  templateUrl: "./img-selector.component.html",
+  styleUrls: ["./img-selector.component.scss"],
 })
 export class ImgSelectorComponent implements OnInit {
-
   imgBase64: string;
 
   @Input() urlCurrentImg: string;
@@ -21,7 +20,7 @@ export class ImgSelectorComponent implements OnInit {
 
   icUpload = IconsService.prototype.getIcon("icUpload");
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
   }
@@ -37,5 +36,4 @@ export class ImgSelectorComponent implements OnInit {
       }
     }
   }
-
 }

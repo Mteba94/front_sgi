@@ -12,6 +12,7 @@ import { UsersManageComponent } from './components/users-manage/users-manage.com
 import { SearchBoxSimpleModule } from '@shared/components/search-box-simple/search-box-simple.module';
 import { UsersRolComponent } from './components/users-rol/users-rol.component';
 import { UsersResetComponent } from './components/users-reset/users-reset.component';
+import { FilterDateRangeYmdComponent } from '@shared/components/reusables/filter-date-range-ymd/filter-date-range-ymd.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { UsersResetComponent } from './components/users-reset/users-reset.compon
     ImgSelectorComponent,
     ListTableComponent,
     MenuComponent,
-    SearchBoxSimpleModule
+    SearchBoxSimpleModule,
+    FilterDateRangeYmdComponent
   ]
 })
 export class UserModule {}

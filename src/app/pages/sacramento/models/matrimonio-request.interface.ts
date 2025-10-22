@@ -3,6 +3,8 @@ export interface matrimonioRequest {
     scNumeroPartida: string,
     peNombreEsposo: string,
     peNombreEsposa: string,
+    peEdadEsposo: number,
+    peEdadEsposa: number,
     peFechaNacimientoEsposo: Date,
     peFechaNacimientoEsposa: Date,
     peIdTipoDocumentoEsposo: number,
@@ -19,7 +21,7 @@ export interface matrimonioRequest {
     scMadreEsposa: string,
     scTestigo1: string,
     scTestigo2: string,
-    scParroco: string,
+    scParrocoId: number,
     scFechaSacramento: Date,
     scObservaciones: string
 }

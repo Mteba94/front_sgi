@@ -9,10 +9,9 @@
     </div>
     <div>
         <app-img-selector
-            (urlCurrentImg)="this.form.get('usImage').value"
+            [urlCurrentImg]="this.form.get('usImage').value"
             (selectedImage)="selectedImage($event)"
-        >
-        </app-img-selector>
+        ></app-img-selector>
             <div fxLayout="row" fxLayoutGap="16px">
                 <div fxFlex="50%">
                     <mat-dialog-content>

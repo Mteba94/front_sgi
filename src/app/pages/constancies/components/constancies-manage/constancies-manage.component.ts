@@ -39,7 +39,7 @@ export class ConstanciesManageComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data != null) {
-      //console.log(this.data)
+      console.log(this.data)
       //console.log(this.data.scIdSacramento)
       this.constancesGenerate(this.data.scIdSacramento);
       this.firmaSelect();
@@ -97,18 +97,18 @@ export class ConstanciesManageComponent implements OnInit {
       const aniAct = fechaActual.getFullYear();
 
       const meses = [
-        "Enero",
-        "Febrero",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre",
       ];
 
       const mesLetraAct = meses[mesAct];
@@ -126,14 +126,22 @@ export class ConstanciesManageComponent implements OnInit {
 
       const nombrePadrinos = [resp.scNombrePadrino, resp.scNombreMadrina];
 
-      let edad = fecha.getFullYear() - fechaNacimiento.getFullYear();
-      const mes = fecha.getMonth() - fechaNacimiento.getMonth();
+      let edad = 0;
 
-      if (
-        mes < 0 ||
-        (mes === 0 && fecha.getDate() < fechaNacimiento.getDate())
-      ) {
-        edad--;
+      if(fechaNacimiento.getFullYear() === 1900){
+        edad = resp.peEdad
+      }
+
+      if(fechaNacimiento.getFullYear() != 1900){
+        edad = fecha.getFullYear() - fechaNacimiento.getFullYear();
+        const mes = fecha.getMonth() - fechaNacimiento.getMonth();
+
+        if (
+          mes < 0 ||
+          (mes === 0 && fecha.getDate() < fechaNacimiento.getDate())
+        ) {
+          edad--;
+        }
       }
 
       this._sacerdoteService
@@ -264,22 +272,24 @@ export class ConstanciesManageComponent implements OnInit {
 
       const nombrePadrinos = [resp.scTestigo1, resp.scTestigo2];
 
-      let edad = fecha.getFullYear() - fechaNacimiento.getFullYear();
-      const mes = fecha.getMonth() - fechaNacimiento.getMonth();
+      let edad = 0;
 
-      if (
-        mes < 0 ||
-        (mes === 0 && fecha.getDate() < fechaNacimiento.getDate())
-      ) {
-        edad--;
+      if(fechaNacimiento.getFullYear() != 1900){
+        let edad = fecha.getFullYear() - fechaNacimiento.getFullYear();
+        const mes = fecha.getMonth() - fechaNacimiento.getMonth();
+
+        if (
+          mes < 0 ||
+          (mes === 0 && fecha.getDate() < fechaNacimiento.getDate())
+        ) {
+          edad--;
+        }
       }
 
       this._sacerdoteService
         .SacerdoteById(resp.scParrocoId)
         .subscribe((respSacerdote) => {
           
-        
-
       const constaciaData: ConstanciaRequest = {
         idTipoSacramento: resp.scIdTipoSacramento,
         tipoSacramento: "Matrimonio",
@@ -384,6 +394,7 @@ export class ConstanciesManageComponent implements OnInit {
       ct_SacramentoId: this.data.scIdSacramento,
       ct_correlativo: this.correlativo,
       ct_UsuarioId: 1,
+      ct_observaciones: null
     };
 
     this.histRegiter(histConstancia);

@@ -8,5 +8,6 @@ export interface SacerdoteResponse {
     sacerdoteEstadoDesc: string;
     icEdit: any,
     icDelete: any,
-    icFirma: any
+    icFirma: any,
+    badgeColor: string;
 }

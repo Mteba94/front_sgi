@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertService } from '@shared/services/alert.service';
 import { TipoSacramentoService } from '../../services/tipo-sacramento.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class TipoSacramentoManageComponent implements OnInit {
     private _fb: FormBuilder,
     private _alert: AlertService,
     private _tipoSacramentoService: TipoSacramentoService,
-    public _dialogRef: MatDialogRef<TipoSacramentoManageComponent>
+    public _dialogRef: MatDialogRef<TipoSacramentoManageComponent>,
+    public _spinner: NgxSpinnerService,
   ) { 
     this.initForm();
   }
@@ -45,6 +47,7 @@ export class TipoSacramentoManageComponent implements OnInit {
   }
 
   tipoSacramentoById(SacramentoId: number): void{
+    this._spinner.show()
     this._tipoSacramentoService.TipoSacramentoById(SacramentoId).subscribe(
       (resp) => {
         this.form.reset({
@@ -53,6 +56,7 @@ export class TipoSacramentoManageComponent implements OnInit {
           TsDescripcion: resp.tsDescripcion,
           TsRequerimiento: resp.tsRequerimiento
         })
+        this._spinner.hide();
       }
     )
   }

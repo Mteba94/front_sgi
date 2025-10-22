@@ -12,12 +12,15 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UsersRolComponent } from '../users-rol/users-rol.component';
 import { UsersResetComponent } from '../users-reset/users-reset.component';
 import { AlertService } from '@shared/services/alert.service';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MY_DATE_FORMATS } from '@shared/functions/date-format';
 
 @Component({
   selector: 'vex-users-all',
   templateUrl: './users-all.component.html',
   styleUrls: ['./users-all.component.scss'],
-  animations: [stagger40ms, scaleIn400ms, fadeInRight400ms]
+  animations: [stagger40ms, scaleIn400ms, fadeInRight400ms],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
 })
 export class UsersAllComponent implements OnInit {
 

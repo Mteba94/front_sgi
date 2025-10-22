@@ -14,6 +14,7 @@ import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular
 import { FilterDateRangeYmdComponent } from '@shared/components/reusables/filter-date-range-ymd/filter-date-range-ymd.component';
 import { FilterDateSingleYmdComponent } from '@shared/components/reusables/filter-date-single-ymd/filter-date-single-ymd.component';
 import { SacramentoSignatureComponent } from './components/sacramento-signature/sacramento-signature.component';
+import { ButtonResetFiltersComponent } from '@shared/components/reusables/button-reset-filters/button-reset-filters.component';
 
 
 @NgModule({
@@ -30,8 +31,9 @@ import { SacramentoSignatureComponent } from './components/sacramento-signature/
     SearchBoxMultipleComponent,
     MenuComponent,
     SearchBoxSimpleModule,
-    //FilterDateRangeYmdComponent,
+    FilterDateRangeYmdComponent,
     //FilterDateSingleYmdComponent
+    ButtonResetFiltersComponent
   ],
 })
 export class SacramentoModule { }

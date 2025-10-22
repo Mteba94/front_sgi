@@ -14,9 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { AuthInterceptor } from '@shared/interceptors/auth.interceptor';
 import { DatePipe } from '@angular/common';
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import { MY_DATE_FORMATS } from '@shared/functions/date-format';
 import { AccesDeniedComponent } from './pages/acces-denied/acces-denied.component';
 import { AuthService } from './pages/auth/services/auth.service';
 

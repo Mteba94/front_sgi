@@ -21,6 +21,8 @@ export const endpoint = {
     MATRIMONIO_REGISTER: 'Sacramento/Register/Matrimonio',
     SACRAMENTO_UPDATE: 'Sacramento/Update/',
     MATRIMONIO_UPDATE: 'Sacramento/Update/Matrimonio/',
+    SACRAMENTO_DELETE: 'Sacramento/Delete/',
+    MATRIMONIO_DELETE: 'Sacramento/Delete/Matrimonio/',
 
     //Document Type Module
     SELECT_DOCUMENT_TYPE: 'TipoDocumento/Select',
@@ -33,6 +35,7 @@ export const endpoint = {
     CONSTANCIA_GENERATE: 'Certification',
     CONSTANCIA_HISTORY_REGISTER: 'HistConstancia/Register',
     CONSTANCIA_GENERATE_CORRELATIVO: 'HistConstancia/Correlativo/',
+    CONSTANCIA_ANULAR: 'HistConstancia/Anular/',
 
     //Dashboard
     CANTIDAD_SACRAMENTOS: 'Dashboard/CantidadSacramentos',

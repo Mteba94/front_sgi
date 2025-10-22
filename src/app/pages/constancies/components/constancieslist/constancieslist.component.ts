@@ -10,6 +10,8 @@ import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { SacramentoService } from 'src/app/pages/sacramento/services/sacramento.service';
 import { BaseResponse } from '@shared/models/base-api-response.interface';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ContanciesAnularComponent } from '../contancies-anular/contancies-anular.component';
 
 @Component({
   selector: 'vex-constancieslist',
@@ -23,7 +25,8 @@ export class ConstancieslistComponent implements OnInit {
   constructor(
     customTitle: CustomTitleService,
     public _constaciaService: ConstanciesService,
-    public _sacramentoService: SacramentoService
+    public _sacramentoService: SacramentoService,
+    public _dialog: MatDialog,
   ) { 
     customTitle.set("Constancias");
   }
@@ -90,7 +93,7 @@ export class ConstancieslistComponent implements OnInit {
 
   rowClick(rowClick: RowClick<ConstanciaResponse>){
     let action = rowClick.action;
-    let sacramento = rowClick.row;
+    let constancia = rowClick.row;
 
     switch(action){
       case "edit":
@@ -99,11 +102,38 @@ export class ConstancieslistComponent implements OnInit {
       case "constancia":
         //this.constancesGenerate(sacramento)
         break
+      case "anular":
+        this.anularConstancia(constancia)
+        break
     }
 
     return false
   }
 
+  anularConstancia(constancia: ConstanciaResponse){
+    const dialogConfig = new MatDialogConfig()
+
+    this._dialog.open(ContanciesAnularComponent, {
+          data: constancia,
+          disableClose: true,
+          width: "700px",
+          maxHeight: '80vh'
+        })
+        .afterClosed().subscribe(
+          (res) => {
+            if (res) {
+              this.formatGetInputs()
+            }
+          }
+        )
+    //console.log(constancia)
+  }
+
   openDialogRegister(){}
+
+  resetFilters() {
+    this.component.filters = { ...this.component.resetFilters };
+    this.formatGetInputs();
+  }
 
 }

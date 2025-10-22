@@ -10,11 +10,14 @@ import { DocumentTypeService } from '@shared/services/document-type.service';
 import { SexTypeService } from '@shared/services/sex-type.service';
 import { UserService } from '../../services/user.service';
 import { GenericValidators } from '@shared/validators/generic-validators';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MY_DATE_FORMATS } from '@shared/functions/date-format';
 
 @Component({
   selector: 'vex-users-manage',
   templateUrl: './users-manage.component.html',
-  styleUrls: ['./users-manage.component.scss']
+  styleUrls: ['./users-manage.component.scss'],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
 })
 export class UsersManageComponent implements OnInit {
 
@@ -31,6 +34,7 @@ export class UsersManageComponent implements OnInit {
   inputType = "password";
   icVisibility = IconsService.prototype.getIcon("icVisibility")
   icVisibilityOff = IconsService.prototype.getIcon("icVisibilityOff")
+  previewImageUrl: string | null = null;
 
   initForm(): void {
     this.form = this._fb.group({
@@ -117,6 +121,13 @@ export class UsersManageComponent implements OnInit {
   selectedImage(file: File){
     this.form.get("usImage").setValue(file);
     console.log(this.form.get("usImage").setValue(file))
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.previewImageUrl = e.target.result;
+      this.cd.markForCheck(); // Notifica a Angular que la vista necesita actualizarse
+    };
+    reader.readAsDataURL(file);
   }
 
   dataUser(userName: string){
@@ -137,6 +148,8 @@ export class UsersManageComponent implements OnInit {
       })
 
       //this.form.get('UsUserName')?.disable();
+      this.previewImageUrl = resp.usImage;
+      this.cd.markForCheck();
     })
   }
 

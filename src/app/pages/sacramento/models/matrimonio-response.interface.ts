@@ -7,6 +7,8 @@ export interface MatrimonioResponse {
     scNumeroPartida: string,
     peNombreEsposo: string,
     peNombreEsposa: string,
+    peEdadEsposo: number,
+    peEdadEsposa: number,
     peFechaNacimientoEsposo: Date,
     peFechaNacimientoEsposa: Date,
     peIdTipoDocumentoEsposo: number,

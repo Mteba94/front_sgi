@@ -10,6 +10,7 @@ import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import Swal from 'sweetalert2';
+import { AuthService } from 'src/app/pages/auth/services/auth.service';
 
 @Component({
   selector: "vex-sacerdotes-list",
@@ -19,14 +20,17 @@ import Swal from 'sweetalert2';
 })
 export class SacerdotesListComponent implements OnInit {
   component: any;
+  buttonShow = false;
 
   constructor(
     public _dialog: MatDialog,
-    public _sacerdoteService: SacerdoteService
+    public _sacerdoteService: SacerdoteService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.component = componentSettings;
+    this.buttonShow = this.authService.hasRole(['Administrador'])
   }
 
   setMenu(value: number) {
@@ -172,5 +176,10 @@ export class SacerdotesListComponent implements OnInit {
           .subscribe(() => this.formatGetInputs());
       }
     });
+  }
+
+  resetFilters() {
+    this.component.filters = { ...this.component.resetFilters };
+    this.formatGetInputs();
   }
 }

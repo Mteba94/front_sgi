@@ -12,12 +12,15 @@ import { DocumentType } from '@shared/models/document-type.interface';
 import { AuthService } from 'src/app/pages/auth/services/auth.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IconsService } from '@shared/services/icons.service';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MY_DATE_FORMATS } from '@shared/functions/date-format';
 
 @Component({
   selector: 'vex-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
-  animations: [stagger40ms, scaleIn400ms, fadeInRight400ms]
+  animations: [stagger40ms, scaleIn400ms, fadeInRight400ms],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
 })
 export class UserListComponent implements OnInit {
 
@@ -86,16 +89,14 @@ export class UserListComponent implements OnInit {
     this.dataUser(this.username)
 
     this.form.get('UsPass').valueChanges.subscribe(() => {
-      this.form.updateValueAndValidity(); // Actualiza las validaciones
+      this.form.updateValueAndValidity();
     });
 
     this.form.get('confirmPass').valueChanges.subscribe(() => {
-      this.form.updateValueAndValidity(); // Actualiza las validaciones
+      this.form.updateValueAndValidity();
     });
 
   }
-
-  
 
   dataUser(userName: string){
     this._userService.getDataUser(userName).subscribe((resp) => {
@@ -111,10 +112,12 @@ export class UserListComponent implements OnInit {
         estadoDescripcion: resp.estadoDescripcion,
         usIdGenero: resp.usIdGenero,
         usIdTipoDocumento: resp.usIdTipoDocumento,
-        UsNumerodocumento: resp.usNumerodocumento
+        UsNumerodocumento: resp.usNumerodocumento,
+        usImage: resp.usImage,
       })
 
       this.form.get('UsUserName')?.disable();
+      this.form.get('estadoDescripcion')?.disable();
     })
   }
 
@@ -127,7 +130,7 @@ export class UserListComponent implements OnInit {
   
     const newPass = this.form.get('UsPass').value;
     const confirmPass = this.form.get('confirmPass').value;
-    const username = this.form.get('UsUserName').value; // Asegúrate de que el campo 'username' esté en el formulario
+    const username = this.form.get('UsUserName').value;
   
     if (newPass) {
       // Validar si las contraseñas coinciden
@@ -172,8 +175,6 @@ export class UserListComponent implements OnInit {
 
   selectedImage(file: File){
     this.form.get("usImage").setValue(file);
-
-    console.log(this.form.get("usImage").getRawValue)
   }
 
   listSexType(): void{
@@ -194,7 +195,6 @@ export class UserListComponent implements OnInit {
 
         const formData = new FormData();
     
-        // Agregar los datos del formulario al FormData
         formData.append('usIdUsuario', this.form.get('usIdUsuario').value);
         formData.append('usUserName', this.form.get('UsUserName').value);
         formData.append('usPass', this.form.get('UsPass').value);
@@ -206,10 +206,9 @@ export class UserListComponent implements OnInit {
         formData.append('usIdGenero', this.form.get('usIdGenero').value);
         formData.append('usDireccion', this.form.get('UsDireccion').value);
       
-        // Agregar la imagen si existe
-        const fileInput = this.form.get('usImage').value; // Asegúrate de que 'usImage' sea el campo correcto en tu formulario.
+        const fileInput = this.form.get('usImage').value;
         if (fileInput) {
-          formData.append('usImage', fileInput); // Agregar archivo
+          formData.append('usImage', fileInput);
         }
 
         this._spinner.show();

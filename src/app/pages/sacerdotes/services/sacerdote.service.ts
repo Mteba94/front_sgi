@@ -12,12 +12,16 @@ import { environment as env } from "src/environments/environment";
 import { ListSacerdoteRequest } from "../models/list-sacerdote-request.interface";
 import { SacerdoteResponse } from "../models/sacerdote-response.interface";
 import { SacerdoteRequest } from "../models/sacerdote-request.interface";
+import { AuthService } from "../../auth/services/auth.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class SacerdoteService {
-  constructor(private _http: HttpClient) {}
+  constructor(
+    private _http: HttpClient,
+    private _authService: AuthService
+  ) {}
 
   GetAll(size, sort, order, page, getInputs): Observable<BaseApiResponse> {
     const requestUrl = `${env.api}${endpoint.SACERDOTE_LIST}`;
@@ -34,9 +38,21 @@ export class SacerdoteService {
     );
     return this._http.post<BaseApiResponse>(requestUrl, params).pipe(
       map((data: BaseApiResponse) => {
+        const canEdit = this._authService.hasRole(['Administrador'])
         data.data.items.forEach(function (sac: SacerdoteResponse) {
-          sac.icEdit = getIcon("icEdit", "Editar Sacerdote", sac.sacerdoteEstado != 0, "edit");
-          sac.icDelete = getIcon("icDelete", "Eliminar Sacerdote", sac.sacerdoteEstado != 0, "delete")
+          switch (sac.sacerdoteEstado) {
+            case 0:
+              sac.badgeColor = 'text-gray bg-gray-light'
+              break;
+            case 1:
+              sac.badgeColor = 'text-green bg-green-light'
+              break;
+            default:
+              sac.badgeColor = 'text-gray bg-gray-light'
+              break;
+          }
+          sac.icEdit = getIcon("icEdit", "Editar Sacerdote", canEdit, "edit");
+          sac.icDelete = getIcon("icDelete", "Eliminar Sacerdote", canEdit, "delete")
           sac.icFirma = getIcon("icSignature", "Firma", sac.sacerdoteEstado != 0, "firma");
         });
         return data;

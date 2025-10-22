@@ -18,7 +18,7 @@ const searchOptions: SearchOptions[] = [
         label: "Numero Documento",
         value: 2,
         placeholder: "Buscar por Documento",
-        validation: [GenericValidators.dni],
+        validation: [GenericValidators.defaultDescription],
         validation_desc: "Solo se permite documentos válidos",
         icon: "icDescription"
     },
@@ -150,6 +150,18 @@ const tableColumns: TableColumns<SacramentoResponse>[] = [
         cssProperty: [],
         type: "icon",
         action: "constancia",
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: false
+    },
+    {
+        label: "",
+        cssLabel: [],
+        property: "icDelete",
+        cssProperty: [],
+        type: "icon",
+        action: "remove",
         sticky: false,
         sort: false,
         visible: true,

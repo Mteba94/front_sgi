@@ -2,7 +2,12 @@
   <div class="dropdown-header" fxLayout="row" fxLayoutAlign="space-between center">
     <div fxLayout="row" fxLayoutAlign="start center">
       <div class="dropdown-heading-icon" fxLayout="row" fxLayoutAlign="center center">
-        <mat-icon [icIcon]="icPerson"></mat-icon>
+        <ng-container *ngIf="userImageUrl">
+          <img [src]="userImageUrl" class="rounded-full h-9 w-9 object-cover" alt="Imagen de usuario">
+        </ng-container>
+        <ng-container *ngIf="!userImageUrl">
+          <mat-icon [icIcon]="icPerson"></mat-icon>
+        </ng-container>
       </div>
       <div class="dropdown-heading">{{username}}</div>
     </div>

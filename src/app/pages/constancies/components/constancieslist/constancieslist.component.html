@@ -6,11 +6,18 @@
                 <span @fadeInRight class="ml-4 block">Constancias Generadas</span>
             </h2>
             <div class="flex items-center justify-end w-full">
-                <app-search-box-multiple
-                    [searchOptions]="component.searchOptions"
-                    (search)="search($event)"
-                >
-                </app-search-box-multiple>
+                <div class="flex justify-between">
+                    <app-button-reset-filters
+                        (buttonClick)="resetFilters()"
+                    ></app-button-reset-filters>
+                </div>
+                <div class="flex justify-between ml-6">
+                    <app-search-box-multiple
+                        [searchOptions]="component.searchOptions"
+                        (search)="search($event)"
+                    >
+                    </app-search-box-multiple>
+                </div>
             </div>
         </div>
     </div>

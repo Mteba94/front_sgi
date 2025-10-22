@@ -14,22 +14,22 @@ const searchOptions: SearchOptions[] = [
         validation_desc: "Solo se permite letras en esta busqueda",
         icon: "icName"
     },
-    {
-        label: "Numero Documento",
-        value: 2,
-        placeholder: "Buscar por Documento",
-        validation: [GenericValidators.dni],
-        validation_desc: "Solo se permite documentos válidos",
-        icon: "icDescription"
-    },
-    {
-        label: "Numero Partida",
-        value: 3,
-        placeholder: "Buscar por Numero Partida",
-        validation: [GenericValidators.defaultDescription],
-        validation_desc: "Solo se permite partidas válidas",
-        icon: "icDescription"
-    }
+    // {
+    //     label: "Numero Documento",
+    //     value: 2,
+    //     placeholder: "Buscar por Documento",
+    //     validation: [GenericValidators.dni],
+    //     validation_desc: "Solo se permite documentos válidos",
+    //     icon: "icDescription"
+    // },
+    // {
+    //     label: "Numero Partida",
+    //     value: 3,
+    //     placeholder: "Buscar por Numero Partida",
+    //     validation: [GenericValidators.defaultDescription],
+    //     validation_desc: "Solo se permite partidas válidas",
+    //     icon: "icDescription"
+    // }
 ]
 
 const menuItems: MenuItems[] = [

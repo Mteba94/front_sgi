@@ -11,6 +11,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Style, StyleService } from '../@vex/services/style.service';
 import { ConfigName } from '../@vex/interfaces/config-name.model';
 import { IconsService } from '@shared/services/icons.service';
+import { AuthService } from './pages/auth/services/auth.service';
 
 @Component({
   selector: 'vex-root',
@@ -20,14 +21,19 @@ import { IconsService } from '@shared/services/icons.service';
 export class AppComponent {
   title = 'vex';
 
-  constructor(private configService: ConfigService,
+  permission = false;
+
+  constructor(
+    private configService: ConfigService,
     private styleService: StyleService,
     private renderer: Renderer2,
     private platform: Platform,
     @Inject(DOCUMENT) private document: Document,
     @Inject(LOCALE_ID) private localeId: string,
     private route: ActivatedRoute,
-    private navigationService: NavigationService) {
+    private navigationService: NavigationService,
+    private authService: AuthService
+  ) {
     Settings.defaultLocale = this.localeId;
 
     if (this.platform.BLINK) {
@@ -60,6 +66,10 @@ export class AppComponent {
     ).subscribe(queryParamMap => this.styleService.setStyle(queryParamMap.get('style') as Style));
 
 
+    if(this.authService.hasRole(['Administrador'])){
+      this.permission = true;
+    }
+
     this.navigationService.items = [
       {
         type: 'link',
@@ -86,11 +96,28 @@ export class AppComponent {
         icon: IconsService.prototype.getIcon("icCloudDownload")
       },
       {
-        type: 'link',
+        type: 'dropdown',
         label: 'Sacerdotes',
-        route: 'sacerdotes',
-        icon: IconsService.prototype.getIcon("icPriest")
-      }
+        icon: IconsService.prototype.getIcon("icPriest"),
+        children: [
+          {
+            type: 'link',
+            label: 'Listado de Sacerdotes',
+            route: 'sacerdotes',
+          },
+          {
+            type: 'link',
+            label: 'Grado Sacerdotal',
+            route: '/catalogos',
+          }
+        ]
+      },
+      // {
+      //   type: 'link',
+      //   label: 'Sacerdotes',
+      //   route: 'sacerdotes',
+      //   icon: IconsService.prototype.getIcon("icPriest")
+      // }
     ];
   }
 }

@@ -11,17 +11,21 @@ import { tipoSacramentoSelect } from '../../models/list-tipoSacramento-select.in
 import { atLeastOneFieldRequiredValidator } from './atLeastOneFieldRequiredValidator';
 import { SexType } from '@shared/models/sex-type.interface';
 import { SexTypeService } from '@shared/services/sex-type.service';
-import moment from 'moment';
 import { SacerdoteSelectService } from '@shared/services/sacerdote-select.service';
 import { ListSacerdote } from '@shared/models/list-sacerdote.interface';
 import { SacerdotesManageComponent } from 'src/app/pages/sacerdotes/components/sacerdotes-manage/sacerdotes-manage.component';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MY_DATE_FORMATS } from '@shared/functions/date-format';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: "vex-sacramento-manage",
   templateUrl: "./sacramento-manage.component.html",
   styleUrls: ["./sacramento-manage.component.scss"],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
 })
 export class SacramentoManageComponent implements OnInit {
   icClose = IconsService.prototype.getIcon("icClose");
@@ -36,22 +40,19 @@ export class SacramentoManageComponent implements OnInit {
   sexTypes: SexType[];
   form: FormGroup;
 
-  initialDate = "2023-01-01";
-  maxDate = moment();
-
   initForm(): void {
     this.form = this._fb.group(
       {
         scIdSacramento: [,],
-        scLibro: ["", [Validators.required]],
-        scFolio: ["", [Validators.required]],
-        scPartida: ["", [Validators.required]],
+        scLibro: ["", [Validators.required, GenericValidators.numeric]],
+        scFolio: ["", [Validators.required, GenericValidators.numeric]],
+        scPartida: ["", [Validators.required, GenericValidators.numeric]],
         scNumeroPartida: [""],
         scIdTipoSacramento: [0, [Validators.required]],
         peNombre: ["", [Validators.required]],
         peFechaNacimiento: [null, [Validators.required]],
         peIdTipoDocumento: [0, [Validators.required]],
-        peNumeroDocumento: [, [Validators.required, Validators.minLength(13)]],
+        peNumeroDocumento: [, [Validators.required, Validators.minLength(13), GenericValidators.numeric]],
         peSexoId: [0, [Validators.required]],
         peDireccion: ["", [Validators.required]],
         scPadre: [""],
@@ -62,14 +63,16 @@ export class SacramentoManageComponent implements OnInit {
         scFechaSacramento: ["", [Validators.required]],
         scObservaciones: [""],
       },
-      {
-        validator: [
-          atLeastOneFieldRequiredValidator("scPadre", "scMadre"),
-          atLeastOneFieldRequiredValidator("scPadrino", "scMadrina"),
-        ],
-      }
+      // {
+      //   validator: [
+      //     atLeastOneFieldRequiredValidator("scPadre", "scMadre"),
+      //     atLeastOneFieldRequiredValidator("scPadrino", "scMadrina"),
+      //   ],
+      // }
     );
   }
+
+  tipoSacramento: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -80,7 +83,8 @@ export class SacramentoManageComponent implements OnInit {
     private _documentTypeService: DocumentTypeService,
     private _sexTypeService: SexTypeService,
     private _sacerdoteService: SacerdoteSelectService,
-    public _dialog: MatDialog
+    public _dialog: MatDialog,
+    public _spinner: NgxSpinnerService,
   ) {
     this.initForm();
   }
@@ -90,6 +94,8 @@ export class SacramentoManageComponent implements OnInit {
     this.listTipoSacramento();
     this.listSexType();
     this.listSacerdote();
+
+    this.sacerdotes = this.sacerdotes || [];
 
     this.form.get("peIdTipoDocumento")?.valueChanges.subscribe((value) => {
       if (value === 2) {
@@ -104,7 +110,6 @@ export class SacramentoManageComponent implements OnInit {
       //console.log(this.data.scIdSacramento)
       this.sacramentoById(this.data.scIdSacramento);
     } else {
-      // Aplicar la configuración del formulario para el tipo de sacramento por defecto (si lo hay)
       //console.log(this.data.scIdSacramento);
       this.handleSacramentoTypeChange(this.form.get("scMatrimonioId")?.value);
     }
@@ -130,14 +135,23 @@ export class SacramentoManageComponent implements OnInit {
   }
 
   handleSacramentoTypeChange(sacramentoTypeId: number): void {
-    // if(sacramentoTypeId === 2){
-    //   this.form.get("scPadrino")?.enable();
-    // }
+    this.tipoSacramento = sacramentoTypeId;
+
+    const confirmacionFields = {
+      scIdTipoSacramento: 3,
+      additionalFields: [
+        { name: "peEdad", validators: [GenericValidators.numeric]},
+        { name: "scLugarBautizo"},
+      ]
+    }
+
     const matrimonioFields = {
       scIdTipoSacramento: 4,
       additionalFields: [
         { name: "peNombreEsposo", validators: [Validators.required] },
         { name: "peNombreEsposa", validators: [Validators.required] },
+        { name: "peEdadEsposo", validators: [GenericValidators.numeric] },
+        { name: "peEdadEsposa", validators: [GenericValidators.numeric] },
         { name: "peFechaNacimientoEsposo" },
         { name: "peFechaNacimientoEsposa" },
         { name: "peIdTipoDocumentoEsposo", validators: [Validators.required] },
@@ -187,6 +201,35 @@ export class SacramentoManageComponent implements OnInit {
       { name: "peSexoId" },
     ];
 
+    if(sacramentoTypeId === confirmacionFields.scIdTipoSacramento){
+      this.form.patchValue({
+        scIdTipoSacramento: confirmacionFields.scIdTipoSacramento
+      });
+
+      confirmacionFields.additionalFields.forEach((field) =>{
+        if (!this.form.contains(field.name)) {
+          const control = new FormControl(
+            { value: "", disabled: false },
+            field.validators
+          );
+          this.form.addControl(field.name, control);
+        }
+      })
+
+      const peFechaNacimientoControl = this.form.get('peFechaNacimiento');
+      if (peFechaNacimientoControl) {
+        peFechaNacimientoControl.clearValidators();
+        peFechaNacimientoControl.updateValueAndValidity();
+      }
+
+      const peDireccionControl = this.form.get('peDireccion');
+      if (peDireccionControl) {
+        peDireccionControl.clearValidators();
+        peDireccionControl.updateValueAndValidity();
+      }
+
+    }
+
     if (sacramentoTypeId === matrimonioFields.scIdTipoSacramento) {
       this.form.patchValue({
         scIdTipoSacramento: matrimonioFields.scIdTipoSacramento,
@@ -206,7 +249,7 @@ export class SacramentoManageComponent implements OnInit {
       this.form
         .get("peIdTipoDocumentoEsposo")
         ?.valueChanges.subscribe((value) => {
-          console.log(value);
+          //console.log(value);
           if (value === 2) {
             this.form.get("peNumeroDocumentoEsposo")?.disable();
             this.generateSecuencial();
@@ -238,8 +281,30 @@ export class SacramentoManageComponent implements OnInit {
           this.form.removeControl(field.name);
         }
       });
-    } else {
-      // Restablecer los campos por defecto si no es matrimonio
+    }
+
+    if(sacramentoTypeId != confirmacionFields.scIdTipoSacramento) {
+      confirmacionFields.additionalFields.forEach((field) => {
+        if (this.form.contains(field.name)) {
+          this.form.removeControl(field.name);
+        }
+      });
+
+      const peFechaNacimientoControl = this.form.get('peFechaNacimiento');
+      if(peFechaNacimientoControl){
+        peFechaNacimientoControl.setValidators([Validators.required]);
+        peFechaNacimientoControl.updateValueAndValidity();
+      }
+
+      const peDireccionControl = this.form.get('peDireccion');
+      if (peDireccionControl) {
+        peDireccionControl.setValidators([Validators.required]);
+        peDireccionControl.updateValueAndValidity();
+      }
+
+    }
+
+    if(sacramentoTypeId != matrimonioFields.scIdTipoSacramento) {
       defaultFields.forEach((field) => {
         if (!this.form.contains(field.name)) {
           this.form.addControl(
@@ -254,17 +319,6 @@ export class SacramentoManageComponent implements OnInit {
           this.form.removeControl(field.name);
         }
       });
-
-      this.form.setValidators([
-        atLeastOneFieldRequiredValidator("scPadre", "scMadre"),
-        atLeastOneFieldRequiredValidator("scPadrino", "scMadrina"),
-      ]);
-
-      // Eliminar los campos específicos de matrimonio
-
-      // Eliminar los validadores específicos para matrimonio
-      this.form.clearValidators();
-      this.form.updateValueAndValidity();
     }
   }
 
@@ -305,11 +359,8 @@ export class SacramentoManageComponent implements OnInit {
     if (this.form.invalid) {
       return Object.values(this.form.controls).forEach((controls) => {
         controls.markAllAsTouched();
-        //console.log(this.form.getRawValue());
       });
     }
-
-    //console.log(this.form.value)
 
     const libro = this.form.get("scLibro").value;
     const folio = this.form.get("scFolio").value;
@@ -320,11 +371,28 @@ export class SacramentoManageComponent implements OnInit {
       `L.${libro} - F.${folio} - P.${partida}`.toUpperCase();
     this.form.patchValue({ scNumeroPartida });
 
-    //console.log(scNumeroPartida)
-
-    const scIdSacramento = this.form.get("scIdSacramento").value;
-
     const scIdTipoSacramento = this.form.get("scIdTipoSacramento").value;
+
+    if(scIdTipoSacramento == 4){
+      if (this.form.get("peFechaNacimientoEsposo").value === "") {
+        this.form.patchValue({ peFechaNacimientoEsposo: "1900-01-01" });
+      }
+  
+      if (this.form.get("peFechaNacimientoEsposa").value === "") {
+        this.form.patchValue({ peFechaNacimientoEsposa: "1900-01-01" });
+      }
+    }
+
+    if(scIdTipoSacramento == 3){
+      const fechaNacimientoControl = this.form.get("peFechaNacimiento");
+  
+      // Verifica si el campo peFechaNacimiento está vacío o es null/undefined
+      if (!fechaNacimientoControl.value || fechaNacimientoControl.value === "") {
+        this.form.patchValue({ peFechaNacimiento: "1900-01-01" });
+      }
+    }
+
+    const scIdSacramento = this.data?.scIdSacramento ?? 0;
 
     if (scIdSacramento > 0) {
       if (scIdTipoSacramento == 4) {
@@ -368,6 +436,7 @@ export class SacramentoManageComponent implements OnInit {
   }
 
   sacramentoById(sacramentoId: number): void {
+    this._spinner.show();
     this._sacramentoService.SacramentoById(sacramentoId).subscribe((resp) => {
       if (resp.scIdTipoSacramento == 4) {
         this.matrimoniobyId(sacramentoId);
@@ -380,9 +449,11 @@ export class SacramentoManageComponent implements OnInit {
       const scFolio = parts ? parts[2] : "";
       const scPartida = parts ? parts[3] : "";
 
-      //console.log(resp.scNumeroPartida,parts, scLibro, - scFolio, - scPartida )
-      const parrocoSeleccionado = this.sacerdotes.find(s => s.scId === resp.scParrocoId) || null;
-      //console.log(parrocoSeleccionado);
+      const parrocoSeleccionado = this.sacerdotes?.length 
+        ? this.sacerdotes.find(s => s.scId === resp.scParrocoId) || null 
+        : null;
+
+      this.handleSacramentoTypeChange(resp.scIdTipoSacramento);
 
       this.form.reset({
         scIdSacramento: resp.scIdSacramento,
@@ -392,7 +463,8 @@ export class SacramentoManageComponent implements OnInit {
         scNumeroPartida: resp.scNumeroPartida,
         scIdTipoSacramento: resp.scIdTipoSacramento,
         peNombre: resp.peNombre,
-        peFechaNacimiento: resp.peFechaNacimiento,
+        peEdad: resp.peEdad === 0 ? null : resp.peEdad,
+        peFechaNacimiento: resp.peFechaNacimiento && this.formatDate(resp.peFechaNacimiento) === "1900-01-01" ? "" : resp.peFechaNacimiento,
         peIdTipoDocumento: resp.peIdTipoDocumento,
         peNumeroDocumento: resp.peNumeroDocumento,
         peSexoId: resp.peSexoId,
@@ -401,21 +473,24 @@ export class SacramentoManageComponent implements OnInit {
         scMadre: resp.scNombreMadre,
         scPadrino: resp.scNombrePadrino,
         scMadrina: resp.scNombreMadrina,
-        scParroco: parrocoSeleccionado,
+        scParroco: resp.scParrocoId,
         scFechaSacramento: resp.scFechaSacramento,
         scObservaciones: resp.scObservaciones,
+        scLugarBautizo: resp.scLugarBautizo
       });
 
       this.celebranteFilterCtrl.setValue(parrocoSeleccionado);
 
       this.form.get("scIdTipoSacramento")?.disable();
       this.form.get("scObservaciones")?.setValidators([Validators.required]);
+      this._spinner.hide();
     });
   }
 
   matrimoniobyId(matrimonioId: number): void {
+    this._spinner.show();
     this._sacramentoService.MatrimonioById(matrimonioId).subscribe((resp) => {
-      console.log(resp);
+      //console.log(resp)
 
       this.handleSacramentoTypeChange(resp.scIdTipoSacramento);
 
@@ -427,7 +502,7 @@ export class SacramentoManageComponent implements OnInit {
       const scPartida = parts ? parts[3] : "";
 
       const parrocoSeleccionado = this.sacerdotes.find(s => s.scId === resp.scParrocoId) || null;
-
+      
       this.form.patchValue({
         scIdTipoSacramento: resp.scIdTipoSacramento,
         scLibro: scLibro,
@@ -436,8 +511,10 @@ export class SacramentoManageComponent implements OnInit {
         scNumeroPartida: resp.scNumeroPartida,
         peNombreEsposo: resp.peNombreEsposo,
         peNombreEsposa: resp.peNombreEsposa,
-        peFechaNacimientoEsposo: resp.peFechaNacimientoEsposo,
-        peFechaNacimientoEsposa: resp.peFechaNacimientoEsposa,
+        peEdadEsposo: resp.peEdadEsposo === 0 ? null : resp.peEdadEsposo,
+        peEdadEsposa: resp.peEdadEsposa === 0 ? null : resp.peEdadEsposa,
+        peFechaNacimientoEsposo: resp.peFechaNacimientoEsposo && this.formatDate(resp.peFechaNacimientoEsposo) === "1900-01-01" ? "" : resp.peFechaNacimientoEsposo,
+        peFechaNacimientoEsposa: resp.peFechaNacimientoEsposa && this.formatDate(resp.peFechaNacimientoEsposa) === "1900-01-01" ? "" : resp.peFechaNacimientoEsposa,
         peIdTipoDocumentoEsposo: resp.peIdTipoDocumentoEsposo,
         peIdTipoDocumentoEsposa: resp.peIdTipoDocumentoEsposa,
         peNumeroDocumentoEsposo: resp.peNumeroDocumentoEsposo,
@@ -461,12 +538,20 @@ export class SacramentoManageComponent implements OnInit {
 
       this.form.get("scIdTipoSacramento")?.disable();
       this.form.get("scObservaciones")?.setValidators([Validators.required]);
+      this._spinner.hide();
     });
   }
 
   sacramentoEdit(scIdSacramento: number): void {
+    const formData = this.form.getRawValue();
+  
+    // Asegúrate de convertir peEdad a string antes de enviarlo
+    if (formData.peEdad !== null && formData.peEdad !== undefined) {
+      formData.peEdad = formData.peEdad.toString();
+    }
+    
     this._sacramentoService
-      .SacramentoEdit(scIdSacramento, this.form.getRawValue())
+      .SacramentoEdit(scIdSacramento, formData)
       .subscribe((resp) => {
         if (resp.isSuccess) {
           this._alert.success("Excelente", resp.message);
@@ -525,7 +610,7 @@ export class SacramentoManageComponent implements OnInit {
   }
 
   onCelebranteSelected(sacerdote: any) {
-    console.log(sacerdote);
+    //console.log(sacerdote);
     if (sacerdote) {
       this.form.patchValue({ scParroco: sacerdote.scId });
     }
@@ -533,5 +618,13 @@ export class SacramentoManageComponent implements OnInit {
 
   displayCelebrante(sacerdote?: any): string {
     return sacerdote && sacerdote.scNombre ? sacerdote.scNombre : '';
+  }
+
+  formatDate(date: Date): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Asegura dos dígitos
+    const day = String(d.getDate()).padStart(2, "0"); // Asegura dos dígitos
+    return `${year}-${month}-${day}`;
   }
 }

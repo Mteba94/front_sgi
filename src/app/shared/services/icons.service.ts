@@ -22,6 +22,7 @@ import icGuardian from "@iconify/icons-ic/twotone-supervisor-account"
 import icLockReset from "@iconify/icons-ic/twotone-lock-open"
 import icSignature from "@iconify/icons-ic/twotone-fingerprint"
 import icPriest from "@iconify/icons-ic/twotone-person-pin"
+import icContractDelete from "@iconify/icons-ic/twotone-cancel-presentation"
 
 @Injectable({
   providedIn: 'root'
@@ -121,6 +122,10 @@ export class IconsService {
 
     if(icon == "icPriest"){
       return icPriest
+    }
+
+    if(icon == "icContractDelete"){
+      return icContractDelete
     }
   }
 }

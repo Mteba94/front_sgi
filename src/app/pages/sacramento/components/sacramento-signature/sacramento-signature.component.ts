@@ -50,7 +50,7 @@ export class SacramentoSignatureComponent implements OnInit {
 
   signatureConfirm(){
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value)
+      this.dialogRef.close(this.form.getRawValue())
     }
   }
 
@@ -62,8 +62,6 @@ export class SacramentoSignatureComponent implements OnInit {
   firmaSelect() {
     this._constanciaService.firmaSelect().subscribe((resp) => {
       this.sacerdote = resp;
-
-      console.log(this.sacerdote);
 
       this.form.reset({
         gradoSacerdotal: this.sacerdote[0].sacerdoteCategoria,

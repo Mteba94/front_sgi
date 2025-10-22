@@ -111,8 +111,8 @@ export class SacAnioActComponent implements OnInit {
       
       this.dataSource = resp.data.items;
   
-      // Filtrar los datos por el año 2024
-      const filteredData = this.dataSource.filter(item => Math.floor(item.anio) === 2024);
+      const fechaActual = new Date();
+      const filteredData = this.dataSource.filter(item => Math.floor(item.anio) === fechaActual.getFullYear());
   
       // Procesar los datos filtrados
       const groupedData = filteredData.reduce((acc, curr) => {

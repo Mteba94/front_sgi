@@ -22,6 +22,7 @@ import { PopoverRef } from '../../../../components/popover/popover-ref';
 import { MsalService } from '@azure/msal-angular';
 import { AuthService } from 'src/app/pages/auth/services/auth.service';
 import data from '@iconify/icons-ic/round-edit';
+import { UserService } from 'src/app/pages/user/services/user.service';
 
 export interface OnlineStatus {
   id: 'online' | 'away' | 'dnd' | 'offline';
@@ -118,9 +119,12 @@ export class ToolbarUserDropdownComponent implements OnInit {
   icNotificationsOff = icNotificationsOff;
 
   username: string;
+  user: string;
+  userImageUrl: string | null = null;
   
   constructor(private cd: ChangeDetectorRef,
         public authService: AuthService,
+        private _userService: UserService,
         private popoverRef: PopoverRef<ToolbarUserDropdownComponent>) { }
         
 
@@ -134,6 +138,20 @@ export class ToolbarUserDropdownComponent implements OnInit {
 
     var dataUser = JSON.parse(atob(token.split('.')[1]))
     this.username = dataUser.family_name
+    this.user = dataUser.given_name
+
+    this.getUser();
+  }
+
+  getUser(){
+    this._userService.getDataUser(this.user).subscribe((data) => {
+      //console.log(data)
+      if (data && data.usImage) {
+        this.userImageUrl = data.usImage;
+        this.cd.markForCheck();
+        //console.log(this.userImageUrl)
+      }
+    })  
   }
 
   setStatus(status: OnlineStatus) {
@@ -164,14 +182,14 @@ export class ToolbarUserDropdownComponent implements OnInit {
         colorClass: 'text-amber',
         route: '/user/list'
       },
-      {
-        id: '3',
-        icon: icSettings,
-        label: 'Configuracion del Sistema',
-        description: 'Gestion de Catalogos',
-        colorClass: 'text-teal',
-        route: '/catalogos'
-      }
+      // {
+      //   id: '3',
+      //   icon: icSettings,
+      //   label: 'Configuracion del Sistema',
+      //   description: 'Gestion de Catalogos',
+      //   colorClass: 'text-teal',
+      //   route: '/catalogos'
+      // }
     ];
 
     // Filtrar los items basados en el rol del usuario
@@ -179,7 +197,11 @@ export class ToolbarUserDropdownComponent implements OnInit {
       if (item.id === '2') {
         return this.authService.hasRole(['Administrador']);
       }
+      if (item.id === '3') {
+        return this.authService.hasRole(['Administrador']);
+      }
       return true; // Para todos los demás items
+      
     });
   }
 

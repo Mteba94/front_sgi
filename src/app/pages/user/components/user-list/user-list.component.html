@@ -16,7 +16,7 @@
                     <mat-dialog-content>
 
                         <app-img-selector
-                            (urlCurrentImg)="this.form.get('usImage').value"
+                            [urlCurrentImg]="this.form.get('usImage').value"
                             (selectedImage)="selectedImage($event)"
                         >
                         </app-img-selector>

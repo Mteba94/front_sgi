@@ -9,6 +9,7 @@ import { SacerdotesManageComponent } from './components/sacerdotes-manage/sacerd
 import { SearchBoxMultipleComponent } from '@shared/components/reusables/search-box-multiple/search-box-multiple.component';
 import { MenuComponent } from '@shared/components/reusables/menu/menu.component';
 import { SearchBoxSimpleModule } from '@shared/components/search-box-simple/search-box-simple.module';
+import { ButtonResetFiltersComponent } from '@shared/components/reusables/button-reset-filters/button-reset-filters.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { SearchBoxSimpleModule } from '@shared/components/search-box-simple/sear
     ListTableComponent,
     SearchBoxMultipleComponent,
     MenuComponent,
-    SearchBoxSimpleModule
+    SearchBoxSimpleModule,
+    ButtonResetFiltersComponent
   ]
 })
 export class SacerdotesModule { }

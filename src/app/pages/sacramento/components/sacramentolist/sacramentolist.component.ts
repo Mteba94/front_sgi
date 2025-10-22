@@ -15,6 +15,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ConstanciesManageComponent } from 'src/app/pages/constancies/components/constancies-manage/constancies-manage.component';
 import { BaseResponse } from '@shared/models/base-api-response.interface';
 import { SacramentoSignatureComponent } from '../sacramento-signature/sacramento-signature.component';
+import Swal from 'sweetalert2';
+import { transformResponseToRequest } from '../../models/sacramento-request.interface';
+import { AuthService } from 'src/app/pages/auth/services/auth.service';
 
 @Component({
   selector: 'vex-sacramentolist',
@@ -25,17 +28,20 @@ import { SacramentoSignatureComponent } from '../sacramento-signature/sacramento
 export class SacramentolistComponent implements OnInit {
 
   component: any
+  buttonShow: boolean = false;
 
   constructor(
     customTitle: CustomTitleService,
     public _sacramentoService: SacramentoService,
     public _dialog: MatDialog,
+    private authService: AuthService
   ) {
     customTitle.set("Sacramentos");
    }
 
   ngOnInit(): void {
     this.component = componentSettings
+    this.buttonShow = this.authService.hasRole(['Administrador'])
 
     this._sacramentoService.TipoSacramentoSelect().subscribe((resp: BaseResponse) => {
       if (resp.isSuccess && Array.isArray(resp.data)) {
@@ -61,6 +67,11 @@ export class SacramentolistComponent implements OnInit {
   searchDateRange(date: DateRange){
     this.component.filters.startDate = date.startDate
     this.component.filters.endDate = date.endDate
+    this.formatGetInputs();
+  }
+
+  resetFilters() {
+    this.component.filters = { ...this.component.resetFilters };
     this.formatGetInputs();
   }
 
@@ -125,6 +136,9 @@ export class SacramentolistComponent implements OnInit {
       case "constancia":
         this.constancesGenerate(sacramento)
         break
+      case "remove":
+        this.SacramentoDelete(sacramento);
+        break
     }
     return false
   }
@@ -154,17 +168,21 @@ export class SacramentolistComponent implements OnInit {
   }
 
   constancesGenerate(sacramentoData: SacramentoResponse){
+    //console.log(sacramentoData)
     this._dialog.open(SacramentoSignatureComponent, {
       disableClose: true,
       width: "600px",
     }).afterClosed().subscribe(
       (res) => {
       if (res) {
+        console.log("Res:", res); // Agrega este console.log
+        console.log("Valor seleccionado en el modal:", res.tituloSacerdotal)
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
           ...sacramentoData,
           tituloSacerdotal: res.tituloSacerdotal
         }
+        console.log(dialogConfig.data)
        this._dialog.open(ConstanciesManageComponent, {
          data: dialogConfig.data,
          disableClose: true,
@@ -184,21 +202,65 @@ export class SacramentolistComponent implements OnInit {
     })
   }
 
-  // constancesGenerate(sacramentoData: SacramentoResponse){
-  //   const dialogConfig = new MatDialogConfig()
-  //   dialogConfig.data = sacramentoData
-  //   this._dialog.open(ConstanciesManageComponent, {
-  //     data: sacramentoData,
-  //     disableClose: true,
-  //     width: "900px",
-  //     maxHeight: '80vh'
-  //   })
-  //   .afterClosed().subscribe(
-  //     (res) => {
-  //       if (res) {
-  //         this.formatGetInputs()
-  //       }
-  //     }
-  //   )
-  // }
+  SacramentoDelete(sacramentoData: SacramentoResponse){
+    this._sacramentoService.SacramentoById(sacramentoData.scIdSacramento).subscribe((resp) =>{
+
+      if(resp.scIdTipoSacramento === 4){
+        this.MatrimonioDelete(resp)
+      }else{
+        this.SacramentoDeleteFN(resp)
+      }
+    })
+    
+  }
+
+  SacramentoDeleteFN(sacramentoData: SacramentoResponse){
+
+    console.log(sacramentoData)
+
+    const requestData = transformResponseToRequest(sacramentoData)
+
+    Swal.fire({
+      title: `¿Realmente deseas eliminar el Sacramento ${sacramentoData.scTipoSacramento} de ${sacramentoData.peNombre}`,
+      text: "Se borrara de forma permanente!",
+      icon: "warning",
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonColor: "rgb(210, 155, 253)",
+      cancelButtonColor: "rgb(79,109,253)",
+      confirmButtonText: "Si, eliminar!",
+      cancelButtonText: "Cancelar",
+      width: 430
+    }).then((result) =>{
+      if (result.isConfirmed) { 
+        this._sacramentoService.SacramentoDelete(sacramentoData.scIdSacramento, requestData).subscribe((resp) => {
+          this.formatGetInputs()
+        })
+      }
+    })
+  }
+
+  MatrimonioDelete(matrimonioData: SacramentoResponse){
+    this._sacramentoService.MatrimonioById(matrimonioData.scIdSacramento).subscribe((resp) =>{
+
+      Swal.fire({
+            title: `¿Realmente deseas eliminar el Sacramento de Matrimonio de ${resp.peNombreEsposo} con ${resp.peNombreEsposa}`,
+            text: "Se borrara de forma permanente!",
+            icon: "warning",
+            showCancelButton: true,
+            focusCancel: true,
+            confirmButtonColor: "rgb(210, 155, 253)",
+            cancelButtonColor: "rgb(79,109,253)",
+            confirmButtonText: "Si, eliminar!",
+            cancelButtonText: "Cancelar",
+            width: 430
+          }).then((result) =>{
+            if (result.isConfirmed) { 
+              this._sacramentoService.MatrimonioDelete(matrimonioData.scIdSacramento, resp).subscribe((resp) => {
+                this.formatGetInputs()
+              })
+            }
+          })
+    })
+  }
 }
