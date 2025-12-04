@@ -6,6 +6,7 @@ export interface SacerdoteResponse {
     sacerdoteFirma: string;
     sacerdoteEstado: number;
     sacerdoteEstadoDesc: string;
+    saImgFirma: string;
     icEdit: any,
     icDelete: any,
     icFirma: any,

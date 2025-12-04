@@ -82,9 +82,19 @@ const tableColumns: TableColumns<SacerdoteResponse>[] = [
         type: "text",
         sticky: false,
         sort: true,
-        sortProperty: "sacerdoteCategoria",
         visible: true,
         download: true
+    },
+    {
+        label: "Visualizar Firma",
+        cssLabel: ["font-bold", "text-sm", "text-left"],
+        property: "saImgFirma",
+        cssProperty: ["font-semibold", "text-sm"],
+        type: "image",
+        sticky: false,
+        sort: false,
+        visible: true,
+        download: false
     },
     {
         label: "Firma",

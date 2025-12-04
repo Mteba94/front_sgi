@@ -69,18 +69,18 @@ export class SacerdoteService {
     );
   }
 
-  SacerdoteRegister(sacerdote: SacerdoteRequest): Observable<BaseResponse> {
+  SacerdoteRegister(formData: FormData): Observable<BaseResponse> {
     const requestUrl = `${env.api}${endpoint.SACERDOTE_REGISTER}`;
-    return this._http.post(requestUrl, sacerdote).pipe(
+    return this._http.post(requestUrl, formData).pipe(
       map((resp: BaseResponse) => {
         return resp;
       })
     );
   }
 
-  SacerdoteUpdate(sacerdoteId: number, sacerdote: SacerdoteRequest): Observable<BaseResponse> {
+  SacerdoteUpdate(sacerdoteId: number, formData: FormData): Observable<BaseResponse> {
     const requestUrl = `${env.api}${endpoint.SACERDOTE_UPDATE}${sacerdoteId}`;
-    return this._http.put(requestUrl, sacerdote).pipe(
+    return this._http.put(requestUrl, formData).pipe(
       map((resp: BaseResponse) => {
         return resp;
       })

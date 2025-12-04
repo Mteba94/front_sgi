@@ -366,6 +366,9 @@
                             <mat-error *ngIf="form.get('peSexoId').hasError('required')">
                                 Campo Genero es requerido.
                             </mat-error>
+                            <mat-error *ngIf="form.get('peSexoId').hasError('min')">
+                                Campo Genero es requerido.
+                            </mat-error>
                         </mat-form-field>
                     </mat-dialog-content>
                 </div>

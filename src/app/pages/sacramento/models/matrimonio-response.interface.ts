@@ -27,5 +27,6 @@ export interface MatrimonioResponse {
     scTestigo2: string,
     scParrocoId: number,
     scFechaSacramento: Date,
-    scObservaciones: string
+    scObservaciones: string,
+    saImgFirma: string
 }

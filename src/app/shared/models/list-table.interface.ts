@@ -5,7 +5,7 @@ export interface TableColumns<T>{
     cssProperty: string[]
     subProperty?: keyof T | string
     cssSubProperty?: string[]
-    type: "text" | "date" | "datetime" | "time" | "icon" | "button" | "badge"
+    type: "text" | "date" | "datetime" | "time" | "icon" | "button" | "badge" | "image"
     visible: boolean
     sort: boolean
     sortProperty?: string

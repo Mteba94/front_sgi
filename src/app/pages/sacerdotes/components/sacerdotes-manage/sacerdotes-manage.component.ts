@@ -20,6 +20,10 @@ export class SacerdotesManageComponent implements OnInit {
 
   catSacerdotes: CatSacerdote[];
 
+  selectedFile: File = null;
+  imagePreview: string | ArrayBuffer;
+  imageDeleted = false;
+
   form: FormGroup
 
   initForm(): void{
@@ -53,16 +57,27 @@ export class SacerdotesManageComponent implements OnInit {
     if(this.form.invalid){
       return Object.values(this.form.controls).forEach((controls) => {
         controls.markAllAsTouched();
-        console.log(this.form.invalid)
       })
+    }
+
+    const formData = new FormData();
+    formData.append('sacerdoteNombre', this.form.get('sacerdoteNombre').value);
+    formData.append('sacerdoteIdCategoria', this.form.get('sacerdoteIdCategoria').value);
+
+    if (this.imageDeleted && !this.selectedFile) {
+      formData.append('deleteImage', 'true');
+    }
+
+    if (this.selectedFile) {
+      formData.append('signatureFile', this.selectedFile, this.selectedFile.name);
     }
 
     const scIdSacerdote = this.form.get("ScId").value;
 
     if(scIdSacerdote > 0){
-      this.sacerdoteEdit(scIdSacerdote);
+      this.sacerdoteEdit(scIdSacerdote, formData);
     }else{
-      this.sacerdoteRegister();
+      this.sacerdoteRegister(formData);
     }
   }
 
@@ -72,12 +87,32 @@ export class SacerdotesManageComponent implements OnInit {
         ScId: resp.sacerdoteId,
         sacerdoteNombre: resp.sacerdoteNombre,
         sacerdoteIdCategoria: resp.sacerdoteIdCategoria
-      })
+      });
+      this.imagePreview = resp.saImgFirma;
     })
   }
 
-  sacerdoteEdit(sacerdoteId: number): void {
-    this._sacerdoteService.SacerdoteUpdate(sacerdoteId, this.form.value).subscribe((resp) => {
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.selectedFile = input.files[0];
+      this.imageDeleted = false;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  removeImage(): void {
+    this.imagePreview = null;
+    this.selectedFile = null;
+    this.imageDeleted = true;
+  }
+
+  sacerdoteEdit(sacerdoteId: number, formData: FormData): void {
+    this._sacerdoteService.SacerdoteUpdate(sacerdoteId, formData).subscribe((resp) => {
       if(resp.isSuccess){
         this._alert.success("Excelente", resp.message);
         this._dialogRef.close(true);
@@ -87,8 +122,8 @@ export class SacerdotesManageComponent implements OnInit {
     })
   }
 
-  sacerdoteRegister(): void {
-    this._sacerdoteService.SacerdoteRegister(this.form.value).subscribe((resp) => {
+  sacerdoteRegister(formData: FormData): void {
+    this._sacerdoteService.SacerdoteRegister(formData).subscribe((resp) => {
       if(resp.isSuccess){
         this._alert.success("Excelente", resp.message);
         this._dialogRef.close(true);

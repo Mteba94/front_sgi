@@ -64,6 +64,20 @@
                     </td>
                 </ng-container>
                 <ng-container
+                    *ngIf="column.type === 'image'" [matColumnDef]="column.property"
+                >
+                    <th mat-header-cell *matHeaderCellDef
+                        [mat-sort-header]="column.sortProperty"
+                        [disabled]="!column.sort"
+                        [ngClass]="column.cssLabel"
+                    >
+                        {{ column.label }}
+                    </th>
+                    <td mat-cell *matCellDef="let row" [ngClass]="column.cssProperty">
+                        <img *ngIf="row[column.property]" [src]="row[column.property]" alt="Imagen" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                    </td>
+                </ng-container>
+                <ng-container
                     *ngIf="column.type === 'badge'" [matColumnDef]="column.property"
                 >
                     <th mat-header-cell *matHeaderCellDef

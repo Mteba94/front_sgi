@@ -68,7 +68,7 @@ export class ListTableComponent<T> implements OnInit, AfterViewInit, OnChanges {
     pageSize: 10,
     pageLength: 0
   };
-  
+
   constructor(
     private _spinner: NgxSpinnerService,
     private _alert: AlertService

@@ -20,7 +20,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
   ) {
-    this.user = new BehaviorSubject<BaseResponse>(JSON.parse(localStorage.getItem("token")))
+    const storedToken = localStorage.getItem("token");
+    this.user = new BehaviorSubject<BaseResponse>(storedToken ? JSON.parse(storedToken) : null);
    }
 
   login(req: Login):Observable<BaseResponse> {
@@ -28,6 +29,7 @@ export class AuthService {
     return this.http.post<BaseResponse>(requestUrl, req, httpOptions).pipe(
       map((resp: BaseResponse) => {
         if(resp.isSuccess){
+          console.log("Response data:", resp.data);
           localStorage.setItem("token", JSON.stringify(resp.data))
           this.user.next(resp.data)
         }
@@ -73,8 +75,12 @@ export class AuthService {
 
 
   public isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
+    const tokenData = localStorage.getItem('token');
+    if (!tokenData) return false;
+
+    const token = JSON.parse(tokenData).token;
     const decodedToken = this.decodeToken(token);
+    
     if (decodedToken && decodedToken.exp) {
       const currentTime = Math.floor(Date.now() / 1000);
       return decodedToken.exp > currentTime;

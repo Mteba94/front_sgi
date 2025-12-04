@@ -27,4 +27,5 @@ export interface ConstanciaRequest{
     sacerdoteFirma: string;
     sacerdoteCat: string;
     tituloSacerdotal: string;
+    saImgFirma: string;
 }

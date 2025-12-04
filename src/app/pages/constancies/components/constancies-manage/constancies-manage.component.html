@@ -8,7 +8,7 @@
 </div>
 
 <div *ngIf="pdfSrc; else loading">
-    <!-- <iframe [src]="pdfSrc" width="100%" height="500px"></iframe> -->
+    <embed [src]="pdfSrc" type="application/pdf" width="100%" height="500px" />
 
 </div>
   
@@ -17,7 +17,7 @@
   </ng-template>
 
 <div mat-dialog-actions>
-  <button mat-flat-button color="primary" (click)="onDownload()">Descargar</button>
+  <button mat-flat-button color="primary" (click)="onDownload()" [disabled]="!pdfSrc">Descargar</button>
   
 </div>
 

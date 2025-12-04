@@ -53,7 +53,7 @@ export class SacramentoManageComponent implements OnInit {
         peFechaNacimiento: [null, [Validators.required]],
         peIdTipoDocumento: [0, [Validators.required]],
         peNumeroDocumento: [, [Validators.required, Validators.minLength(13), GenericValidators.numeric]],
-        peSexoId: [0, [Validators.required]],
+        peSexoId: [0, [Validators.required, Validators.min(1)]],
         peDireccion: ["", [Validators.required]],
         scPadre: [""],
         scMadre: [""],
@@ -93,9 +93,21 @@ export class SacramentoManageComponent implements OnInit {
     this.listDocumentTypes();
     this.listTipoSacramento();
     this.listSexType();
-    this.listSacerdote();
+    // Chain listSacerdote to ensure sacerdotes are loaded before sacramentoById/matrimonioById
+    this._sacerdoteService.listSacerdote().subscribe((resp) => {
+      this.sacerdotes = resp;
+      this.filteredSacerdotes = this.celebranteFilterCtrl.valueChanges.pipe(
+        startWith(""),
+        map((value) => this._filterSacerdotes(value || ""))
+      );
 
-    this.sacerdotes = this.sacerdotes || [];
+      // Now that sacerdotes are loaded, call sacramentoById if data exists
+      if (this.data != null) {
+        this.sacramentoById(this.data.scIdSacramento);
+      } else {
+        this.handleSacramentoTypeChange(this.form.get("scMatrimonioId")?.value);
+      }
+    });
 
     this.form.get("peIdTipoDocumento")?.valueChanges.subscribe((value) => {
       if (value === 2) {
@@ -105,14 +117,6 @@ export class SacramentoManageComponent implements OnInit {
         this.form.get("peNumeroDocumento")?.enable();
       }
     });
-
-    if (this.data != null) {
-      //console.log(this.data.scIdSacramento)
-      this.sacramentoById(this.data.scIdSacramento);
-    } else {
-      //console.log(this.data.scIdSacramento);
-      this.handleSacramentoTypeChange(this.form.get("scMatrimonioId")?.value);
-    }
   }
 
   generateSecuencial(): void {
@@ -123,9 +127,7 @@ export class SacramentoManageComponent implements OnInit {
     const hour = ("0" + date.getHours()).slice(-2); // Hora con dos dígitos
     const minute = ("0" + date.getMinutes()).slice(-2); // Minutos con dos dígitos
     const second = ("0" + date.getSeconds()).slice(-2); // Segundos con dos dígitos
-    const secuencial = `${year}${month}${day}${hour}${minute}${second.slice(
-      -2
-    )}`;
+    const secuencial = `${year}${month}${day}${hour}${minute}${second}`;
     const secuencialEsp = (parseInt(secuencial) + 1).toString();
     this.form.patchValue({
       peNumeroDocumento: secuencial,
@@ -198,7 +200,7 @@ export class SacramentoManageComponent implements OnInit {
       { name: "scMadre" },
       { name: "scPadrino" },
       { name: "scMadrina" },
-      { name: "peSexoId" },
+      { name: "peSexoId",  validators: [Validators.required, Validators.min(1)] },
     ];
 
     if(sacramentoTypeId === confirmacionFields.scIdTipoSacramento){
@@ -602,22 +604,27 @@ export class SacramentoManageComponent implements OnInit {
       });
   }
 
-  private _filterSacerdotes(value: string): ListSacerdote[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+  private _filterSacerdotes(value: string | ListSacerdote): ListSacerdote[] {
+    const filterValue =
+      typeof value === "string"
+        ? value.toLowerCase()
+        : value
+        ? value.scNombre.toLowerCase()
+        : "";
+
     return this.sacerdotes.filter((sacerdote) =>
       sacerdote.scNombre.toLowerCase().includes(filterValue)
     );
   }
 
-  onCelebranteSelected(sacerdote: any) {
-    //console.log(sacerdote);
+  onCelebranteSelected(sacerdote: ListSacerdote) {
     if (sacerdote) {
       this.form.patchValue({ scParroco: sacerdote.scId });
     }
   }
 
-  displayCelebrante(sacerdote?: any): string {
-    return sacerdote && sacerdote.scNombre ? sacerdote.scNombre : '';
+  displayCelebrante(sacerdote?: ListSacerdote): string {
+    return sacerdote ? sacerdote.scNombre : "";
   }
 
   formatDate(date: Date): string {

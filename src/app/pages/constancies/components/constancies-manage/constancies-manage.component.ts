@@ -13,6 +13,8 @@ import { forkJoin } from 'rxjs';
 import { SacerdoteResponse } from 'src/app/pages/sacerdotes/models/sacerdote-response.interface';
 import { SacerdoteService } from 'src/app/pages/sacerdotes/services/sacerdote.service';
 
+import { MatDialogRef } from '@angular/material/dialog';
+
 @Component({
   selector: "vex-constancies-manage",
   templateUrl: "./constancies-manage.component.html",
@@ -34,7 +36,8 @@ export class ConstanciesManageComponent implements OnInit {
     public _constanciaService: ConstanciesService,
     private sanitizer: DomSanitizer,
     private _alert: AlertService,
-    private _sacerdoteService: SacerdoteService
+    private _sacerdoteService: SacerdoteService,
+    public _dialogRef: MatDialogRef<ConstanciesManageComponent>
   ) {}
 
   ngOnInit(): void {
@@ -148,6 +151,7 @@ export class ConstanciesManageComponent implements OnInit {
         .SacerdoteById(resp.scParrocoId)
         .subscribe((respSacerdote) => {
           let nombreSacerdote = respSacerdote.sacerdoteNombre;
+          let sacImgFirma = respSacerdote.saImgFirma;
 
           const constaciaData: ConstanciaRequest = {
             idTipoSacramento: resp.scIdTipoSacramento,
@@ -178,6 +182,7 @@ export class ConstanciesManageComponent implements OnInit {
             sacerdoteFirma: this.sacerdote[0].sacerdoteNombre,
             sacerdoteCat: this.sacerdote[0].sacerdoteCategoria,
             tituloSacerdotal: this.data.tituloSacerdotal,
+            saImgFirma: this.sacerdote[0].saImgFirma,
           };
 
           this._spinner.show();
@@ -186,6 +191,7 @@ export class ConstanciesManageComponent implements OnInit {
               this._spinner.hide();
 
               const base64Data = respConst.data.b64;
+              console.log("Base64 Data:", base64Data);
               const fileNameData = respConst.data.fileName;
 
               const binary = atob(base64Data.replace(/\s/g, ""));
@@ -197,13 +203,15 @@ export class ConstanciesManageComponent implements OnInit {
               }
               const blob = new Blob([view], { type: "application/pdf" });
 
-              const url = URL.createObjectURL(blob);
+              const url = URL.createObjectURL(blob) + '#toolbar=0';
               this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
               this.fileName = fileNameData;
             },
             (error) => {
               console.error("Error al generar la constancia: ", error);
               this._spinner.hide();
+              this._alert.error("Error", "No se pudo generar la constancia.");
+              this._dialogRef.close();
             }
           );
         });
@@ -319,6 +327,7 @@ export class ConstanciesManageComponent implements OnInit {
         sacerdoteFirma: this.sacerdote[0].sacerdoteNombre,
         sacerdoteCat: this.sacerdote[0].sacerdoteCategoria,
         tituloSacerdotal: this.data.tituloSacerdotal,
+        saImgFirma: this.sacerdote[0].saImgFirma,
       };
 
       this._spinner.show();
@@ -327,6 +336,7 @@ export class ConstanciesManageComponent implements OnInit {
           this._spinner.hide();
 
           const base64Data = respConst.data.b64;
+          console.log("Base64 Data (Matrimonio):", base64Data);
           const fileNameData = respConst.data.fileName;
 
           const binary = atob(base64Data.replace(/\s/g, ""));
@@ -338,13 +348,15 @@ export class ConstanciesManageComponent implements OnInit {
           }
           const blob = new Blob([view], { type: "application/pdf" });
 
-          const url = URL.createObjectURL(blob);
+          const url = URL.createObjectURL(blob) + '#toolbar=0';
           this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
           this.fileName = fileNameData;
         },
         (error) => {
           console.error("Error al generar la constancia: ", error);
           this._spinner.hide();
+          this._alert.error("Error", "No se pudo generar la constancia.");
+          this._dialogRef.close();
         }
       );
     })
@@ -398,6 +410,7 @@ export class ConstanciesManageComponent implements OnInit {
     };
 
     this.histRegiter(histConstancia);
+    this._dialogRef.close();
   }
 
   histRegiter(histConstancia: HistConstanciaRequest) {
@@ -415,6 +428,7 @@ export class ConstanciesManageComponent implements OnInit {
   firmaSelect() {
     this._constanciaService.firmaSelect().subscribe((resp) => {
       this.sacerdote = resp;
+      console.log(this.sacerdote)
     });
   }
 }

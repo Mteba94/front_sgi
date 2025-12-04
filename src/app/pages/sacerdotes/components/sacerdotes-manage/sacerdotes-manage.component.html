@@ -32,6 +32,15 @@
                 </mat-error>
             </mat-form-field>
         </div>
+
+        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px" class="mt-4">
+            <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa de la firma" width="250px" class="border-2 border-dashed rounded">
+            <div fxLayout="row" fxLayoutGap="16px">
+                <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()">Seleccionar Firma</button>
+                <button *ngIf="imagePreview" mat-stroked-button color="warn" type="button" (click)="removeImage()">Quitar Firma</button>
+            </div>
+            <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/*">
+        </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button mat-button mat-dialog-close type="button">CANCELAR</button>
